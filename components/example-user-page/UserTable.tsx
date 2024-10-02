@@ -1,33 +1,11 @@
-'use client'
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { useEffect, useState } from "react";
-import http from '../../core/http/http';
-type User = {
-    id:string,
-    firstName: string,
-    lastName: string,
-    age: number,
+import { User } from "@/core/models/example-user-page/User";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+
+type UserTableProps = {
+    users: User[],
 };
-
-export default function Page() {
-    const [users, setUsers] = useState<User[]>([]);
-    const loadUsers = async () => {
-
-        try {
-            const url = '/users';
-            const res = await http().get(url);
-            setUsers(res.data.users as User[]);
-            console.log("🚀 ~ loadUsers ~ res.data:", res.data)
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    useEffect(()=>{
-        loadUsers();
-    }, [])
+const UserTable:React.FC<UserTableProps> = (props:UserTableProps) => {
     return (
-        <div>
-            <h1 className="text-6xl">This is /user</h1>
             <TableContainer>
                 <Table>
                     <TableHead>
@@ -39,7 +17,7 @@ export default function Page() {
                         </TableRow>
                     </TableHead>
                         <TableBody>
-                            {users.map(u => 
+                            {props.users.map(u => 
                                 <TableRow key={u.id}>
                                     <TableCell>{u.id}</TableCell>
                                     <TableCell>{u.firstName}</TableCell>
@@ -50,7 +28,7 @@ export default function Page() {
                         </TableBody>
                 </Table>
             </TableContainer>
-            <Button variant="outlined">This is button</Button>
-        </div>
     );
 }
+
+export default UserTable;

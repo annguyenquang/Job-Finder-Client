@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 const Home = () => {
   const router = useRouter(); 
   const onClick = () => {
-    router.push('/user');
+    router.push('/example-user-page');
   }
   return (
     <div>
