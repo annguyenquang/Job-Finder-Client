@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Card, CardContent } from '@mui/material';
+import Alert from '@mui/material/Alert'
+
 
 
 type CompanyInfoProps = {

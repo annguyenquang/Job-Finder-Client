@@ -1,6 +1,6 @@
 export type CompanyDetail = {
     id: string; // Mã công ty
-    accountId: number;
+    accountId: string;
     avatar: string,
     name: string; // Tên công ty
     slug: string; // Tên mã hóa

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Alert, Box, Card, CardContent, IconButton, Snackbar, TextField } from '@mui/material';
+import { Box, Card, CardContent, IconButton, Snackbar, TextField } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import ShareIcon from '@mui/icons-material/Share';
+import Alert from '@mui/material/Alert'
 
 
 export const Share: React.FC = () => {

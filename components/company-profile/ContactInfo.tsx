@@ -2,8 +2,8 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Card, CardContent } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Divider from '@mui/material/Divider';
-import MapIcon from '@mui/icons-material/Map';
+import Alert from '@mui/material/Alert'
+
 
 type ContactInfoProps = {
     address: string

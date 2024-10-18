@@ -1,8 +1,9 @@
+import { JobStatus } from "./JobStatus"
 export type Job = {
     id: string,
     title: string,
     salary: number,
-    position: string,
+    location: string,
     status: JobStatus,
     description: string,
     ownerId: string,

@@ -9,7 +9,7 @@ const fakeCompanies: CompanyDetail[] = [
     {
         id: '1',
         name: "CÔNG TY TNHH ĐẦU TƯ THƯƠNG MẠI NHẬT MINH",
-        accountId: 1,
+        accountId: '1',
         avatar: 'https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/qBfrVeU5wVAfunKSH2WH004bDiWkG2O1_1709184279____b41b0027409b4c36f833508084ed0a1f.png',
         slug: "cong-ty-tnhh-dau-tu-thuong-mai-nhat-minh-1",
         employeeCount: 499,
@@ -21,7 +21,7 @@ const fakeCompanies: CompanyDetail[] = [
     {
         id: '2',
         name: "CÔNG TY CỔ PHẦN CÔNG NGHỆ ABC",
-        accountId: 1,
+        accountId: '1',
         avatar: 'https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/qBfrVeU5wVAfunKSH2WH004bDiWkG2O1_1709184279____b41b0027409b4c36f833508084ed0a1f.png',
         slug: "cong-ty-co-phan-cong-nghe-abc-2",
         employeeCount: 100,
@@ -36,7 +36,7 @@ const getCompanyDetail = async (slug: string) => {
     try {
         const companyDetail = fakeCompanies.find(c => c.slug === slug);
         if (!companyDetail) {
-            throw new Error("Company not found");
+            console.log('Company not found')
         }
         return { companyDetail };
     } catch (error) {

@@ -3,6 +3,8 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, FormControl, Grid2, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { CompanyDetail, Job } from 'core/models';
+import Alert from '@mui/material/Alert'
+
 
 type RecruitmentProps = {
     jobs: Job[];
@@ -113,7 +115,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
                                                     variant="body2"
                                                     className="bg-slate-200 text-gray-600 font-bold inline-block p-1 mr-3 rounded-md"
                                                 >
-                                                    {job.position}
+                                                    {job.location}
                                                 </Typography>
                                                 <Typography
                                                     variant="body2"

@@ -4,6 +4,8 @@ import { Avatar, Box, Button, Card, CardContent, CardMedia, Container, Grid2, Li
 import AddIcon from '@mui/icons-material/Add';
 import LanguageIcon from '@mui/icons-material/Language';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import Alert from '@mui/material/Alert'
+
 
 type BannerProps = {
     avatar: string,
@@ -13,11 +15,12 @@ type BannerProps = {
 }
 
 export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
+    const BANNER_IMAGE = 'https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/normal-company/cover/company_cover_1.jpg'
     return (
         <Card className="bg-white shadow-md rounded-lg mt-5 relative">
             <CardMedia
                 className='h-full min-h-64'
-                image="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/normal-company/cover/company_cover_1.jpg"
+                image={BANNER_IMAGE}
                 title="green iguana"
             />
             <Avatar
