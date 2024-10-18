@@ -1,11 +1,11 @@
 'use client';
 
-import { UserTable } from '@/components';
 import { Button } from '@mui/material';
 import type { User } from '@/models';
 import { useUserStore } from '@/stores';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { UserTable } from '@/components';
 
 export default function User() {
     const router = useRouter();

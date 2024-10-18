@@ -1,3 +1,4 @@
 export * from './example-user-page';
 export * from './common';
-export * from './home-page';
+export * from './company-page';
+export * from './viec-lam-page';
