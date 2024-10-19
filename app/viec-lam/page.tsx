@@ -8,14 +8,13 @@ import JobList from '../../components/viec-lam-page/JobList'
 
 const ViecLamPage = () => {
   const [location, setLocation] = useState<string>('TP. Hồ Chí Minh')
-
-  const handleChange = (event: SelectChangeEvent<string>) => {
+  const handleLocationChange = (event: SelectChangeEvent<string>) => {
     setLocation(event.target.value)
   }
   return (
     <div>
       <Container className='h-screen flex flex-col bg-background rounded-sm' maxWidth={false} sx={{ maxWidth: '95%' }}>
-        <SearchBar {...{ location, handleChange }} />
+        <SearchBar {...{ location, handleChange: handleLocationChange }} />
         <Typography variant='h6' className='font-semibold text-primary'>
           Danh sách việc làm
         </Typography>

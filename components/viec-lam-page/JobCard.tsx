@@ -1,8 +1,14 @@
+'use client'
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
 import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
-
-const JobCard = () => {
+import { Job } from '@/models'
+import { useRouter } from 'next/navigation'
+type JobCardProps = {
+  job: Job
+}
+const JobCard: React.FC<JobCardProps> = (props) => {
+  const router = useRouter()
   return (
     <Card
       className='flex flex-col p-3 min-w-[100%]'
@@ -10,8 +16,7 @@ const JobCard = () => {
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
           boxShadow: '0 4px 20px rgb(106 147 217 / var(--tw-bg-opacity))',
-          transform: 'scale(1.02)',
-          cursor: 'pointer'
+          transform: 'scale(1.02)'
         }
       }}
     >
@@ -22,17 +27,25 @@ const JobCard = () => {
         ></CardMedia>
 
         <CardContent>
-          <Typography gutterBottom className='text-lg text-primary font-bold' component='div'>
-            Lập trình viên fullstack
+          <Typography
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              router.push(`viec-lam/${props.job.id}`)
+            }}
+            gutterBottom
+            className='text-lg text-primary font-bold'
+            component='div'
+          >
+            {props.job.title}
           </Typography>
           <Typography variant='body1' className='text-primary'>
-            Viettel Software
+            $props.job.company.name
           </Typography>
-          <Typography variant='body2'> Hồ Chí Minh</Typography>
+          <Typography variant='body2'>{props.job.location}</Typography>
           <Chip
             className='bg-primary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}
-            label='Thoả thuận'
+            label={props.job.salary}
             size='medium'
           />
         </CardContent>
