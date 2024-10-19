@@ -3,6 +3,7 @@ export type CompanyDetail = {
     accountId: string;
     avatar: string,
     name: string; // Tên công ty
+    email: string
     slug: string; // Tên mã hóa
     employeeCount: number; // Số lượng nhân viên
     description: string; // Giới thiệu công ty

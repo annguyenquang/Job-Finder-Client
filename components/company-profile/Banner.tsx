@@ -1,10 +1,17 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Avatar, Box, Button, Card, CardContent, CardMedia, Container, Grid2, Link } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid2 from '@mui/material/Grid2';
+import Link from '@mui/material/Link';
 import AddIcon from '@mui/icons-material/Add';
 import LanguageIcon from '@mui/icons-material/Language';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import Alert from '@mui/material/Alert'
+import EmailIcon from '@mui/icons-material/Email';
+import Box from '@mui/material/Box';
 
 
 type BannerProps = {
@@ -12,6 +19,7 @@ type BannerProps = {
     name: string,
     employeeCount: number,
     website: string,
+    email: string,
 }
 
 export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
@@ -51,6 +59,12 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
                                     <PeopleAltIcon />
                                     <Typography variant="body1" className='ml-3'>
                                         {props.employeeCount} nhân viên
+                                    </Typography>
+                                </Grid2>
+                                <Grid2 className="flex flex-row justify-center text-white">
+                                    <EmailIcon />
+                                    <Typography variant="body1" className='ml-3'>
+                                        {props.email}
                                     </Typography>
                                 </Grid2>
                             </Grid2>

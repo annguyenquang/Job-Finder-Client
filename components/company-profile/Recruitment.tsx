@@ -1,9 +1,19 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Avatar, Box, Button, Card, CardActionArea, CardContent, FormControl, Grid2, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import FormControl from '@mui/material/FormControl';
+import Grid2 from '@mui/material/Grid2';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Pagination from '@mui/material/Pagination';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { CompanyDetail, Job } from 'core/models';
-import Alert from '@mui/material/Alert'
 
 
 type RecruitmentProps = {
@@ -12,7 +22,7 @@ type RecruitmentProps = {
 };
 
 export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
-    const [age, setAge] = React.useState('');
+    const [province, setProvince] = React.useState('');
     const [currentPage, setCurrentPage] = React.useState(1);  // Trang hiện tại
     const jobsPerPage = 3;  // Số lượng công việc mỗi trang
 
@@ -27,7 +37,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
     const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob); // Lấy dữ liệu công việc hiện tại
 
     const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
+        setProvince(event.target.value);
     };
 
     return (
@@ -53,7 +63,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={age}
+                                value={province}
                                 label="Tỉnh"
                                 onChange={handleChange}
                             >

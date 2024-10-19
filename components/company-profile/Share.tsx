@@ -1,10 +1,14 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Card, CardContent, IconButton, Snackbar, TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import CardContent from '@mui/material/CardContent';
+import Card from '@mui/material/Card';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
+import Box from '@mui/material/Box';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CloseIcon from '@mui/icons-material/Close';
 import ShareIcon from '@mui/icons-material/Share';
-import Alert from '@mui/material/Alert'
 
 
 export const Share: React.FC = () => {

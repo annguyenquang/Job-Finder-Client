@@ -9,7 +9,7 @@ const job: Job = {
     id: '1',
     title: 'Frontend Developer',
     salary: 15,
-    position: 'Hà Nội',
+    location: 'Hà Nội',
     status: JobStatus.Open,
     description: 'Phát triển các thành phần giao diện người dùng cho ứng dụng web.',
     ownerId: '1',
