@@ -14,7 +14,11 @@ const config: Config = {
         primary: '#19734e',
         secondary: '#145c3e',
         text: '#ffffff',
-        textHover: '#4a5568'
+        textHover: '#4a5568',
+        colorStartBanner: 'var(--STARTGREENBANNER)',
+        colorEndBanner: 'var(--ENDGREENBANNER)',
+        colorPrimary: 'var(--PRIMARYCOLOR)',
+        colorPimaryText: 'var(--PRIMARYTEXT)'
       }
     }
   },
