@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-import { Box, Card, CardContent, Chip } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Chip from '@mui/material/Chip';
 import JobDescription from './JobDescription';
 
 export const JobInfo: React.FC = () => {
@@ -61,6 +62,7 @@ export const JobInfo: React.FC = () => {
                 >
                     <Box className="flex flex-row items-center">
                         <img
+                            alt=""
                             className='w-20 h-20 m-2'
                             src={AVATAR}>
                         </img>
@@ -93,16 +95,16 @@ export const JobInfo: React.FC = () => {
                 >
                     Mô tả công việc
                 </Typography>
-                {requirements.map((requirement, index) => (
-                    <Chip key={index} className='mr-2' label={requirement} />
+                {requirements.map((requirement) => (
+                    <Chip key={requirement} className='mr-2' label={requirement} />
                 ))}
                 <Typography
                     className='font-sans text-lg font-semibold text-gray-600 mt-4 mb-4'
                 >
                     Kỹ năng
                 </Typography>
-                {skills.map((skill, index) => (
-                    <Chip key={index} className='mr-2 mb-2' label={skill} />
+                {skills.map((skill) => (
+                    <Chip key={skill} className='mr-2 mb-2' label={skill} />
                 ))}
             </CardContent>
         </Card>

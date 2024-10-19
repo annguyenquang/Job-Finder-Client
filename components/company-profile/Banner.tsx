@@ -1,10 +1,9 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Avatar, Box, Button, Card, CardContent, CardMedia, Container, Grid2, Link } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, CardMedia, Grid2, Link } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import LanguageIcon from '@mui/icons-material/Language';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import Alert from '@mui/material/Alert'
 
 
 type BannerProps = {

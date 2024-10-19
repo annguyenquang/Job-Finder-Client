@@ -1,4 +1,7 @@
-import { Box, Card, CardContent, Divider, Grid2, Typography } from "@mui/material";
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Grid2 from '@mui/material/Grid2';
+import Typography from '@mui/material/Typography';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SchoolIcon from '@mui/icons-material/School';
@@ -43,18 +46,20 @@ export const JobList: React.FC = () => {
             >
                 Công việc tương tự
             </Typography>
-            {jobListings.map((job, index) => (
+            {jobListings.map((job) => (
                 <Grid2
                     spacing={2}
                     container
                     border={1}
-                    key={index} className="flex flex-row rounded cursor-pointer text-gray-300 p-2 mb-4">
+                    key={job.title}
+                    className="flex flex-row rounded cursor-pointer text-gray-300 p-2 mb-4">
                     <Grid2
                         size={2}
                         className="flex flex-col"
                     >
                         <Box className="-mr-2">
                             <img
+                                alt=""
                                 className='w-full h-full'
                                 src={job.avatar}>
                             </img>

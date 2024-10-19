@@ -1,12 +1,17 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Card, CardContent, Grid2, IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid2 from '@mui/material/Grid2';
+import IconButton from '@mui/material/IconButton';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import SchoolIcon from '@mui/icons-material/School';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'; type BannerProps = {
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+
+type BannerProps = {
 
 }
 
