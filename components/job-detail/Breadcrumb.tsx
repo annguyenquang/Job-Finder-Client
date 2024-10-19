@@ -13,7 +13,6 @@ function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
 }
 
 export const JobBreadcrumb: React.FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
-    console.log(props.currentPosition);
     return (
         <div role="presentation" onClick={handleClick}>
             <Breadcrumbs aria-label="breadcrumb">
