@@ -9,7 +9,6 @@ type BreadcrumbProps = {
 
 function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.preventDefault();
-    console.info('You clicked a breadcrumb.');
 }
 
 export const JobBreadcrumb: React.FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
