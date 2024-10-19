@@ -31,7 +31,7 @@ const fakeJobs: Job[] = [
         title: 'Data Scientist',
         salary: 25,   // Lương: 25 triệu VNĐ
         location: 'Đà Nẵng', // Vị trí: Đà Nẵng
-        status: JobStatus.Close,
+        status: JobStatus.Closed,
         description: 'Phân tích và diễn giải dữ liệu phức tạp để đưa ra quyết định.',
         ownerId: '1',
         closeDate: '30-11-2024'
@@ -81,7 +81,7 @@ const fakeJobs: Job[] = [
         title: 'Data Scientist',
         salary: 25,   // Lương: 25 triệu VNĐ
         location: 'Đà Nẵng', // Vị trí: Đà Nẵng
-        status: JobStatus.Close,
+        status: JobStatus.Closed,
         description: 'Phân tích và diễn giải dữ liệu phức tạp để đưa ra quyết định.',
         ownerId: '1',
         closeDate: '30-11-2024'
