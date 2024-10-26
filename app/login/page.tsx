@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
                         <Button variant="contained">Đăng nhập</Button>
                         <Grid2 direction={"row"}>
                             <Divider>
-                                <Typography className="inline" fontSize={18} textAlign={"center"}>
+                                <Typography fontSize={18} textAlign={"center"}>
                                     Hoặc
                                 </Typography>
                             </Divider>
