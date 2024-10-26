@@ -1,6 +1,7 @@
-import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } from "@mui/material";
 import blue from "@mui/material/colors/blue";
 import Image from "next/image";
+import AccountAndPasswordForm from "../../components/login/AccountAndPasswordForm";
 
 const LoginPage: React.FC = () => {
     return (
@@ -17,10 +18,7 @@ const LoginPage: React.FC = () => {
 
                         <Typography variant="h6">Đăng nhập JobFinder để tiếp tục</Typography>
 
-                        <Grid2 rowSpacing={2} container direction={"column"}>
-                            <TextField label="Tài khoản" variant="outlined"></TextField>
-                            <TextField label="Mật khẩu" variant="outlined"></TextField>
-                        </Grid2>
+                        <AccountAndPasswordForm />
 
                         <Link textAlign={"center"} color={blue[600]} href="#">Quên mật khẩu?</Link>
 
