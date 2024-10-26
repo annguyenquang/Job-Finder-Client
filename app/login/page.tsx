@@ -25,8 +25,13 @@ const LoginPage: React.FC = () => {
                         <Link textAlign={"center"} color={blue[600]} href="#">Quên mật khẩu?</Link>
 
                         <Button variant="contained">Đăng nhập</Button>
-
-                        <Typography textAlign={"center"}>Hoặc</Typography>
+                        <Grid2 direction={"row"}>
+                            <Divider>
+                                <Typography className="inline" fontSize={18} textAlign={"center"}>
+                                    Hoặc
+                                </Typography>
+                            </Divider>
+                        </Grid2>
 
                         <Grid2 columnGap={5} justifyContent={"center"} alignItems={"center"} container>
                             <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
