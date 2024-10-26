@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
 
                         <Divider />
 
-                        <Typography variant="h6">Đăng nhập để tiếp tục</Typography>
+                        <Typography variant="h6">Đăng nhập JobFinder để tiếp tục</Typography>
 
                         <Grid2 rowSpacing={2} container direction={"column"}>
                             <TextField label="Tài khoản" variant="outlined"></TextField>
@@ -49,9 +49,9 @@ const LoginPage: React.FC = () => {
                             </Button>
                         </Grid2>
                     </Grid2>
-
                 </CardContent>
             </Card>
+            <Typography marginTop={1}>Chưa có tài khoản? <Link href="#">Tạo ngay</Link></Typography>
         </Grid2 >
     )
 }
