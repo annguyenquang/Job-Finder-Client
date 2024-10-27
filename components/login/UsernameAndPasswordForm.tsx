@@ -3,7 +3,7 @@
 import { Button, Grid2, InputAdornment, TextField } from "@mui/material"
 import { useState } from "react";
 
-const AccountAndPasswordForm: React.FC = () => {
+export const UsernameAndPasswordForm: React.FC = () => {
     const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
     const revertShowState = () => {
         setIsShowPassword(!isShowPassword);
@@ -19,5 +19,3 @@ const AccountAndPasswordForm: React.FC = () => {
         </Grid2>
     );
 }
-
-export default AccountAndPasswordForm;

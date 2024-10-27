@@ -1,7 +1,7 @@
-import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } from "@mui/material";
+import { Button, Card, CardContent, Divider, Grid2, Link, Typography } from "@mui/material";
 import blue from "@mui/material/colors/blue";
 import Image from "next/image";
-import AccountAndPasswordForm from "../../components/login/AccountAndPasswordForm";
+import { SocialAuthOptions, UsernameAndPasswordForm } from "@/components";
 
 const LoginPage: React.FC = () => {
     return (
@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
 
                         <Typography variant="h6">Đăng nhập JobFinder để tiếp tục</Typography>
 
-                        <AccountAndPasswordForm />
+                        <UsernameAndPasswordForm />
 
                         <Link textAlign={"center"} color={blue[600]} href="#">Quên mật khẩu?</Link>
 
@@ -31,21 +31,8 @@ const LoginPage: React.FC = () => {
                             </Divider>
                         </Grid2>
 
-                        <Grid2 columnGap={5} justifyContent={"center"} alignItems={"center"} container>
-                            <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
-                                <Avatar className="w-[26px] h-[26px] mr-3" variant="square" src='/google-logo.png'></Avatar>
-                                <Typography textTransform={'none'}>Countinue with Google</Typography>
-                            </Button>
-                            <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
-                                <Avatar className="w-[26px] h-[26px] mr-3" variant="square" src='/facebook-logo.png'></Avatar>
-                                <Typography textTransform={'none'}>Countinue with Facebook</Typography>
+                        <SocialAuthOptions />
 
-                            </Button>
-                            <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
-                                <Avatar className="w-[26px] h-[26px] mr-3" variant="square" src='/linkedin-logo.png'></Avatar>
-                                <Typography textTransform={'none'}>Countinue with LinkedIn</Typography>
-                            </Button>
-                        </Grid2>
                     </Grid2>
                 </CardContent>
             </Card>
