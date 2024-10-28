@@ -4,14 +4,14 @@ import React, { useEffect, useState } from 'react'
 import JobCard from './JobCard'
 import Pagination from '../common/Pagination'
 import { useJobStore } from '@/stores'
+import { Metadata } from '@/models/common/Metadata'
+import { JobService } from '@/services'
 
 const JobList = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1) // State for current page
-  const totalPages = 5 // Set total pages dynamically or hardcoded
   const jobStore = useJobStore()
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page) // Update current page state
+    if (page >= 1 && page <= jobStore.total) {
+      jobStore.setPage(page) // Update current page state
     }
   }
   useEffect(() => {
@@ -19,7 +19,11 @@ const JobList = () => {
       jobStore.loadJobs()
     }
     getJob()
-  }, [])
+  }, [jobStore.pagination])
+
+  useEffect(() => {
+    console.log(jobStore.jobs)
+  }, [jobStore.jobs])
   return (
     <Grid2 marginLeft={2} container spacing={1}>
       {jobStore.jobs.map((job, idx) => (
@@ -28,7 +32,11 @@ const JobList = () => {
         </Grid2>
       ))}
       <Grid2 size={12} display='flex' justifyContent='center'>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        <Pagination
+          currentPage={jobStore.pagination.page}
+          totalPages={jobStore.total}
+          onPageChange={handlePageChange}
+        />
       </Grid2>
     </Grid2>
   )

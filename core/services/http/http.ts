@@ -1,14 +1,14 @@
-import axios, { CreateAxiosDefaults } from "axios"
+import axios, { CreateAxiosDefaults } from 'axios'
 
-const baseURL = process.env.SOME_API_URL || 'https://dummyjson.com';
+const defaultURL = process.env.SOME_API_URL || 'https://localhost:7019/api'
 
-export const http = () => {
+export const http = (customURL?: string) => {
+  const baseURL = customURL || defaultURL
   const defaultOption: CreateAxiosDefaults = {
-    baseURL,
-  };
+    baseURL
+  }
 
-
-  const instance = axios.create(defaultOption);
+  const instance = axios.create(defaultOption)
 
   //       instance.interceptors.request.use(async (request) => {
   //     const session = await getSession();
@@ -20,12 +20,12 @@ export const http = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      return response;
+      return response
     },
     (error) => {
-      console.log(`error`, error);
-    },
-  );
+      console.log(`error`, error)
+    }
+  )
 
-  return instance;
+  return instance
 }

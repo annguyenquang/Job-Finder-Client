@@ -3,8 +3,14 @@ import { Box, InputLabel, MenuItem, outlinedInputClasses, Select, selectClasses,
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import React, { useState } from 'react'
+import { Metadata } from '@/models/common/Metadata'
 
-const FilterBox = () => {
+type FilterBoxProps = {
+  filterOptions: Metadata[]
+  type: number
+}
+
+const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
   const [val, setVal] = useState<number>()
 
   return (
@@ -19,7 +25,7 @@ const FilterBox = () => {
       }}
     >
       <Typography variant='body1' sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-        Loại công việc
+        {TypeTranslation[props.type]}
       </Typography>
       <Select
         displayEmpty
@@ -63,24 +69,11 @@ const FilterBox = () => {
           }
         }}
       >
-        <MenuItem value={0} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Việc làm fulltime
-        </MenuItem>
-        <MenuItem value={1} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Việc làm bán thời gian
-        </MenuItem>
-        <MenuItem value={2} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Thực tập
-        </MenuItem>
-        <MenuItem value={3} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Freelance
-        </MenuItem>
-        <MenuItem value={4} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Theo dự án
-        </MenuItem>
-        <MenuItem value={5} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
-          Theo ngày
-        </MenuItem>
+        {props.filterOptions.map((e) => (
+          <MenuItem key={e.id} value={0} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
+            {e.value}
+          </MenuItem>
+        ))}
       </Select>
     </Box>
   )

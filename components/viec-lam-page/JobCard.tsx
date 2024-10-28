@@ -41,7 +41,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           <Typography variant='body1' className='text-primary'>
             $props.job.company.name
           </Typography>
-          <Typography variant='body2'>{props.job.location}</Typography>
+          <Typography variant='body2'>$props.job.location</Typography>
           <Chip
             className='bg-primary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}

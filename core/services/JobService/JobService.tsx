@@ -1,129 +1,48 @@
 import { JobStatus, type CompanyDetail, type Job } from '@/models'
 import { http } from '../http'
-
+import { Pagination } from '@/models/common/Pagination'
+import { Metadata } from '@/models/common/Metadata'
 type JobResponse = {
   jobs: Job[] // Chỉnh sửa để trả về mảng các Job
 }
 
-const fakeJobs: Job[] = [
-  {
-    id: '1',
-    title: 'Frontend Developer',
-    salary: 15, // Lương: 15 triệu VNĐ
-    location: 'Hà Nội', // Vị trí: Hà Nội
-    status: JobStatus.Open,
-    description: 'Phát triển các thành phần giao diện người dùng cho ứng dụng web.',
-    ownerId: '1',
-    closeDate: '31-12-2024'
-  },
-  {
-    id: '2',
-    title: 'Backend Developer',
-    salary: 18, // Lương: 18 triệu VNĐ
-    location: 'TP. Hồ Chí Minh', // Vị trí: TP. Hồ Chí Minh
-    status: JobStatus.Open,
-    description: 'Xử lý logic phía server và tương tác với cơ sở dữ liệu.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '3',
-    title: 'Data Scientist',
-    salary: 25, // Lương: 25 triệu VNĐ
-    location: 'Đà Nẵng', // Vị trí: Đà Nẵng
-    status: JobStatus.Close,
-    description: 'Phân tích và diễn giải dữ liệu phức tạp để đưa ra quyết định.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '4',
-    title: 'DevOps Engineer',
-    salary: 20, // Lương: 20 triệu VNĐ
-    location: 'Hải Phòng', // Vị trí: Hải Phòng
-    status: JobStatus.Open,
-    description: 'Đảm bảo tích hợp và triển khai liên tục trong quy trình phát triển phần mềm.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '5',
-    title: 'Product Manager',
-    salary: 30, // Lương: 30 triệu VNĐ
-    location: 'Bình Dương', // Vị trí: Bình Dương
-    status: JobStatus.Open,
-    description: 'Quản lý phát triển và phát hành sản phẩm, đảm bảo phù hợp với chiến lược kinh doanh.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '6',
-    title: 'Frontend Developer',
-    salary: 15, // Lương: 15 triệu VNĐ
-    location: 'Hà Nội', // Vị trí: Hà Nội
-    status: JobStatus.Open,
-    description: 'Phát triển các thành phần giao diện người dùng cho ứng dụng web.',
-    ownerId: '1',
-    closeDate: '31-12-2024'
-  },
-  {
-    id: '7',
-    title: 'Backend Developer',
-    salary: 18, // Lương: 18 triệu VNĐ
-    location: 'TP. Hồ Chí Minh', // Vị trí: TP. Hồ Chí Minh
-    status: JobStatus.Open,
-    description: 'Xử lý logic phía server và tương tác với cơ sở dữ liệu.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '8',
-    title: 'Data Scientist',
-    salary: 25, // Lương: 25 triệu VNĐ
-    location: 'Đà Nẵng', // Vị trí: Đà Nẵng
-    status: JobStatus.Close,
-    description: 'Phân tích và diễn giải dữ liệu phức tạp để đưa ra quyết định.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '9',
-    title: 'DevOps Engineer',
-    salary: 20, // Lương: 20 triệu VNĐ
-    location: 'Hải Phòng', // Vị trí: Hải Phòng
-    status: JobStatus.Open,
-    description: 'Đảm bảo tích hợp và triển khai liên tục trong quy trình phát triển phần mềm.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  },
-  {
-    id: '10',
-    title: 'Product Manager',
-    salary: 30, // Lương: 30 triệu VNĐ
-    location: 'Bình Dương', // Vị trí: Bình Dương
-    status: JobStatus.Open,
-    description: 'Quản lý phát triển và phát hành sản phẩm, đảm bảo phù hợp với chiến lược kinh doanh.',
-    ownerId: '1',
-    closeDate: '30-11-2024'
-  }
-]
+export type GetJobParam = {
+  pagination: Pagination
+}
 
-const getJobs = async () => {
-  return fakeJobs
+const getQuery = (param: GetJobParam) => {
+  const pagination = `Pagination.Page=${param.pagination.page}&Pagination.PageSize=${param.pagination.pageSize}`
+  return pagination
+}
+
+const getJobs = async (param: GetJobParam) => {
+  const url = `/Position/GetPositionsByPagination?${getQuery(param)}`
+  try {
+    const res = await http().get(url)
+    return res.data.result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAndParseMetadata = async (): Promise<Metadata[] | undefined> => {
+  const url = `/Metadata/GetMetadataByPagination`
+  try {
+    const res = await http().get(url)
+    const rawMetadata: Metadata[] = res.data.result
+    const parsedMetadata: Metadata[] = rawMetadata.map((e) => {
+      const parsedValue = JSON.parse(e.value) // Parse the JSON string
+      const translatedValue = ValueTranslations[parsedValue.data] || parsedValue.data // Get the translated value
+      return { ...e, value: translatedValue, active: e.active !== undefined ? e.active : 0 }
+    })
+    return parsedMetadata
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const getJobsByCompanyId = async (ownerId: string): Promise<JobResponse | undefined> => {
-  try {
-    // Sử dụng filter để lấy tất cả jobs của ownerId
-    const jobs = fakeJobs.filter((j) => j.ownerId === ownerId)
-    if (jobs.length === 0) {
-      console.log('Jobs not found')
-    }
-    return { jobs } // Trả về mảng jobs
-  } catch (error) {
-    console.log(error)
-    return undefined // Hoặc có thể xử lý lỗi theo cách khác
-  }
+  return
 }
 
-export const JobService = { getJobsByCompanyId, getJobs }
+export const JobService = { getJobsByCompanyId, getJobs, getAndParseMetadata }

@@ -1,8 +1,24 @@
+'use client'
 import { Box, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FilterBox from './FilterBox'
+import { useJobStore } from '@/stores'
 
 const SideBar = () => {
+  const jobStore = useJobStore()
+  const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
+
+  useEffect(() => {
+    const uniqueTypes: number[] = jobStore.filter.reduce<number[]>((acc, item) => {
+      if (!acc.includes(item.type)) {
+        acc.push(item.type)
+      }
+      return acc
+    }, [])
+
+    setUniqueTypes(uniqueTypes)
+  }, [])
+
   return (
     <Container disableGutters={true} className='h-[100%] bg-background'>
       <Box
@@ -37,10 +53,9 @@ const SideBar = () => {
           </RadioGroup>
         </FormControl>
       </Box>
-      <FilterBox />
-      <FilterBox />
-      <FilterBox />
-      <FilterBox />
+      {uniqueTypes.map((e) => (
+        <FilterBox key={e} type={e} filterOptions={jobStore.filter.filter((element) => e === element.type)} />
+      ))}
     </Container>
   )
 }
