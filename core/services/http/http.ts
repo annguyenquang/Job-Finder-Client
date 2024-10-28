@@ -1,8 +1,9 @@
 import axios, { CreateAxiosDefaults } from "axios"
 
-const baseURL = process.env.SOME_API_URL || 'https://dummyjson.com';
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7019/api';
 
 export const http = () => {
+  console.log(baseURL);
   const defaultOption: CreateAxiosDefaults = {
     baseURL,
   };
