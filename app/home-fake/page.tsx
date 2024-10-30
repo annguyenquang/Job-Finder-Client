@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 const Home = () => {
     const items = [
-        { id: 1, slug: 'cong-ty-tnhh-dau-tu-thuong-mai-nhat-minh-1' },
-        { id: 2, slug: 'cong-ty-co-phan-cong-nghe-abc-2' },
+        { id: 1, slug: 'health-inc' },
+        { id: 2, slug: 'health-inc' },
     ];
 
     return (

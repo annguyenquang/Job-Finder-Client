@@ -1,4 +1,4 @@
-import { JobStatus, type CompanyDetail, type Job } from "@/models";
+import { JobStatus, type Company, type Job } from "@/models";
 import { http } from "../http";
 
 type JobResponse = {

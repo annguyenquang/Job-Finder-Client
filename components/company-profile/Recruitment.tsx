@@ -2,13 +2,13 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, FormControl, Grid2, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { CompanyDetail, Job } from 'core/models';
+import { Company, Job } from 'core/models';
 import Alert from '@mui/material/Alert'
 
 
 type RecruitmentProps = {
     jobs: Job[];
-    company: CompanyDetail;
+    company: Company;
 };
 
 export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
