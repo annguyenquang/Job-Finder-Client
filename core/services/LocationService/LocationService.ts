@@ -17,7 +17,9 @@ const DEFAULT_DISTRICT_URL = 'https://provinces.open-api.vn/api/d'
 
 const getDistrictsByProvinceId = async (provinceId: number): Promise<District[] | undefined> => {
   try {
-    const res: AxiosResponse<Province> = await http(DEFAULT_PROVINCE_URL).get(`/${provinceId}?depth=2`)
+    const res: AxiosResponse<Province> = await http().get(`${DEFAULT_PROVINCE_URL}/${provinceId}?depth=2`, {
+      baseURL: ''
+    })
     console.log(res.data)
     return res.data.districts
   } catch (error) {
@@ -27,7 +29,9 @@ const getDistrictsByProvinceId = async (provinceId: number): Promise<District[] 
 
 const searchProvince = async (query: string): Promise<Province[] | undefined> => {
   try {
-    const res: AxiosResponse<Province[]> = await http(DEFAULT_PROVINCE_URL).get(`/search/?q=${query}`)
+    const res: AxiosResponse<Province[]> = await http().get(`${DEFAULT_PROVINCE_URL}/search/?q=${query}`, {
+      baseURL: ''
+    })
     return res.data
   } catch (error) {
     console.log(error)

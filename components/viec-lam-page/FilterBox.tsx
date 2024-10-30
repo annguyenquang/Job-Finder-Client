@@ -2,17 +2,29 @@
 import { Box, InputLabel, MenuItem, outlinedInputClasses, Select, selectClasses, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Metadata } from '@/models/common/Metadata'
+import { TypeTranslation } from '@/models/enum/MetadataValue'
+import { useJobStore } from '@/stores'
 
 type FilterBoxProps = {
-  filterOptions: Metadata[]
+  filter: Metadata[]
   type: number
 }
 
 const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
-  const [val, setVal] = useState<number>()
+  const jobStore = useJobStore()
+  const [val, setVal] = useState<string>()
+  const filterOptions = props.filter.filter((element) => props.type === element.type)
 
+  const handleSelect = (metadataId: string) => {
+    jobStore.modifyFilter(metadataId)
+    setVal(metadataId) // Update local state to reflect selected value
+  }
+
+  useEffect(() => {
+    console.log(`Current selected ID: type ${props.type}/${val}`)
+  }, [val])
   return (
     <Box
       sx={{
@@ -44,7 +56,7 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
           }
         }}
         value={val}
-        onChange={(event) => setVal(event.target.value as number)}
+        onChange={(event) => handleSelect(event.target.value as string)} // Use handleSelect to update state
         sx={{
           mt: 1.5,
           [`& .${selectClasses.select}`]: {
@@ -69,8 +81,8 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
           }
         }}
       >
-        {props.filterOptions.map((e) => (
-          <MenuItem key={e.id} value={0} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
+        {filterOptions.map((e) => (
+          <MenuItem key={e.id} value={e.id} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
             {e.value}
           </MenuItem>
         ))}

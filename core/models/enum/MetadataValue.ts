@@ -1,4 +1,4 @@
-const ValueTranslations: { [key: string]: string } = {
+export const ValueTranslations: { [key: string]: string } = {
   Male: 'Nam',
   OneToThreeYears: '1 đến 3 năm',
   LessThanOneYear: 'Ít hơn 1 năm',
@@ -27,7 +27,7 @@ const ValueTranslations: { [key: string]: string } = {
   PartTime: 'Bán thời gian'
 }
 
-const TypeTranslation: { [key: number]: string } = {
+export const TypeTranslation: { [key: number]: string } = {
   0: 'Loại hợp đồng',
   1: 'Hình thức làm việc',
   2: 'Kinh nghiệm làm việc',

@@ -13,6 +13,7 @@ type JobStore = {
   setPage: (page: number) => void
   loadJobs: () => Promise<void>
   loadFilter: () => Promise<void>
+  modifyFilter: (id: string) => void
   loadJobsByCompanyId: (ownerId: string) => Promise<void>
 }
 
@@ -33,9 +34,26 @@ export const useJobStore = create<JobStore>((set) => ({
   },
   loadFilter: async () => {
     const initialFilter = await JobService.getAndParseMetadata()
-    set({
+    console.log('initialFilter: ' + initialFilter)
+    set(() => ({
       filter: initialFilter
-    })
+    }))
+  },
+  modifyFilter: (id: string) => {
+    set((state) => ({
+      filter: state.filter.map((item) => {
+        // Check if the item has the same type as the selected item
+        if (item.id === id) {
+          // Set active to 1 for the selected item
+          return { ...item, active: 1 }
+        } else if (item.type === state.filter.find((f) => f.id === id)?.type) {
+          // Set active to 0 for other items with the same type
+          return { ...item, active: 0 }
+        }
+        // Return the item unchanged if it's neither selected nor of the same type
+        return item
+      })
+    }))
   },
   loadJobs: async () => {
     const { pagination } = useJobStore.getState() // Get the current pagination state

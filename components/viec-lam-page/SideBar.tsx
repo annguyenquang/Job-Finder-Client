@@ -9,14 +9,26 @@ const SideBar = () => {
   const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
 
   useEffect(() => {
+    console.log('Current filter: ' + jobStore.filter)
+
+    //Every time filter reset, get the unique type of filter
     const uniqueTypes: number[] = jobStore.filter.reduce<number[]>((acc, item) => {
       if (!acc.includes(item.type)) {
         acc.push(item.type)
       }
       return acc
     }, [])
-
     setUniqueTypes(uniqueTypes)
+    jobStore.filter.forEach((e) => {
+      if (e.active === 1) console.log(`Category: ${e.type} Value: ${e.id}`)
+    })
+  }, [jobStore.filter])
+
+  useEffect(() => {
+    const getFilter = async () => {
+      await jobStore.loadFilter() // Await to ensure completion
+    }
+    getFilter()
   }, [])
 
   return (
@@ -54,7 +66,7 @@ const SideBar = () => {
         </FormControl>
       </Box>
       {uniqueTypes.map((e) => (
-        <FilterBox key={e} type={e} filterOptions={jobStore.filter.filter((element) => e === element.type)} />
+        <FilterBox key={e} type={e} filter={jobStore.filter} />
       ))}
     </Container>
   )

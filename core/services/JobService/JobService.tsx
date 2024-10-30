@@ -2,6 +2,7 @@ import { JobStatus, type CompanyDetail, type Job } from '@/models'
 import { http } from '../http'
 import { Pagination } from '@/models/common/Pagination'
 import { Metadata } from '@/models/common/Metadata'
+import { ValueTranslations } from '@/models/enum/MetadataValue'
 type JobResponse = {
   jobs: Job[] // Chỉnh sửa để trả về mảng các Job
 }
@@ -16,7 +17,7 @@ const getQuery = (param: GetJobParam) => {
 }
 
 const getJobs = async (param: GetJobParam) => {
-  const url = `/Position/GetPositionsByPagination?${getQuery(param)}`
+  const url = `/Job/GetJobsByPagination?${getQuery(param)}`
   try {
     const res = await http().get(url)
     return res.data.result
@@ -29,7 +30,7 @@ const getAndParseMetadata = async (): Promise<Metadata[] | undefined> => {
   const url = `/Metadata/GetMetadataByPagination`
   try {
     const res = await http().get(url)
-    const rawMetadata: Metadata[] = res.data.result
+    const rawMetadata: Metadata[] = res.data.result.data
     const parsedMetadata: Metadata[] = rawMetadata.map((e) => {
       const parsedValue = JSON.parse(e.value) // Parse the JSON string
       const translatedValue = ValueTranslations[parsedValue.data] || parsedValue.data // Get the translated value
@@ -38,6 +39,7 @@ const getAndParseMetadata = async (): Promise<Metadata[] | undefined> => {
     return parsedMetadata
   } catch (e) {
     console.log(e)
+    return []
   }
 }
 
