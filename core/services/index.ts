@@ -1,4 +1,5 @@
 export * from './http';
 export * from './UserService';
-export * from './CompanyDetailService';
+export * from './CompanyService';
 export * from './JobService'
+export * from "./LocationService";

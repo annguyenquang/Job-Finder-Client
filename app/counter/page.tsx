@@ -1,5 +1,5 @@
 'use client'
-import { useCounterStore } from "@/core/stores/CounterStore/CounterStore";
+import { useCounterStore } from "@/stores";
 import { Button, Card, CardContent, Grid2 } from "@mui/material";
 
 const Counter = () => {

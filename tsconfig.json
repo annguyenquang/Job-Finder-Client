@@ -22,19 +22,12 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
-      "@/models": [
-        "./core/models/"
-      ],
-      "@/services": [
-        "./core/services/"
-      ],
-      "@/stores": [
-        "./core/stores/"
+      "@/*": [
+        "./core/*"
       ],
       "@/components": [
-        "./components/"
+        "./components"
       ]
     }
   },

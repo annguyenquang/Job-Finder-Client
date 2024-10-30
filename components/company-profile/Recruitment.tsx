@@ -13,12 +13,12 @@ import Pagination from '@mui/material/Pagination';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { CompanyDetail, Job } from 'core/models';
+import { Company, Job } from 'core/models';
 
 
 type RecruitmentProps = {
     jobs: Job[];
-    company: CompanyDetail;
+    company: Company;
 };
 
 export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {

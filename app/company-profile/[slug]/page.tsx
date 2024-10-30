@@ -7,12 +7,12 @@ import Container from '@mui/material/Container';
 import Grid2 from '@mui/material/Grid2';
 
 
-import { useCompanyDetailStore, useJobStore } from 'core/stores';
+import { useCompanyStore, useJobStore } from '@/stores';
 
 const Profile = () => {
     const { slug } = useParams();
 
-    const companyDetailStore = useCompanyDetailStore();
+    const companyDetailStore = useCompanyStore();
     const jobStore = useJobStore();
 
 
@@ -29,7 +29,7 @@ const Profile = () => {
     useEffect(() => {
         // Tải chi tiết công ty
         const loadComapanyDetail = async () => {
-            companyDetailStore.loadCompanyDetail(slug as string);
+            companyDetailStore.loadCompany(slug as string);
         }
 
         // Tải jobs và sau đó hiển thị từng đối tượng job
@@ -53,14 +53,14 @@ const Profile = () => {
                 component="main"
                 className="flex-grow p-5">
                 <BasicBreadcrumb
-                    currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyDetailStore.CompanyDetail.name}`}>
+                    currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyDetailStore.Company.name}`}>
                 </BasicBreadcrumb>
                 <Banner
-                    avatar={companyDetailStore.CompanyDetail.avatar}
-                    name={companyDetailStore.CompanyDetail.name}
-                    employeeCount={companyDetailStore.CompanyDetail.employeeCount}
-                    email={companyDetailStore.CompanyDetail.email}
-                    website={companyDetailStore.CompanyDetail.website ?? ''}>
+                    avatar={companyDetailStore.Company.avatar}
+                    name={companyDetailStore.Company.name}
+                    employeeCount={companyDetailStore.Company.employeeCount}
+                    email={companyDetailStore.Company.emailContact}
+                    website={companyDetailStore.Company.website ?? ''}>
                 </Banner>
 
                 <Grid2
@@ -70,18 +70,18 @@ const Profile = () => {
                     <Grid2
                         size={8}>
                         <CompanyInfo
-                            description={companyDetailStore.CompanyDetail.description}>
+                            description={companyDetailStore.Company.description}>
                         </CompanyInfo>
                         <Recruitment
                             jobs={jobStore.jobs}
-                            company={companyDetailStore.CompanyDetail}
+                            company={companyDetailStore.Company}
                         >
                         </Recruitment>
                     </Grid2>
                     <Grid2
                         size={4}>
                         <ContactInfo
-                            address={companyDetailStore.CompanyDetail.address}
+                            address={companyDetailStore.Company.address}
                         ></ContactInfo>
                         <Share />
                     </Grid2>
