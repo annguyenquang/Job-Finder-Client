@@ -13,28 +13,32 @@ import Pagination from '@mui/material/Pagination';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Company, Job } from 'core/models';
+import { Company } from '@/models';
+import { useJobStore } from '@/stores';
 
 
 type RecruitmentProps = {
-    jobs: Job[];
     company: Company;
 };
 
-export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
+export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     const [province, setProvince] = React.useState('');
-    const [currentPage, setCurrentPage] = React.useState(1);  // Trang hiện tại
-    const jobsPerPage = 3;  // Số lượng công việc mỗi trang
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const jobsPerPage = 4;
+    const jobStore = useJobStore();
+
 
     // Hàm xử lý thay đổi trang
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value);
     };
 
-    // Hàm tính toán phần tử bắt đầu và kết thúc trên mỗi trang
-    const indexOfLastJob = currentPage * jobsPerPage;
-    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob); // Lấy dữ liệu công việc hiện tại
+    // Gọi loadJobs khi currentPage thay đổi
+    React.useEffect(() => {
+        const pagination = { page: currentPage, pageSize: jobsPerPage };
+        jobStore.loadJobs(company.id, pagination);
+    }, [currentPage, company.id]);
+
 
     const handleChange = (event: SelectChangeEvent) => {
         setProvince(event.target.value);
@@ -93,8 +97,8 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
 
                 {/* Displaying paginated job information */}
                 <Box mt={3}>
-                    {currentJobs.length > 0 ? (
-                        currentJobs.map((job) => (
+                    {jobStore.jobs.length > 0 ? (
+                        jobStore.jobs.map((job) => (
                             <Card key={job.id} className="mb-4 bg-green-100">
                                 <CardContent>
                                     <Box key={job.id}>
@@ -106,7 +110,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
                                             >
                                                 <Avatar
                                                     alt="avatar"
-                                                    src={company.avatar}
+                                                    src={company.logo}
                                                     className="border-4 w-20 h-20 border-white"
                                                 />
                                             </Grid2>
@@ -125,13 +129,13 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
                                                     variant="body2"
                                                     className="bg-slate-200 text-gray-600 font-bold inline-block p-1 mr-3 rounded-md"
                                                 >
-                                                    {job.location}
+                                                    {job.districtId}
                                                 </Typography>
                                                 <Typography
                                                     variant="body2"
                                                     className="bg-slate-200 text-gray-600 inline-block p-1 m-0 rounded"
                                                 >
-                                                    Ứng tuyển đến hết <b>{job.closeDate}</b>
+                                                    Ứng tuyển đến hết <b>{new Date(job.closeDate).toLocaleDateString('Vi-VN')}</b>
                                                 </Typography>
                                             </Grid2>
                                             <Grid2
@@ -167,7 +171,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ jobs, company }) => {
                 {/* Pagination */}
                 <Box mt={3} className="flex justify-center">
                     <Pagination
-                        count={Math.ceil(jobs.length / jobsPerPage)}  // Tính tổng số trang
+                        count={Math.ceil(jobStore.totalJobs / jobsPerPage)}  // Tính tổng số trang
                         page={currentPage}  // Trang hiện tại
                         onChange={handlePageChange}  // Xử lý thay đổi trang
                         variant="outlined"

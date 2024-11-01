@@ -7,15 +7,15 @@ type CompanyResponse = {
     errors: string[] // Danh sách lỗi
 }
 
-const getCompany = async (slug: string) => {
+const GetCompanyBySlug = async (slug: string) => {
     try {
         const url = `/Company/GetCompanyBySlug/${slug}`;
         const res = await http().get<CompanyResponse>(url);
-        return res;
+        return res.data;
     } catch (error) {
         console.log(error);
     }
 };
 
 
-export const CompanyService = { getCompany };
+export const CompanyService = { GetCompanyBySlug };
