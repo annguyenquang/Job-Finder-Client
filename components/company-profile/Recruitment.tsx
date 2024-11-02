@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { Company } from '@/models';
 import { useJobStore } from '@/stores';
-
+import { useEffect } from 'react';
 
 type RecruitmentProps = {
     company: Company;
@@ -24,24 +24,28 @@ type RecruitmentProps = {
 export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     const [province, setProvince] = React.useState('');
     const [currentPage, setCurrentPage] = React.useState(1);
-    const jobsPerPage = 4;
+    const jobsPerPage = 4; // Số công việc trên mỗi trang
     const jobStore = useJobStore();
-
 
     // Hàm xử lý thay đổi trang
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value);
     };
 
-    // Gọi loadJobs khi currentPage thay đổi
-    React.useEffect(() => {
+    // Gọi loadJobs khi currentPage hoặc từ khóa tìm kiếm thay đổi
+    useEffect(() => {
         const pagination = { page: currentPage, pageSize: jobsPerPage };
-        jobStore.loadJobs(company.id, pagination);
-    }, [currentPage, company.id]);
-
+        jobStore.loadJobs(company.id, pagination); // Gọi loadJobs với thông tin phân trang
+    }, [currentPage, company.id, jobStore.searchKeyword]);
 
     const handleChange = (event: SelectChangeEvent) => {
         setProvince(event.target.value);
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        jobStore.searchKeyword = event.target.value; // Cập nhật từ khóa tìm kiếm
+        setCurrentPage(1); // Đặt lại trang về 1 khi tìm kiếm
+        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage }); // Gọi lại loadJobs với từ khóa mới
     };
 
     return (
@@ -59,6 +63,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                             label="Tên công việc, vị trí ứng tuyển..."
                             fullWidth
                             variant="outlined"
+                            onChange={handleSearchChange} // Thêm sự kiện thay đổi cho ô tìm kiếm
                         />
                     </Grid2>
                     <Grid2 size={4}>

@@ -1,8 +1,8 @@
 "use client";
 import { Box, Container } from '@mui/material';
-import { JobBanner, JobBreadcrumb } from 'components';
+import { JobBanner, JobBreadcrumb } from '@/components';
 import React from 'react'
-import { Job, JobStatus } from 'core/models';
+import { Job, JobStatus } from '@/models';
 
 
 const job: Job = {
