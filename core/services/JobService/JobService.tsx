@@ -1,4 +1,4 @@
-import { Job } from "@/models";
+import { ApiResult, Job } from "@/models";
 import { http } from "../http";
 
 export type JobPaginationByCompany = {
@@ -39,7 +39,7 @@ const getJobsByCompany = async (companyId: string, keyword: string | null, pagin
 const getJobById = async (jobId: string): Promise<JobByIdResponse | undefined> => {
     try {
         const baseUrl = `Job/GetJob?id=${jobId}`;
-        const res = await http().get<JobByIdResponse>(baseUrl);
+        const res = await http().get<ApiResult<Job>>(baseUrl);
         return res.data;
     } catch (error) {
         console.log(error);
