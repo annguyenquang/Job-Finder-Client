@@ -5,8 +5,12 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
-export const CompanyIntro: React.FC = () => {
-    const AVATAR = "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/qBfrVeU5wVAfunKSH2WH004bDiWkG2O1_1709184279____b41b0027409b4c36f833508084ed0a1f.png"
+type CompanyInfoProps = {
+    company: any,
+}
+
+
+export const CompanyIntro: React.FC<CompanyInfoProps> = (props) => {
 
     return (
         <Card className='mb-4'>
@@ -21,7 +25,7 @@ export const CompanyIntro: React.FC = () => {
                     <img
                         alt=""
                         className='w-10 h-10 mr-4'
-                        src={AVATAR}>
+                        src={props.company.logo}>
                     </img>
                     <Box
                         className="flex flex-col"
@@ -29,13 +33,13 @@ export const CompanyIntro: React.FC = () => {
                         <Typography
                             className='font-sans text-lg font-semibold text-black'
                         >
-                            NOUS BY SUN LIFE MIỀN NAM
+                            {props.company.name}
                         </Typography>
                         <Typography
                             color="textSecondary"
                             className='font-sans'
                         >
-                            200 nhân viên
+                            {props.company.employeeCount} nhân viên
                         </Typography>
                     </Box>
                 </Box>
@@ -47,7 +51,7 @@ export const CompanyIntro: React.FC = () => {
                 <Typography
                     className='font-sans text-lg text-black mb-2'
                 >
-                    Số 102C Nguyễn Văn Cừ, Phường Nguyễn Cư Trinh, Quận 1
+                    {props.company.address}
                 </Typography>
                 <Box className='flex justify-center'>
                     <Button

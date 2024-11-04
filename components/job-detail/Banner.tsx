@@ -10,12 +10,13 @@ import SchoolIcon from '@mui/icons-material/School';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import { Job } from '@/models';
 
 type BannerProps = {
-
+    job: Job,
 }
 
-export const JobBanner: React.FC = () => {
+export const JobBanner: React.FC<BannerProps> = (props) => {
     return (
         <Grid2
             container
@@ -28,7 +29,7 @@ export const JobBanner: React.FC = () => {
                 <Typography className='font-bold font-sans text-white mt-4'
                     variant="h4"
                 >
-                    Premier Life Consultant
+                    {props.job.title}
                 </Typography>
                 <Box className='flex flex-row items-center mt-6'>
                     <AttachMoneyIcon
@@ -37,7 +38,7 @@ export const JobBanner: React.FC = () => {
                     </AttachMoneyIcon>
                     <Typography
                         className='font-sans font-semibold text-lg text-colorPimaryText'>
-                        12-18 Tr/Tháng
+                        {props.job.salary} Tr/Tháng
                     </Typography>
                 </Box>
                 <Box className='flex flex-row items-center mt-1'>
@@ -74,7 +75,7 @@ export const JobBanner: React.FC = () => {
                 </Box>
                 <Typography
                     className='font-sans text-base text-green-400 mt-1 mb-6'>
-                    Cập nhật 16 ngày trước
+                    Cập nhật {props.job.createdAt ? Math.ceil((new Date().getTime() - new Date(props.job.createdAt).getTime()) / (1000 * 3600 * 24)) : 'N/A'} ngày trước
                 </Typography>
             </Grid2>
             <Grid2

@@ -1,22 +1,18 @@
 "use client";
 import { Box, Card, CardContent, Container, Grid2 } from '@mui/material';
-import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from 'components';
-import React from 'react'
-import { Job, JobStatus } from 'core/models';
+import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components';
+import React, { useEffect } from 'react'
+import { useJobStore } from '@/stores';
+import { useParams } from 'next/navigation';
 
-
-const job: Job = {
-    id: '1',
-    title: 'Frontend Developer',
-    salary: 15,
-    location: 'Hà Nội',
-    status: JobStatus.Open,
-    description: 'Phát triển các thành phần giao diện người dùng cho ứng dụng web.',
-    ownerId: '1',
-    closeDate: '31-12-2024'
-};
 
 const JobDetail = () => {
+    const { id } = useParams();
+    const jobStore = useJobStore();
+
+    useEffect(() => {
+        jobStore.loadJobById(id as string);
+    }, [id])
     return (
         <Box
             className="flex flex-col">
@@ -25,7 +21,7 @@ const JobDetail = () => {
                 maxWidth="lg"
                 className="flex-grow p-4">
                 <JobBreadcrumb
-                    currentPosition={`Tuyển dụng ${job.title}`}>
+                    currentPosition={`Tuyển dụng ${jobStore.job.title}`}>
                 </JobBreadcrumb>
             </Container>
             <Box className=" bg-colorPrimary">
@@ -33,7 +29,9 @@ const JobDetail = () => {
                     maxWidth="lg"
                     component="main"
                     className="flex-grow">
-                    <JobBanner ></JobBanner>
+                    <JobBanner
+                        job={jobStore.job}
+                    ></JobBanner>
                 </Container>
             </Box>
             <Container
@@ -49,12 +47,16 @@ const JobDetail = () => {
                     <Grid2
                         size={8}
                     >
-                        <JobInfo></JobInfo>
+                        <JobInfo
+                            job={jobStore.job}
+                        ></JobInfo>
                     </Grid2>
                     <Grid2
                         size={4}
                     >
-                        <CompanyIntro></CompanyIntro>
+                        <CompanyIntro
+                            company={jobStore.job.company}
+                        ></CompanyIntro>
                         <Card>
                             <CardContent>
                                 <JobList></JobList>
