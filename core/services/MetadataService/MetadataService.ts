@@ -1,7 +1,6 @@
 import { http } from "@/services/http";
-import { AxiosResponse } from "axios";
 import { Metadata } from "@/models";
-import { ValueTranslations } from "@/models/enum/ValueTranslations";
+import { ValueTranslations } from "@/models/enum/MetadataValue";
 
 const getAndParseMetadata = async (): Promise<Metadata[] | undefined> => {
   const url = `/Metadata/GetMetadataByPagination`;
