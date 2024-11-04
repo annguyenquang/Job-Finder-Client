@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import JobDescription from './JobDescription';
 import { Job } from '@/models';
+import Image from 'next/image';
 type JobInfoProps = {
     job: Job,
 }
@@ -36,11 +37,11 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                     className="rounded-lg text-gray-400"
                 >
                     <Box className="flex flex-row items-center">
-                        <img
+                        <Image
                             alt=""
                             className='w-20 h-20 m-2'
                             src={props.job.company.logo}>
-                        </img>
+                        </Image>
                         <Box
                             className="flex flex-col"
                         >
