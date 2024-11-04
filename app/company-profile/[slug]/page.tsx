@@ -22,14 +22,14 @@ const Profile = () => {
                 component="main"
                 className="flex-grow p-5">
                 <BasicBreadcrumb
-                    currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyStore.Company.name}`}>
+                    currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyStore.company.name}`}>
                 </BasicBreadcrumb>
                 <Banner
-                    avatar={companyStore.Company.logo}
-                    name={companyStore.Company.name}
-                    employeeCount={companyStore.Company.employeeCount}
-                    email={companyStore.Company.emailContact}
-                    website={companyStore.Company.website ?? ''}>
+                    avatar={companyStore.company.logo}
+                    name={companyStore.company.name}
+                    employeeCount={companyStore.company.employeeCount}
+                    email={companyStore.company.emailContact}
+                    website={companyStore.company.website ?? ''}>
                 </Banner>
 
                 <Grid2
@@ -39,17 +39,17 @@ const Profile = () => {
                     <Grid2
                         size={8}>
                         <CompanyInfo
-                            description={companyStore.Company.description}>
+                            description={companyStore.company.description}>
                         </CompanyInfo>
                         <Recruitment
-                            company={companyStore.Company}
+                            company={companyStore.company}
                         >
                         </Recruitment>
                     </Grid2>
                     <Grid2
                         size={4}>
                         <ContactInfo
-                            address={companyStore.Company.address}
+                            address={companyStore.company.address}
                         ></ContactInfo>
                         <Share />
                     </Grid2>

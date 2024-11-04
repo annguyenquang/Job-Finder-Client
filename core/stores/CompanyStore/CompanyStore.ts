@@ -3,7 +3,7 @@ import { CompanyService } from "@/services";
 import { create } from "zustand";
 
 type CompanyStore = {
-    Company: Company; // Chú ý sửa từ "Company" thành "company" để nhất quán với kiểu
+    company: Company; 
     loadCompany: (slug: string) => void;
 };
 
@@ -30,9 +30,9 @@ const emptyCompany: Company = {
 }
 
 export const useCompanyStore = create<CompanyStore>()((set) => ({
-    Company: emptyCompany, // Sử dụng đối tượng company rỗng
+    company: emptyCompany, // Sử dụng đối tượng company rỗng
     loadCompany: async (slug: string) => {
         const res = await CompanyService.GetCompanyBySlug(slug);
-        set(() => ({ Company: res?.result })); // Cập nhật trạng thái company với dữ liệu nhận được
+        set(() => ({ company: res?.result })); // Cập nhật trạng thái company với dữ liệu nhận được
     }
 }));

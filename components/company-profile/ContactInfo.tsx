@@ -5,12 +5,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-
 type ContactInfoProps = {
     address: string
 }
 
 export const ContactInfo: React.FC<ContactInfoProps> = (props: ContactInfoProps) => {
+
     return (
         <Card
             className="flex flex-col mb-4">

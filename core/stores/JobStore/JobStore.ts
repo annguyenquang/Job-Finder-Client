@@ -1,4 +1,4 @@
-import { Job, JobStatus } from "@/models";
+import { Job } from "@/models";
 import { JobService, JobPaginationByCompany } from "@/services";
 import { create } from "zustand";
 
@@ -14,23 +14,58 @@ const emptyJob: Job = {
     title: "",
     description: "",
     salary: 0,
-    status: JobStatus.Open,
-    closeDate: new Date(),
+    status: 0, 
+    closeDate: new Date, 
     provinceId: 0,
     districtId: 0,
     minAgeRequirement: 0,
     maxAgeRequirement: 0,
-    workArrangementId: "",
-    commitmentTypeId: "",
-    genderRequirementId: "",
-    educationLevelRequirementId: "",
-    workExperienceRequirementId: "",
-    companyId: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    createdBy: "",
-    updatedBy: "",
+    genderRequirement: {
+        type: 0,
+        value: "",
+        id: ""
+    },
+    educationLevelRequirement: {
+        type: 0,
+        value: "",
+        id: ""
+    },
+    workExperienceRequirement: {
+        type: 0,
+        value: "",
+        id: ""
+    },
+    workArrangement: {
+        type: 0,
+        value: "",
+        id: ""
+    },
+    commitmentType: {
+        type: 0,
+        value: "",
+        id: ""
+    },
+    company: {
+        name: "",
+        emailContact: "",
+        phoneContact: "",
+        description: "",
+        employeeCount: 0,
+        provinceId: 0,
+        districtId: 0,
+        logo: "",
+        slug: "",
+        address: "",
+        website: "",
+        industry: "",
+        id: ""
+    },
+    createdAt: new Date,
+    updatedAt: new Date,
+    createdBy: null,
+    updatedBy: null,
 };
+
 
 export const useJobStore = create<JobStore>((set, get) => ({
     jobs: [emptyJob],
