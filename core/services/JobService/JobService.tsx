@@ -7,17 +7,8 @@ type JobResponse = {
   jobs: Job[] // Chỉnh sửa để trả về mảng các Job
 }
 
-export type GetJobParam = {
-  pagination: Pagination
-}
-
-const getQuery = (param: GetJobParam) => {
-  const pagination = `Pagination.Page=${param.pagination.page}&Pagination.PageSize=${param.pagination.pageSize}`
-  return pagination
-}
-
-const getJobs = async (param: GetJobParam) => {
-  const url = `/Job/GetJobsByPagination?${getQuery(param)}`
+const getJobs = async (param: string) => {
+  const url = `/Job/GetJobsByPagination?${param}`
   try {
     const res = await http().get(url)
     return res.data.result

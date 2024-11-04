@@ -37,4 +37,5 @@ const searchProvince = async (query: string): Promise<Province[] | undefined> =>
     console.log(error)
   }
 }
+
 export const LocationService = { getDistrictsByProvinceId, searchProvince }

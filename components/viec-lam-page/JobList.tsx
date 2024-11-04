@@ -14,12 +14,6 @@ const JobList = () => {
       jobStore.setPage(page) // Update current page state
     }
   }
-  useEffect(() => {
-    const getJob = async () => {
-      jobStore.loadJobs()
-    }
-    getJob()
-  }, [jobStore.pagination])
 
   useEffect(() => {
     console.log(jobStore.jobs)

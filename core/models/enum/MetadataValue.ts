@@ -34,3 +34,12 @@ export const TypeTranslation: { [key: number]: string } = {
   3: 'Trình độ học vấn',
   4: 'Giới tính'
 }
+
+// For constructing the URL in English
+export const QueryParams: { [key: number]: string } = {
+  0: 'JobFilter.CommitmentTypeId',
+  1: 'JobFilter.WorkArrangementId',
+  2: 'JobFilter.WorkExperienceRequirementId',
+  3: 'JobFilter.EducationLevelRequirementId',
+  4: 'JobFilter.GenderRequirementId'
+}

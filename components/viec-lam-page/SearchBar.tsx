@@ -17,12 +17,14 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import React, { useEffect, useState } from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useJobStore } from '@/stores'
 
 interface SearchBarProps {
   location: string
   handleChange: (event: SelectChangeEvent<string>) => void
 }
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
+  const jobStore = useJobStore()
   // Define your initial options state
   const initialOptions: Province[] = [
     {
@@ -48,6 +50,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   useEffect(() => {
     console.log('Current options:' + JSON.stringify(options))
+    const getJob = async () => {
+      jobStore.loadJobs(jobStore.param.constructParam())
+    }
   }, [options])
 
   useEffect(() => {
@@ -106,7 +111,13 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                 setQuery(newInputValue)
               }}
               onChange={(event, value) => {
-                console.log('Selected option:', value)
+                const selectedProvince = options.find((option) => option.name === value)
+                if (selectedProvince) {
+                  const newParam = jobStore.param
+                  // Call the passed setProvinceId function to set the province ID
+                  newParam.setProvinceId(selectedProvince.code)
+                  jobStore.updateParam(newParam)
+                }
               }}
             />
           </Container>

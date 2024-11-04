@@ -10,7 +10,9 @@ const SideBar = () => {
 
   useEffect(() => {
     console.log('Current filter: ' + jobStore.filter)
-
+    const getJob = async () => {
+      jobStore.loadJobs(jobStore.param.constructParam())
+    }
     //Every time filter reset, get the unique type of filter
     const uniqueTypes: number[] = jobStore.filter.reduce<number[]>((acc, item) => {
       if (!acc.includes(item.type)) {
@@ -19,9 +21,13 @@ const SideBar = () => {
       return acc
     }, [])
     setUniqueTypes(uniqueTypes)
-    jobStore.filter.forEach((e) => {
-      if (e.active === 1) console.log(`Category: ${e.type} Value: ${e.id}`)
-    })
+    //Update param filter
+    const currentParam = jobStore.param
+    const currentActiveFilter = jobStore.filter.filter((e) => e.active === 1) // TODO
+    currentParam.setFilter(currentActiveFilter)
+    jobStore.updateParam(currentParam)
+
+    getJob()
   }, [jobStore.filter])
 
   useEffect(() => {

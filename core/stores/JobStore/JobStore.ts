@@ -1,7 +1,8 @@
 import { Job } from '@/models'
+import { JobParam } from '@/models/common/JobFilterParam'
 import { Metadata } from '@/models/common/Metadata'
 import { Pagination } from '@/models/common/Pagination'
-import { GetJobParam, JobService } from '@/services'
+import { JobService } from '@/services'
 import { create } from 'zustand'
 
 type JobStore = {
@@ -10,11 +11,13 @@ type JobStore = {
   filter: Metadata[]
   pagination: Pagination
   total: number
+  param: JobParam
   setPage: (page: number) => void
-  loadJobs: () => Promise<void>
+  loadJobs: (param: string) => Promise<void>
   loadFilter: () => Promise<void>
   modifyFilter: (id: string) => void
   loadJobsByCompanyId: (ownerId: string) => Promise<void>
+  updateParam: (newParam: JobParam) => void // Update param state
 }
 
 const DEFAULT_PAGE = 1
@@ -23,15 +26,18 @@ const DEFAULT_PAGESIZE = 6
 export const useJobStore = create<JobStore>((set) => ({
   jobs: [],
   companyJobs: [],
+  param: new JobParam(),
   filter: [],
   pagination: {
     page: DEFAULT_PAGE,
     pageSize: DEFAULT_PAGESIZE
   },
   total: 0,
+
   setPage: (newPage: number) => {
     set((state) => ({ pagination: { ...state.pagination, page: newPage } }))
   },
+
   loadFilter: async () => {
     const initialFilter = await JobService.getAndParseMetadata()
     console.log('initialFilter: ' + initialFilter)
@@ -55,12 +61,9 @@ export const useJobStore = create<JobStore>((set) => ({
       })
     }))
   },
-  loadJobs: async () => {
+  loadJobs: async (param: string) => {
     const { pagination } = useJobStore.getState() // Get the current pagination state
-    const params: GetJobParam = {
-      pagination
-    }
-    const res = await JobService.getJobs(params)
+    const res = await JobService.getJobs(param)
     set((state) => ({
       jobs: res.data || [], // Update the state with the jobs array
       total: Math.ceil(res.total / state.pagination.pageSize)
@@ -69,5 +72,6 @@ export const useJobStore = create<JobStore>((set) => ({
   loadJobsByCompanyId: async (ownerId: string) => {
     const res = await JobService.getJobsByCompanyId(ownerId)
     set(() => ({ companyJobs: Array.isArray(res?.jobs) ? res.jobs : [] }))
-  }
+  },
+  updateParam: (newParam: JobParam) => set({ param: newParam })
 }))

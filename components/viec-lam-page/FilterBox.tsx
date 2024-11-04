@@ -19,6 +19,7 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
 
   const handleSelect = (metadataId: string) => {
     jobStore.modifyFilter(metadataId)
+
     setVal(metadataId) // Update local state to reflect selected value
   }
 
