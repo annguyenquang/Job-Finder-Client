@@ -1,4 +1,4 @@
-import { type Job } from "@/models";
+import { ApiResult, type Job } from "@/models";
 import { http } from "../http";
 
 export type JobPaginationByCompany = {
@@ -6,24 +6,17 @@ export type JobPaginationByCompany = {
     pageSize: number
 }
 
-type JobResponse = {
-    succeeded: boolean,
-    result: {
-        pagination: {
-            page: number,
-            pageSize: number
-        },
-        data: Job[],
-        total: number // Thêm trường này
-    },
-    errors: string[]
-};
+type jobResult<T> = {
+    pagination: JobPaginationByCompany,
+    data: T,
+    total: number
+}
 
-const getJobsByCompany = async (companyId: string, keyword: string | null, pagination: JobPaginationByCompany): Promise<JobResponse | undefined> => {
+const getJobsByCompany = async (companyId: string, keyword: string | null, pagination: JobPaginationByCompany): Promise<ApiResult<jobResult<Job[]>> | undefined> => {
     try {
         const baseUrl = `/Company/GetCompanyJobs/${companyId}/jobs?Pagination.Page=${pagination.page}&Pagination.PageSize=${pagination.pageSize}`;
         const url = keyword ? `${baseUrl}&Filter.Keyword=${keyword}` : baseUrl; // Tối ưu hóa việc xây dựng URL
-        const res = await http().get<JobResponse>(url);
+        const res = await http().get<ApiResult<jobResult<Job[]>>>(url);
         return res.data;
     } catch (error) {
         console.log(error);
