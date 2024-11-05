@@ -21,7 +21,7 @@ const getDistrictsByProvinceId = async (
   try {
     const res: AxiosResponse<Province> = await http().get(
       `${DEFAULT_PROVINCE_URL}/${provinceId}?depth=2`,
-      { baseURL: "" }
+      { baseURL: "", withCredentials: false }
     );
     console.log(res.data);
     return res.data.districts;
@@ -36,7 +36,7 @@ const searchProvince = async (
   try {
     const res: AxiosResponse<Province[]> = await http().get(
       `${DEFAULT_PROVINCE_URL}/search/?q=${query}`,
-      { baseURL: "" }
+      { baseURL: "", withCredentials: false }
     );
     return res.data;
   } catch (error) {
