@@ -50,6 +50,8 @@ const Profile = () => {
                         size={4}>
                         <ContactInfo
                             address={companyStore.company.address}
+                            districtId={companyStore.company.districtId}
+                            provinceId={companyStore.company.provinceId}
                         ></ContactInfo>
                         <Share />
                     </Grid2>

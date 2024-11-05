@@ -16,6 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Company } from '@/models';
 import { useJobStore } from '@/stores';
 import { useEffect } from 'react';
+import { LocationService, Province } from '@/services';
 
 type RecruitmentProps = {
     company: Company;
@@ -24,6 +25,7 @@ type RecruitmentProps = {
 export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     const [province, setProvince] = React.useState('');
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [jobProvinces, setJobProvinces] = React.useState<{ [key: number]: Province }>({});
     const jobsPerPage = 4; // Số công việc trên mỗi trang
     const jobStore = useJobStore();
 
@@ -38,6 +40,19 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
         jobStore.loadJobs(company.id, pagination); // Gọi loadJobs với thông tin phân trang
     }, [currentPage, company.id, jobStore.searchKeyword]);
 
+    useEffect(() => {
+        const fetchProvinces = async () => {
+            const provinces: { [key: number]: Province } = {};
+            for (const job of jobStore.jobs) {
+                const fetchedProvince = await LocationService.getProvinceById(job.provinceId);
+                provinces[job.provinceId] = fetchedProvince || { name: '', code: 0, districts: [] };
+            }
+            setJobProvinces(provinces);
+        };
+
+        fetchProvinces();
+    }, [jobStore.jobs]);
+
     const handleChange = (event: SelectChangeEvent) => {
         setProvince(event.target.value);
     };
@@ -47,6 +62,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
         setCurrentPage(1); // Đặt lại trang về 1 khi tìm kiếm
         jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage }); // Gọi lại loadJobs với từ khóa mới
     };
+
 
     return (
         <Card className="flex flex-col mb-4">
@@ -134,7 +150,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                                     variant="body2"
                                                     className="bg-slate-200 text-gray-600 font-bold inline-block p-1 mr-3 rounded-md"
                                                 >
-                                                    {job.districtId}
+                                                    {jobProvinces[job.provinceId]?.name || 'Đang tải...'}
                                                 </Typography>
                                                 <Typography
                                                     variant="body2"

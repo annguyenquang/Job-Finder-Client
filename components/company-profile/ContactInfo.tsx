@@ -4,12 +4,37 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { District, LocationService, Province } from '@/services';
 
 type ContactInfoProps = {
     address: string
+    districtId: number
+    provinceId: number
 }
 
 export const ContactInfo: React.FC<ContactInfoProps> = (props: ContactInfoProps) => {
+    const [districts, setDistricts] = React.useState<District>();
+    const [province, setProvince] = React.useState<Province>();
+
+    React.useEffect(() => {
+        const fetchProvince = async () => {
+            const fetchedProvince = await LocationService.getProvinceById(props.provinceId);
+            if (fetchedProvince) {
+                setProvince(fetchedProvince);
+            }
+        };
+        fetchProvince();
+    }, [props.provinceId]);
+
+    React.useEffect(() => {
+        const fetchDistricts = async () => {
+            const fetchedDistricts = await LocationService.getDistrictById(props.districtId);
+            if (fetchedDistricts) {
+                setDistricts(fetchedDistricts);
+            }
+        };
+        fetchDistricts();
+    }, [props.districtId]);
 
     return (
         <Card
@@ -36,7 +61,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props: ContactInfoProps)
                 <Typography
                     variant="body2"
                     color='textSecondary'
-                >{props.address}
+                >{props.address}, {districts?.name}, {province?.name}
                 </Typography>
             </CardContent>
         </Card>
