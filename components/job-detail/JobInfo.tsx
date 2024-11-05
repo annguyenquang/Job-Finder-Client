@@ -6,16 +6,19 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import JobDescription from './JobDescription';
 import { Job } from '@/models';
-import Image from 'next/image';
 type JobInfoProps = {
     job: Job,
+    educationLevel: string,
+    workExperienceRequirement: string,
+    genderRequirement: string
 }
 
 export const JobInfo: React.FC<JobInfoProps> = (props) => {
     const requirements = [
-        "Dưới một năm kinh nghiệm",
-        "Tối thiểu Cao Đẳng",
-        "22-35 tuổi"
+        props.educationLevel,
+        props.workExperienceRequirement,
+        props.genderRequirement,
+        `${props.job.minAgeRequirement}-${props.job.maxAgeRequirement}`
     ];
 
     const skills = [
@@ -37,11 +40,11 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                     className="rounded-lg text-gray-400"
                 >
                     <Box className="flex flex-row items-center">
-                        <Image
+                        <img
                             alt=""
                             className='w-20 h-20 m-2'
                             src={props.job.company.logo}>
-                        </Image>
+                        </img>
                         <Box
                             className="flex flex-col"
                         >
@@ -71,16 +74,16 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                 >
                     Mô tả công việc
                 </Typography>
-                {requirements.map((requirement) => (
-                    <Chip key={requirement} className='mr-2' label={requirement} />
+                {requirements.map((requirement, index) => (
+                    <Chip key={`${requirement}-${index}`} className="mr-2" label={requirement} />
                 ))}
                 <Typography
                     className='font-sans text-lg font-semibold text-gray-600 mt-4 mb-4'
                 >
                     Kỹ năng
                 </Typography>
-                {skills.map((skill) => (
-                    <Chip key={skill} className='mr-2 mb-2' label={skill} />
+                {skills.map((skill, index) => (
+                    <Chip key={`${skill}-${index}`} className='mr-2 mb-2' label={skill} />
                 ))}
             </CardContent>
         </Card>

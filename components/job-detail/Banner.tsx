@@ -14,6 +14,10 @@ import { Job } from '@/models';
 
 type BannerProps = {
     job: Job,
+    educationLevel: string,
+    commitmentType: string
+    workExperienceRequirement: string
+    workArrangement: string
 }
 
 export const JobBanner: React.FC<BannerProps> = (props) => {
@@ -49,7 +53,7 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                         </BusinessCenterIcon>
                         <Typography
                             className='font-sans text-lg text-white'>
-                            {'<1 năm'}
+                            {props.workExperienceRequirement}
                         </Typography>
                     </Box>
                     <Box className='flex flex-row items-center'>
@@ -59,7 +63,7 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                         </SchoolIcon>
                         <Typography
                             className='font-sans text-lg text-white'>
-                            Tối thiểu Cao Đẳng
+                            {props.educationLevel}
                         </Typography>
                     </Box>
                 </Box>
@@ -70,7 +74,7 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                     </LocationOnIcon>
                     <Typography
                         className='font-sans text-lg text-white'>
-                        Quận Một, Thành phố Hồ Chí Minh  ·  Làm tại công ty  ·  Việc làm fulltime
+                        Quận Một, Thành phố Hồ Chí Minh  ·  {props.workArrangement}  ·  Việc làm {props.commitmentType}
                     </Typography>
                 </Box>
                 <Typography

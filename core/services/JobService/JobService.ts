@@ -1,6 +1,10 @@
 import { ApiResult, Job } from "@/models";
 import { http } from "../http";
 
+export type JobPaginationByCompany = {
+    page: number,
+    pageSize: number
+}
 
 const getJobById = async (jobId: string): Promise<ApiResult<Job> | undefined> => {
     try {

@@ -7,7 +7,7 @@ type JobStore = {
     jobs: Job[];
     totalJobs: number;
     searchKeyword: string;
-    loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
+    // loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
     loadJobById: (jobId: string) => Promise<void>;
 };
 
@@ -73,15 +73,15 @@ export const useJobStore = create<JobStore>((set, get) => ({
     jobs: [emptyJob],
     totalJobs: 0,
     searchKeyword: "",
-    loadJobs: async (companyId: string, pagination: JobPaginationByCompany) => {
-        const res = await JobService.getJobsByCompany(companyId, get().searchKeyword, pagination);
-        if (res) {
-            set(() => ({
-                jobs: res.result.data, // Lưu trữ danh sách công việc
-                totalJobs: res.result.total // Cập nhật tổng số công việc
-            }));
-        }
-    },
+    // loadJobs: async (companyId: string, pagination: JobPaginationByCompany) => {
+    //     const res = await JobService.getJobsByCompany(companyId, get().searchKeyword, pagination);
+    //     if (res) {
+    //         set(() => ({
+    //             jobs: res.result.data, // Lưu trữ danh sách công việc
+    //             totalJobs: res.result.total // Cập nhật tổng số công việc
+    //         }));
+    //     }
+    // },
     loadJobById: async(jobId: string) => {
         const res = await JobService.getJobById(jobId);
         if (res) { // Kiểm tra xem phản hồi có thành công không

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Image from 'next/image';
 
 type CompanyInfoProps = {
     company: any,
@@ -23,11 +22,11 @@ export const CompanyIntro: React.FC<CompanyInfoProps> = (props) => {
                     Giới thiệu về công ty
                 </Typography>
                 <Box className="flex flex-row items-center">
-                    <Image
+                    <img
                         alt=""
                         className='w-10 h-10 mr-4'
                         src={props.company.logo}>
-                    </Image>
+                    </img>
                     <Box
                         className="flex flex-col"
                     >
