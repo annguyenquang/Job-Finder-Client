@@ -11,6 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { Job } from '@/models';
+import { District, LocationService, Province } from '@/services';
 
 type BannerProps = {
     job: Job,
@@ -21,6 +22,28 @@ type BannerProps = {
 }
 
 export const JobBanner: React.FC<BannerProps> = (props) => {
+    const [district, setDistrict] = React.useState<District>();
+    const [province, setProvince] = React.useState<Province>();
+
+    React.useEffect(() => {
+        const fetchProvince = async () => {
+            const fetchedProvince = await LocationService.getProvinceById(props.job.provinceId);
+            if (fetchedProvince) {
+                setProvince(fetchedProvince);
+            }
+        };
+        fetchProvince();
+    }, [props.job.provinceId]);
+
+    React.useEffect(() => {
+        const fetchDistrict = async () => {
+            const fetchedDistrict = await LocationService.getDistrictById(props.job.districtId);
+            if (fetchedDistrict) {
+                setDistrict(fetchedDistrict);
+            }
+        };
+        fetchDistrict();
+    }, [props.job.districtId]);
     return (
         <Grid2
             container
@@ -72,9 +95,8 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                         fontSize='medium'
                         className='text-colorPimaryText mr-1 font-semibold'>
                     </LocationOnIcon>
-                    <Typography
-                        className='font-sans text-lg text-white'>
-                        Quận Một, Thành phố Hồ Chí Minh  ·  {props.workArrangement}  ·  Việc làm {props.commitmentType}
+                    <Typography className="font-sans text-lg text-white">
+                        {district?.name ?? ''}, {province?.name ?? ''} · {props.workArrangement} · Việc làm {props.commitmentType}
                     </Typography>
                 </Box>
                 <Typography
