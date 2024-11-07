@@ -1,9 +1,26 @@
+"use client"
+
 import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } from "@mui/material";
 import blue from "@mui/material/colors/blue";
 import Image from "next/image";
 import AccountAndPasswordForm from "../../components/login/AccountAndPasswordForm";
+import {useAccountStore} from "@/stores/AccountStore/AccountStore";
+import React from "react";
+import {AccountService} from "@/services/AccountService";
 
 const LoginPage: React.FC = () => {
+    const accountStore = useAccountStore();
+    const [username, setUsername] = React.useState<string>("");
+    const [password, setPassword] = React.useState<string>("");
+    const onUpdateUsername = (newUsername: string) => {
+        setUsername(newUsername);
+    }
+    const onUpdatePassword = (newPassword:string)=> {
+        setPassword(newPassword);
+    }
+    const onLogin = async () => {
+        await accountStore.login(username, password);
+    }
     return (
         <Grid2 direction={"column"} container justifyContent="center" alignItems={"center"}>
             <div className="w-full">
@@ -18,11 +35,15 @@ const LoginPage: React.FC = () => {
 
                         <Typography variant="h6">Đăng nhập JobFinder để tiếp tục</Typography>
 
-                        <AccountAndPasswordForm />
+                        <AccountAndPasswordForm
+                            password={password}
+                            username={username}
+                            updatePassword={onUpdatePassword}
+                            updateUsername={onUpdateUsername}/>
 
                         <Link textAlign={"center"} color={blue[600]} href="#">Quên mật khẩu?</Link>
 
-                        <Button variant="contained">Đăng nhập</Button>
+                        <Button onClick={onLogin} variant="contained">Đăng nhập</Button>
                         <Grid2 direction={"row"}>
                             <Divider>
                                 <Typography fontSize={18} textAlign={"center"}>
@@ -32,7 +53,7 @@ const LoginPage: React.FC = () => {
                         </Grid2>
 
                         <Grid2 columnGap={5} justifyContent={"center"} alignItems={"center"} container>
-                            <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
+                            <Button onClick={async () => {await AccountService.getAccountByCookie();}} color="inherit" className="w-full justify-start p-3" variant="outlined">
                                 <Avatar className="w-[26px] h-[26px] mr-3" variant="square" src='/google-logo.png'></Avatar>
                                 <Typography textTransform={'none'}>Countinue with Google</Typography>
                             </Button>
