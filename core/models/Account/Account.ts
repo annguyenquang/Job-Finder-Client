@@ -5,13 +5,13 @@ export type AccountModel = {
     email: string,
 };
 
-export type User = {
+export type UserAccount = {
     firstName: string,
     lastName: string,
     dateOfBirth: Date,
 } & AccountModel
 
-export type Company = {
+export type CompanyAccount = {
     name: string,
     emailContact: string,
     phoneContact: string,
@@ -24,4 +24,4 @@ export type Company = {
     industry: string,
 } & AccountModel
 
-export type Account =  Company | User | null;
+export type Account =  CompanyAccount | UserAccount | null;

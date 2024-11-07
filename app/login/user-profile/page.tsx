@@ -1,12 +1,12 @@
 "use client"
 import {useAccountStore} from "@/stores/AccountStore/AccountStore";
-import {User} from "@/models";
+import {UserAccount} from "@/models";
 
 const UserProfilePage:React.FC  = () =>{
     const accountStore = useAccountStore();
     return (
         <div>
-            {(accountStore.account as User).firstName}
+            {(accountStore.account as UserAccount).firstName}
         </div>
     )
 };
