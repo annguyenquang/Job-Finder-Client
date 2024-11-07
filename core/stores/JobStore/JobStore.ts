@@ -1,13 +1,13 @@
-import { Job } from "@/models";
-import { JobService, JobPaginationByCompany } from "@/services";
+import { Job, Pagination } from "@/models";
+import { JobService } from "@/services";
 import { create } from "zustand";
 
 type JobStore = {
-    job: Job// chỉ có 1 job trong mảng;
+    job: Job
     jobs: Job[];
     totalJobs: number;
     searchKeyword: string;
-    // loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
+    loadJobs: (companyId: string, pagination: Pagination) => Promise<void>;
     loadJobById: (jobId: string) => Promise<void>;
 };
 
@@ -73,20 +73,20 @@ export const useJobStore = create<JobStore>((set, get) => ({
     jobs: [emptyJob],
     totalJobs: 0,
     searchKeyword: "",
-    loadJobs: async (companyId: string, pagination: JobPaginationByCompany) => {
+    loadJobs: async (companyId: string, pagination: Pagination) => {
         const res = await JobService.getJobsByCompany(companyId, get().searchKeyword, pagination);
         if (res) {
             set(() => ({
-                jobs: res.result.data, // Lưu trữ danh sách công việc
-                totalJobs: res.result.total // Cập nhật tổng số công việc
+                jobs: res.result.data,
+                totalJobs: res.result.total
             }));
         }
     },
     loadJobById: async(jobId: string) => {
         const res = await JobService.getJobById(jobId);
-        if (res) { // Kiểm tra xem phản hồi có thành công không
+        if (res) { 
             set(() => ({
-                job: res.result, // Cập nhật job với dữ liệu từ phản hồi
+                job: res.result,
             }));
         }
     }
