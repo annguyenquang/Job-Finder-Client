@@ -3,10 +3,12 @@ import { JobService, JobPaginationByCompany } from "@/services";
 import { create } from "zustand";
 
 type JobStore = {
+    job: Job// chỉ có 1 job trong mảng;
     jobs: Job[];
     totalJobs: number;
     searchKeyword: string;
-    loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
+    // loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
+    loadJobById: (jobId: string) => Promise<void>;
 };
 
 const emptyJob: Job = {
@@ -66,8 +68,8 @@ const emptyJob: Job = {
     updatedBy: null,
 };
 
-
 export const useJobStore = create<JobStore>((set, get) => ({
+    job: emptyJob,
     jobs: [emptyJob],
     totalJobs: 0,
     searchKeyword: "",
@@ -77,6 +79,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
             set(() => ({
                 jobs: res.result.data, // Lưu trữ danh sách công việc
                 totalJobs: res.result.total // Cập nhật tổng số công việc
+            }));
+        }
+    },
+    loadJobById: async(jobId: string) => {
+        const res = await JobService.getJobById(jobId);
+        if (res) { // Kiểm tra xem phản hồi có thành công không
+            set(() => ({
+                job: res.result, // Cập nhật job với dữ liệu từ phản hồi
             }));
         }
     }

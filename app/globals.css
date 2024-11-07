@@ -5,4 +5,6 @@
 :root {
     --STARTGREENBANNER: #203540; /* Màu nền */
     --ENDGREENBANNER: #01ae4f; /* Màu chữ */
+    --PRIMARYCOLOR: #006593;
+    --PRIMARYTEXT: #0baeec;
 }

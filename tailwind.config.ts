@@ -13,6 +13,8 @@ const config: Config = {
         foreground: "var(--foreground)",
         colorStartBanner: 'var(--STARTGREENBANNER)',
         colorEndBanner: 'var(--ENDGREENBANNER)',
+        colorPrimary: 'var(--PRIMARYCOLOR)',
+        colorPimaryText: 'var(--PRIMARYTEXT)'
       },
     },
   },
