@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {Account, AccountType, CompanyAccount, UserAccount} from "@/models";
-import {AccountService} from "@/services/AccountService";
+import {AccountService} from "@/services";
 
 
 type AccountStore = {
