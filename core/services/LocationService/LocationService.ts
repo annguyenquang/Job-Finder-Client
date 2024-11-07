@@ -45,9 +45,6 @@ const searchProvince = async (
 };
 
 const getDistrictById = async (districtId: number): Promise<District | undefined> => {
-  if(districtId === 0){
-    return;
-  }
   try {
     const res: AxiosResponse<District> = await http().get(
       `${DEFAULT_DISTRICT_URL}/${districtId}`,
@@ -60,9 +57,6 @@ const getDistrictById = async (districtId: number): Promise<District | undefined
 }
 
 const getProvinceById = async (provinceId: number): Promise<Province | undefined> => {
-  if(provinceId === 0){
-    return;
-  }
   try {
     const res: AxiosResponse<Province> = await http().get(
       `${DEFAULT_PROVINCE_URL}/${provinceId}`,
