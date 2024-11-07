@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {http} from "@/services";
-import {Account} from "@/models";
+import {Account, ApiResult} from "@/models";
 import {NextURL} from "next/dist/server/web/next-url";
 
 export const config = {
@@ -20,11 +20,6 @@ export const config = {
     }
 }
 
-type ApiResult<T> = {
-    succeeded: boolean,
-    result: T,
-    error: string[]
-}
 
 const getAccountByToken = async (token:string) => {
     try {

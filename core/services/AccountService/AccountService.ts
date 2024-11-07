@@ -1,11 +1,5 @@
 import {http} from "@/services";
-import {Account} from "@/models";
-
-type ApiResult<T> = {
-    succeeded: boolean,
-    result: T,
-    error: string[]
-}
+import {Account, ApiResult} from "@/models";
 
 const login = async (username: string, password: string) => {
 
@@ -19,16 +13,18 @@ const login = async (username: string, password: string) => {
         return res.data.result;
     } catch (e) {
         console.log(e);
+        return null;
     }
 }
 
-const getAccountByCookie = async () => {
+const getAccountByCookie:() => Promise<Account | null> = async () => {
    try {
        const url = "/Account/GetAccountByJwt";
        const res = await http().get<ApiResult<Account>>(url);
        return res.data.result;
    } catch (e) {
        console.log(e);
+       return null;
    }
 }
 
