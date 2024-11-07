@@ -5,7 +5,6 @@ type UserTableProps = {
     users: User[],
 };
 export const UserTable: React.FC<UserTableProps> = (props: UserTableProps) => {
-    console.log(props.users);
     return (
         <TableContainer>
             <Table>
