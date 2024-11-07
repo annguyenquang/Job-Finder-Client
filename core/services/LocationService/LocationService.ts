@@ -21,7 +21,7 @@ const getDistrictsByProvinceId = async (
   try {
     const res: AxiosResponse<Province> = await http().get(
       `${DEFAULT_PROVINCE_URL}/${provinceId}?depth=2`,
-      { baseURL: "" }
+      { baseURL: "", withCredentials: false }
     );
     console.log(res.data);
     return res.data.districts;
@@ -36,11 +36,34 @@ const searchProvince = async (
   try {
     const res: AxiosResponse<Province[]> = await http().get(
       `${DEFAULT_PROVINCE_URL}/search/?q=${query}`,
-      { baseURL: "" }
+      { baseURL: "", withCredentials: false }
     );
     return res.data;
   } catch (error) {
     console.log(error);
   }
 };
-export const LocationService = { getDistrictsByProvinceId, searchProvince };
+const getDistrictById = async (districtId: number): Promise<District | undefined> => {
+  try {
+    const res: AxiosResponse<District> = await http().get(
+      `${DEFAULT_DISTRICT_URL}/${districtId}`,
+      { baseURL: "", withCredentials: false }
+    );
+    return res.data; 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const getProvinceById = async (provinceId: number): Promise<Province | undefined> => {
+  try {
+    const res: AxiosResponse<Province> = await http().get(
+      `${DEFAULT_PROVINCE_URL}/${provinceId}`,
+      { baseURL: "", withCredentials: false }
+    );
+    return res.data; 
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const LocationService = { getDistrictsByProvinceId, searchProvince, getDistrictById, getProvinceById };
