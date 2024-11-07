@@ -1,14 +1,17 @@
-import { Job } from "@/models";
-import { JobService, JobPaginationByCompany } from "@/services";
+import { Job, Pagination } from "@/models";
+import { JobService } from "@/services";
 import { create } from "zustand";
 
 type JobStore = {
-    job: Job// chỉ có 1 job trong mảng;
+    job: Job;
     jobs: Job[];
     totalJobs: number;
-    searchKeyword: string;
-    // loadJobs: (companyId: string, pagination: JobPaginationByCompany) => Promise<void>;
+    keyword: string;
+    provinceId: number | null;
+    loadJobs: (companyId: string, pagination: Pagination) => Promise<void>;
     loadJobById: (jobId: string) => Promise<void>;
+    setSearchKeyword: (keyword: string) => void;
+    setProvinceId: (provinceId: number | null) => void;
 };
 
 const emptyJob: Job = {
@@ -16,8 +19,8 @@ const emptyJob: Job = {
     title: "",
     description: "",
     salary: 0,
-    status: 0, 
-    closeDate: new Date, 
+    status: 0,
+    closeDate: new Date(),
     provinceId: 0,
     districtId: 0,
     minAgeRequirement: 0,
@@ -62,8 +65,8 @@ const emptyJob: Job = {
         industry: "",
         id: ""
     },
-    createdAt: new Date,
-    updatedAt: new Date,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     createdBy: null,
     updatedBy: null,
 };
@@ -72,22 +75,30 @@ export const useJobStore = create<JobStore>((set, get) => ({
     job: emptyJob,
     jobs: [emptyJob],
     totalJobs: 0,
-    searchKeyword: "",
-    // loadJobs: async (companyId: string, pagination: JobPaginationByCompany) => {
-    //     const res = await JobService.getJobsByCompany(companyId, get().searchKeyword, pagination);
-    //     if (res) {
-    //         set(() => ({
-    //             jobs: res.result.data, // Lưu trữ danh sách công việc
-    //             totalJobs: res.result.total // Cập nhật tổng số công việc
-    //         }));
-    //     }
-    // },
-    loadJobById: async(jobId: string) => {
-        const res = await JobService.getJobById(jobId);
-        if (res) { // Kiểm tra xem phản hồi có thành công không
-            set(() => ({
-                job: res.result, // Cập nhật job với dữ liệu từ phản hồi
-            }));
+    keyword: "",
+    provinceId: null,
+
+    loadJobs: async (companyId: string, pagination: Pagination) => {
+        const { keyword, provinceId } = get();
+        const res = await JobService.getJobsByCompany(companyId, keyword, pagination, provinceId);
+        if (res) {
+            set({
+                jobs: res.result.data,
+                totalJobs: res.result.total,
+            });
         }
-    }
+    },
+
+    loadJobById: async (jobId: string) => {
+        const res = await JobService.getJobById(jobId);
+        if (res) {
+            set({
+                job: res.result,
+            });
+        }
+    },
+
+    setSearchKeyword: (keyword) => set({ keyword }),
+
+    setProvinceId: (provinceId) => set({ provinceId }),
 }));
