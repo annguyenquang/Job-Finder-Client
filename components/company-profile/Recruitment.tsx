@@ -103,7 +103,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                             fullWidth
                             variant="outlined"
                             value={searchKeyword}
-                            onChange={handleSearchChange} // Thêm sự kiện thay đổi cho ô tìm kiếm
+                            onChange={handleSearchChange}
                         />
                     </Grid2>
                     <Grid2 size={4}>
