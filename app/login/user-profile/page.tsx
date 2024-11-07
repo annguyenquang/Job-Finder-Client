@@ -1,8 +1,7 @@
 "use client"
-import {useAccountStore} from "@/stores/AccountStore/AccountStore";
-import {CompanyAccount, UserAccount} from "@/models";
+import {useAccountStore} from "@/stores";
+import {AccountType, CompanyAccount, UserAccount} from "@/models";
 import React from "react";
-import {AccountType} from "@/models/Account/AccountType";
 
 const UserProfilePage:React.FC  = () =>{
     const accountStore = useAccountStore();

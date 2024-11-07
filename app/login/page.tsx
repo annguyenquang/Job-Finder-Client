@@ -4,9 +4,8 @@ import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } f
 import blue from "@mui/material/colors/blue";
 import Image from "next/image";
 import AccountAndPasswordForm from "../../components/login/AccountAndPasswordForm";
-import {useAccountStore} from "@/stores/AccountStore/AccountStore";
 import React from "react";
-import {AccountService} from "@/services/AccountService";
+import {useAccountStore} from "@/stores";
 
 const LoginPage: React.FC = () => {
     const accountStore = useAccountStore();
@@ -53,7 +52,7 @@ const LoginPage: React.FC = () => {
                         </Grid2>
 
                         <Grid2 columnGap={5} justifyContent={"center"} alignItems={"center"} container>
-                            <Button onClick={async () => {await AccountService.getAccountByCookie();}} color="inherit" className="w-full justify-start p-3" variant="outlined">
+                            <Button color="inherit" className="w-full justify-start p-3" variant="outlined">
                                 <Avatar className="w-[26px] h-[26px] mr-3" variant="square" src='/google-logo.png'></Avatar>
                                 <Typography textTransform={'none'}>Countinue with Google</Typography>
                             </Button>
