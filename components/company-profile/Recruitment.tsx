@@ -56,10 +56,6 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
         fetchProvinces();
     }, [jobStore.jobs]);
 
-    useEffect(() => {
-    }, locationStore.allProvince);
-
-
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchKeyword(value);
