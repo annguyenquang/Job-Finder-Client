@@ -14,10 +14,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Company } from '@/models';
-import { useJobStore } from '@/stores';
+import { useJobStore, useLocationStore } from '@/stores';
 import { useEffect } from 'react';
 import { LocationService, Province } from '@/services';
-import { useLocationStore } from '@/stores/LocationStore';
 
 type RecruitmentProps = {
     company: Company;
