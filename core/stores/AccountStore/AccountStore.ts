@@ -12,7 +12,7 @@ type AccountStore = {
 };
 
 
-export const useAccountStore = create<AccountStore>()((set, getState) => ({
+export const useAccountStore = create<AccountStore>()((set) => ({
     account: null,
     accountType: null,
     login: async (username: string, password: string) => {
