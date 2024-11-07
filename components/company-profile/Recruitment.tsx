@@ -12,11 +12,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import SearchIcon from '@mui/icons-material/Search';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { Company } from '@/models';
 import { useJobStore } from '@/stores';
 import { useEffect } from 'react';
 import { LocationService, Province } from '@/services';
+import { useLocationStore } from '@/stores/LocationStore';
 
 type RecruitmentProps = {
     company: Company;
@@ -28,6 +29,9 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     const [jobProvinces, setJobProvinces] = React.useState<{ [key: number]: Province }>({});
     const jobsPerPage = 4; // Số công việc trên mỗi trang
     const jobStore = useJobStore();
+    const locationStore = useLocationStore();
+    const [searchKeyword, setSearchKeyword] = React.useState('');
+
 
     // Hàm xử lý thay đổi trang
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -38,9 +42,10 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     useEffect(() => {
         const pagination = { page: currentPage, pageSize: jobsPerPage };
         jobStore.loadJobs(company.id, pagination); // Gọi loadJobs với thông tin phân trang
-    }, [currentPage, company.id, jobStore.searchKeyword]);
+    }, [currentPage, company.id, jobStore.keyword, jobStore.provinceId]);
 
     useEffect(() => {
+        locationStore.loadAllProvince();
         const fetchProvinces = async () => {
             const provinces: { [key: number]: Province } = {};
             for (const job of jobStore.jobs) {
@@ -49,19 +54,37 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
             }
             setJobProvinces(provinces);
         };
-
         fetchProvinces();
     }, [jobStore.jobs]);
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setProvince(event.target.value);
-    };
+    useEffect(() => {
+    }, locationStore.allProvince);
+
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        jobStore.searchKeyword = event.target.value; // Cập nhật từ khóa tìm kiếm
-        setCurrentPage(1); // Đặt lại trang về 1 khi tìm kiếm
-        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage }); // Gọi lại loadJobs với từ khóa mới
+        const value = event.target.value;
+        setSearchKeyword(value);
+        jobStore.keyword = value;
+        setCurrentPage(1);
+        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
     };
+
+    const handleProvinceChange = (event: SelectChangeEvent) => {
+        setProvince(event.target.value);
+        jobStore.provinceId = parseInt(event.target.value);
+        setCurrentPage(1);
+        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
+    };
+
+    const handleRefresh = () => {
+        setProvince('');
+        setSearchKeyword('');
+        jobStore.keyword = '';
+        jobStore.provinceId = null;
+        setCurrentPage(1);
+        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
+    };
+
 
 
     return (
@@ -79,6 +102,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                             label="Tên công việc, vị trí ứng tuyển..."
                             fullWidth
                             variant="outlined"
+                            value={searchKeyword}
                             onChange={handleSearchChange} // Thêm sự kiện thay đổi cho ô tìm kiếm
                         />
                     </Grid2>
@@ -90,14 +114,14 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                 id="demo-simple-select"
                                 value={province}
                                 label="Tỉnh"
-                                onChange={handleChange}
+                                onChange={handleProvinceChange}
                             >
                                 <MenuItem disabled value="">
                                     <em>Tất cả tỉnh, thành phố</em>
                                 </MenuItem>
-                                {names.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                        {name}
+                                {locationStore.allProvince.length > 0 && locationStore.allProvince.map((province: { name: string, code: number }) => (
+                                    <MenuItem key={province.code} value={province.code}>
+                                        {province.name}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -108,10 +132,11 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                             className="text-white bg-green-500 font-medium items-center"
                             size="large"
                             variant="contained"
-                            startIcon={<SearchIcon className="text-white" />}
+                            startIcon={<RefreshIcon className="text-white" />}
                             style={{ textTransform: 'none' }}
+                            onClick={handleRefresh}
                         >
-                            Tìm kiếm
+                            Làm mới
                         </Button>
                     </Grid2>
                 </Grid2>
@@ -204,65 +229,3 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
         </Card>
     );
 };
-
-const names = [
-    'TP. Hồ Chí Minh',
-    'Hà Nội',
-    'Đà Nẵng',
-    'Bình Dương',
-    'Bà Rịa - Vũng Tàu',
-    'Đồng Nai',
-    'Hải Phòng',
-    'Cần Thơ',
-    'Quảng Ninh',
-    'Khánh Hòa',
-    'Long An',
-    'Bắc Ninh',
-    'Hải Dương',
-    'Thanh Hóa',
-    'Nghệ An',
-    'Quảng Nam',
-    'Thừa Thiên Huế',
-    'Lâm Đồng',
-    'Tiền Giang',
-    'Vĩnh Phúc',
-    'Bình Thuận',
-    'Quảng Ngãi',
-    'Phú Yên',
-    'Bắc Giang',
-    'Hưng Yên',
-    'Phú Thọ',
-    'Hà Nam',
-    'Bến Tre',
-    'Kiên Giang',
-    'Sóc Trăng',
-    'An Giang',
-    'Cà Mau',
-    'Hậu Giang',
-    'Tây Ninh',
-    'Bạc Liêu',
-    'Trà Vinh',
-    'Đồng Tháp',
-    'Lạng Sơn',
-    'Lào Cai',
-    'Điện Biên',
-    'Sơn La',
-    'Hòa Bình',
-    'Tuyên Quang',
-    'Yên Bái',
-    'Lai Châu',
-    'Kon Tum',
-    'Gia Lai',
-    'Đắk Lắk',
-    'Đắk Nông',
-    'Quảng Trị',
-    'Bình Phước',
-    'Ninh Thuận',
-    'Bình Định',
-    'Quảng Bình',
-    'Ninh Bình',
-    'Nam Định',
-    'Hà Tĩnh',
-    'Cao Bằng',
-    'Bắc Kạn',
-];

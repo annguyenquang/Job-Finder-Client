@@ -3,12 +3,15 @@ import { JobService } from "@/services";
 import { create } from "zustand";
 
 type JobStore = {
-    job: Job
+    job: Job;
     jobs: Job[];
     totalJobs: number;
-    searchKeyword: string;
+    keyword: string;
+    provinceId: number | null;
     loadJobs: (companyId: string, pagination: Pagination) => Promise<void>;
     loadJobById: (jobId: string) => Promise<void>;
+    setSearchKeyword: (keyword: string) => void;
+    setProvinceId: (provinceId: number | null) => void;
 };
 
 const emptyJob: Job = {
@@ -16,8 +19,8 @@ const emptyJob: Job = {
     title: "",
     description: "",
     salary: 0,
-    status: 0, 
-    closeDate: new Date, 
+    status: 0,
+    closeDate: new Date(),
     provinceId: 0,
     districtId: 0,
     minAgeRequirement: 0,
@@ -62,8 +65,8 @@ const emptyJob: Job = {
         industry: "",
         id: ""
     },
-    createdAt: new Date,
-    updatedAt: new Date,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     createdBy: null,
     updatedBy: null,
 };
@@ -72,22 +75,30 @@ export const useJobStore = create<JobStore>((set, get) => ({
     job: emptyJob,
     jobs: [emptyJob],
     totalJobs: 0,
-    searchKeyword: "",
+    keyword: "",
+    provinceId: null,
+
     loadJobs: async (companyId: string, pagination: Pagination) => {
-        const res = await JobService.getJobsByCompany(companyId, get().searchKeyword, pagination);
+        const { keyword, provinceId } = get();
+        const res = await JobService.getJobsByCompany(companyId, keyword, pagination, provinceId);
         if (res) {
-            set(() => ({
+            set({
                 jobs: res.result.data,
-                totalJobs: res.result.total
-            }));
+                totalJobs: res.result.total,
+            });
         }
     },
-    loadJobById: async(jobId: string) => {
+
+    loadJobById: async (jobId: string) => {
         const res = await JobService.getJobById(jobId);
-        if (res) { 
-            set(() => ({
+        if (res) {
+            set({
                 job: res.result,
-            }));
+            });
         }
-    }
+    },
+
+    setSearchKeyword: (keyword) => set({ keyword }),
+
+    setProvinceId: (provinceId) => set({ provinceId }),
 }));
