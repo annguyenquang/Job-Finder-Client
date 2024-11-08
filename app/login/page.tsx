@@ -1,9 +1,25 @@
+"use client"
+
 import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } from "@mui/material";
 import blue from "@mui/material/colors/blue";
 import Image from "next/image";
 import AccountAndPasswordForm from "../../components/login/AccountAndPasswordForm";
+import React from "react";
+import {useAccountStore} from "@/stores";
 
 const LoginPage: React.FC = () => {
+    const accountStore = useAccountStore();
+    const [username, setUsername] = React.useState<string>("");
+    const [password, setPassword] = React.useState<string>("");
+    const onUpdateUsername = (newUsername: string) => {
+        setUsername(newUsername);
+    }
+    const onUpdatePassword = (newPassword:string)=> {
+        setPassword(newPassword);
+    }
+    const onLogin = async () => {
+        await accountStore.login(username, password);
+    }
     return (
         <Grid2 direction={"column"} container justifyContent="center" alignItems={"center"}>
             <div className="w-full">
@@ -18,11 +34,15 @@ const LoginPage: React.FC = () => {
 
                         <Typography variant="h6">Đăng nhập JobFinder để tiếp tục</Typography>
 
-                        <AccountAndPasswordForm />
+                        <AccountAndPasswordForm
+                            password={password}
+                            username={username}
+                            updatePassword={onUpdatePassword}
+                            updateUsername={onUpdateUsername}/>
 
                         <Link textAlign={"center"} color={blue[600]} href="#">Quên mật khẩu?</Link>
 
-                        <Button variant="contained">Đăng nhập</Button>
+                        <Button onClick={onLogin} variant="contained">Đăng nhập</Button>
                         <Grid2 direction={"row"}>
                             <Divider>
                                 <Typography fontSize={18} textAlign={"center"}>
