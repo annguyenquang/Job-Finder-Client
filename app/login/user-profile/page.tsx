@@ -9,7 +9,7 @@ const UserProfilePage:React.FC  = () =>{
         accountStore.loadAccountByJwt();
     }, [])
    React.useEffect(() => {
-       console.log()
+       console.log(accountStore.account)
    }, [accountStore.account])
     return (
         <div>

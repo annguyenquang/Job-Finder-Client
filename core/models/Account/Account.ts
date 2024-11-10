@@ -22,6 +22,12 @@ export type CompanyAccount = {
     website: string,
     logo: string,
     industry: string,
+    slug:string,
+    address:string,
+    createdAt?: Date;
+    updatedAt?: Date;
+    createdBy?: string;
+    updatedBy?: string;
 } & AccountModel
 
 export type Account =  CompanyAccount | UserAccount | null;
