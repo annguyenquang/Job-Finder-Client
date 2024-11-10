@@ -9,11 +9,9 @@ type JobStore = {
   jobs: Job[] // Rename to 'jobs' instead of 'Job' for clarity
   companyJobs: Job[]
   filter: Metadata[]
-  pagination: Pagination
   total: number
-  param: JobParam
-  setPage: (page: number) => void
-  loadJobs: (param: string) => Promise<void>
+  reqParam: JobParam
+  loadJobs: () => Promise<void>
   loadFilter: () => Promise<void>
   modifyFilter: (id: string) => void
   loadJobsByCompanyId: (ownerId: string) => Promise<void>
@@ -26,17 +24,9 @@ const DEFAULT_PAGESIZE = 6
 export const useJobStore = create<JobStore>((set) => ({
   jobs: [],
   companyJobs: [],
-  param: new JobParam(),
+  reqParam: new JobParam(),
   filter: [],
-  pagination: {
-    page: DEFAULT_PAGE,
-    pageSize: DEFAULT_PAGESIZE
-  },
   total: 0,
-
-  setPage: (newPage: number) => {
-    set((state) => ({ pagination: { ...state.pagination, page: newPage } }))
-  },
 
   loadFilter: async () => {
     const initialFilter = await JobService.getAndParseMetadata()
@@ -61,17 +51,19 @@ export const useJobStore = create<JobStore>((set) => ({
       })
     }))
   },
-  loadJobs: async (param: string) => {
-    const { pagination } = useJobStore.getState() // Get the current pagination state
-    const res = await JobService.getJobs(param)
+  loadJobs: async () => {
+    const { reqParam } = useJobStore.getState()
+    const res = await JobService.getJobs(reqParam.constructParam())
     set((state) => ({
       jobs: res.data || [], // Update the state with the jobs array
-      total: Math.ceil(res.total / state.pagination.pageSize)
+      total: Math.ceil(res.total / state.reqParam.pagination.pageSize)
     }))
   },
   loadJobsByCompanyId: async (ownerId: string) => {
     const res = await JobService.getJobsByCompanyId(ownerId)
     set(() => ({ companyJobs: Array.isArray(res?.jobs) ? res.jobs : [] }))
   },
-  updateParam: (newParam: JobParam) => set({ param: newParam })
+  updateParam: (newParam: JobParam) => {
+    set({ reqParam: newParam })
+  }
 }))

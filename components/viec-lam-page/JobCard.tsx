@@ -28,7 +28,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
 
         <CardContent>
           <Typography
-            sx={{ cursor: 'pointer' }}
+            sx={{ cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
             onClick={() => {
               router.push(`viec-lam/${props.job.id}`)
             }}

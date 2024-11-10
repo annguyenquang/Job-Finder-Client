@@ -6,24 +6,47 @@ import { QueryParams } from '@/models/enum/MetadataValue'
 export class JobParam {
   pagination: Pagination
   metadata?: Metadata[] | undefined
+  status: number
   provinceId?: number
+  query: string
 
   constructor() {
     this.pagination = { page: 1, pageSize: 6 }
+    this.status = 1
+    this.query = ''
   }
 
   setFilter(newFilter: Metadata[] | undefined): void {
     this.metadata = newFilter
   }
 
+  setStatus(newStatus: number): void {
+    this.status = newStatus
+  }
+
   setProvinceId(newProvinceId: number): void {
     this.provinceId = newProvinceId
   }
 
+  setPage(newPage: number): void {
+    this.pagination.page = newPage
+  }
+
+  setQuery(newQuery: string) {
+    this.query = newQuery
+  }
+
   constructParam(): string {
     let result = ''
+
+    //Construct status
+    result += `JobFilter.Status=${this.status}`
+
+    //Construct query
+    result += `JobFilter.Query=${this.query}`
+
     //Construct pagination
-    result += `Pagination.Page=${this.pagination.page}&Pagination.PageSize=${this.pagination.pageSize}`
+    result += `&Pagination.Page=${this.pagination.page}&Pagination.PageSize=${this.pagination.pageSize}`
 
     //Construct metadata
     this.metadata?.forEach((item) => {

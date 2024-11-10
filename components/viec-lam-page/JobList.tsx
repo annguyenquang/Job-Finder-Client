@@ -11,7 +11,10 @@ const JobList = () => {
   const jobStore = useJobStore()
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= jobStore.total) {
-      jobStore.setPage(page) // Update current page state
+      const updateParam = jobStore.reqParam
+      updateParam.setPage(page)
+      jobStore.updateParam(updateParam)
+      jobStore.loadJobs()
     }
   }
 
@@ -27,7 +30,7 @@ const JobList = () => {
       ))}
       <Grid2 size={12} display='flex' justifyContent='center'>
         <Pagination
-          currentPage={jobStore.pagination.page}
+          currentPage={jobStore.reqParam.pagination.page}
           totalPages={jobStore.total}
           onPageChange={handlePageChange}
         />

@@ -49,13 +49,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const debounce = useDebounce<string>(query)
 
   useEffect(() => {
-    console.log('Current options:' + JSON.stringify(options))
-    const getJob = async () => {
-      jobStore.loadJobs(jobStore.param.constructParam())
-    }
-  }, [options])
-
-  useEffect(() => {
     const fetchProvinces = async () => {
       if (debounce) {
         // Only fetch if there's a query
@@ -113,7 +106,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               onChange={(event, value) => {
                 const selectedProvince = options.find((option) => option.name === value)
                 if (selectedProvince) {
-                  const newParam = jobStore.param
+                  const newParam = jobStore.reqParam
                   // Call the passed setProvinceId function to set the province ID
                   newParam.setProvinceId(selectedProvince.code)
                   jobStore.updateParam(newParam)

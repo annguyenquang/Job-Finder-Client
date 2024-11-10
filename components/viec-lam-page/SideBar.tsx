@@ -7,11 +7,19 @@ import { useJobStore } from '@/stores'
 const SideBar = () => {
   const jobStore = useJobStore()
   const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
+  const [jobStatus, setJobStatus] = useState<number>(1)
+
+  useEffect(() => {
+    const updateParam = jobStore.reqParam
+    updateParam.setStatus(jobStatus)
+    jobStore.updateParam(updateParam)
+    jobStore.loadJobs()
+  }, [jobStatus])
 
   useEffect(() => {
     console.log('Current filter: ' + jobStore.filter)
     const getJob = async () => {
-      jobStore.loadJobs(jobStore.param.constructParam())
+      jobStore.loadJobs()
     }
     //Every time filter reset, get the unique type of filter
     const uniqueTypes: number[] = jobStore.filter.reduce<number[]>((acc, item) => {
@@ -22,7 +30,7 @@ const SideBar = () => {
     }, [])
     setUniqueTypes(uniqueTypes)
     //Update param filter
-    const currentParam = jobStore.param
+    const currentParam = jobStore.reqParam
     const currentActiveFilter = jobStore.filter.filter((e) => e.active === 1) // TODO
     currentParam.setFilter(currentActiveFilter)
     jobStore.updateParam(currentParam)
@@ -55,16 +63,16 @@ const SideBar = () => {
           <RadioGroup
             aria-labelledby='demo-controlled-radio-buttons-group'
             name='controlled-radio-buttons-group'
-            // value={value}
-            // onChange={handleChange}
+            value={jobStatus}
+            onChange={(e) => setJobStatus(Number(e.target.value))}
           >
             <FormControlLabel
-              value='female'
+              value={1}
               control={<Radio />}
               label={<Typography sx={{ fontSize: '0.875rem' }}>Active</Typography>}
             />
             <FormControlLabel
-              value='male'
+              value={0}
               control={<Radio />}
               label={<Typography sx={{ fontSize: '0.875rem' }}>Inactive</Typography>}
             />
