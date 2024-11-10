@@ -45,16 +45,18 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   ]
   const [loading, setLoading] = useState(false)
   const [options, setOptions] = useState<Province[]>(initialOptions)
-  const [query, setQuery] = useState('')
-  const debounce = useDebounce<string>(query)
+  const [locationQuery, setLocationQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const locationDebounce = useDebounce<string>(locationQuery)
+  const searchDebounce = useDebounce<string>(searchQuery)
 
   useEffect(() => {
     const fetchProvinces = async () => {
-      if (debounce) {
+      if (locationDebounce) {
         // Only fetch if there's a query
         setLoading(true) // Start loading
         try {
-          const res = await LocationService.searchProvince(debounce) // Fetch results
+          const res = await LocationService.searchProvince(locationDebounce) // Fetch results
           console.log('Locations:' + JSON.stringify(res!))
           setOptions(res!) // Update options with the fetched results
         } catch (error) {
@@ -68,12 +70,28 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     }
 
     fetchProvinces()
-  }, [debounce])
+  }, [locationDebounce])
+
+  useEffect(() => {
+    const currentParam = jobStore.reqParam
+    currentParam.setQuery(searchDebounce)
+    currentParam.setPage(1)
+    jobStore.updateParam(currentParam)
+    jobStore.loadJobs()
+  }, [searchDebounce])
   return (
     <Container className=' bg-background py-2' maxWidth='xl' disableGutters={true}>
       <Grid2 className='px-0' container spacing={1}>
         <Grid2 size={6} display='flex' justifyContent='center' alignItems='center'>
-          <TextField fullWidth size='small' label='Tìm việc làm yêu thích' id='fullWidth' />
+          <TextField
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+            }}
+            fullWidth
+            size='small'
+            label='Tìm việc làm yêu thích'
+            id='fullWidth'
+          />
         </Grid2>
         <Grid2 size={6} display='flex' justifyContent='space-between' alignItems='center'>
           <Container className='flex flex-row items-center justify-between'>
@@ -101,7 +119,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               loadingText='Đang tải...' // custom loading text
               renderInput={(params) => <TextField {...params} label='Chọn địa điểm' />}
               onInputChange={(e, newInputValue) => {
-                setQuery(newInputValue)
+                setLocationQuery(newInputValue)
               }}
               onChange={(event, value) => {
                 const selectedProvince = options.find((option) => option.name === value)

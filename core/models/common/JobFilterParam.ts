@@ -43,7 +43,7 @@ export class JobParam {
     result += `JobFilter.Status=${this.status}`
 
     //Construct query
-    result += `JobFilter.Query=${this.query}`
+    if (this.query) result += `&JobFilter.Keyword=${this.query}`
 
     //Construct pagination
     result += `&Pagination.Page=${this.pagination.page}&Pagination.PageSize=${this.pagination.pageSize}`
