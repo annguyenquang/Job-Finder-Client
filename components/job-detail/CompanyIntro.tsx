@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import { useRouter } from 'next/navigation';
 
 type CompanyInfoProps = {
     company: any,
@@ -11,6 +12,11 @@ type CompanyInfoProps = {
 
 
 export const CompanyIntro: React.FC<CompanyInfoProps> = (props) => {
+    const router = useRouter();
+
+    const handleCompanyClick = () => {
+        router.push(`/company-profile/${props.company.slug}`);
+    };
 
     return (
         <Card className='mb-4'>
@@ -56,6 +62,7 @@ export const CompanyIntro: React.FC<CompanyInfoProps> = (props) => {
                 <Box className='flex justify-center'>
                     <Button
                         className='w-full'
+                        onClick={handleCompanyClick}
                         variant="outlined">
                         Xem công ty
                     </Button>

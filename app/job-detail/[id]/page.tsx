@@ -19,7 +19,7 @@ const JobDetailPage = () => {
 
 
     useEffect(() => {
-        metadataStore.loadMetadata(jobStore.job);
+        metadataStore.loadValueMetadata(jobStore.job);
     }, [jobStore.job]);
     return (
         <JobDetail job={jobStore.job}></JobDetail>

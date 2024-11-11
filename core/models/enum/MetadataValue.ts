@@ -43,3 +43,9 @@ export const QueryParams: { [key: number]: string } = {
   3: "JobFilter.EducationLevelRequirementId",
   4: "JobFilter.GenderRequirementId",
 };
+
+export const COMMITMENTTYPE = 0;
+export const WORKARRANGEMENTTYPE = 1;
+export const WORKEXPERIENCERETYPE = 2;
+export const EDUCATIONLEVELTYPE = 3;
+export const GENDERTYPE = 4;

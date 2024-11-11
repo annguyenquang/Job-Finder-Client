@@ -2,7 +2,6 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import Alert from '@mui/material/Alert'
 
 
 type BreadcrumbProps = {
@@ -20,7 +19,7 @@ export const BasicBreadcrumb: React.FC<BreadcrumbProps> = (props: BreadcrumbProp
                 <Link underline="hover" color="inherit" href="/">
                     Danh sách công ty
                 </Link>
-                <Typography sx={{ color: 'text.primary' }}>{props.currentPosition}</Typography>
+                <Typography className='text-colorPrimary'>{props.currentPosition}</Typography>
             </Breadcrumbs>
         </div>
     );

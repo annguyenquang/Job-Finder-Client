@@ -15,7 +15,7 @@ export const CompanyInfo: React.FC<CompanyInfoProps> = (props: CompanyInfoProps)
         <Card
             className="flex flex-col mb-4">
             <Box
-                className="bg-gradient-to-r from-colorStartBanner to-colorEndBanner">
+                className="bg-colorPrimary">
                 <Typography
                     variant="h6"
                     className="font-medium p-3 text-white"

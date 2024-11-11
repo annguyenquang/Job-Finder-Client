@@ -7,14 +7,14 @@ type JobStore = {
     jobs: Job[];
     totalJobs: number;
     keyword: string;
-    provinceId: number | null;
+    provinceId: number ;
     loadJobs: (companyId: string, pagination: Pagination) => Promise<void>;
     loadJobById: (jobId: string) => Promise<void>;
     setSearchKeyword: (keyword: string) => void;
-    setProvinceId: (provinceId: number | null) => void;
+    setProvinceId: (provinceId: number) => void;
 };
 
-const emptyJob: Job = {
+export const emptyJob: Job = {
     id: "",
     title: "",
     description: "",
@@ -65,6 +65,7 @@ const emptyJob: Job = {
         industry: "",
         id: ""
     },
+    skills: [],
     createdAt: new Date(),
     updatedAt: new Date(),
     createdBy: null,
@@ -76,7 +77,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
     jobs: [emptyJob],
     totalJobs: 0,
     keyword: "",
-    provinceId: null,
+    provinceId: 0,
 
     loadJobs: async (companyId: string, pagination: Pagination) => {
         const { keyword, provinceId } = get();

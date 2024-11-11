@@ -8,9 +8,8 @@ type CompanyStore = {
 };
 
 // Đối tượng company rỗng
-const emptyCompany: Company = {
+export const emptyCompany: Company = {
     id: "", // Mã công ty
-    accountId: "", // ID tài khoản
     name: "", // Tên công ty
     emailContact: "", // Email liên hệ 
     phoneContact: "", // Số điện thoại liên hệ 

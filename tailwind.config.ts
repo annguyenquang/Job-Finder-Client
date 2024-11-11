@@ -11,10 +11,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        colorStartBanner: 'var(--STARTGREENBANNER)',
-        colorEndBanner: 'var(--ENDGREENBANNER)',
         colorPrimary: 'var(--PRIMARYCOLOR)',
-        colorPimaryText: 'var(--PRIMARYTEXT)'
+        colorPrimaryText: 'var(--PRIMARYTEXT)',
+        colorLittleWhite: 'var(--BACKGROUNDWHITE)',
       },
     },
   },

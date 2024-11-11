@@ -5,18 +5,17 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import FormControl from '@mui/material/FormControl';
 import Grid2 from '@mui/material/Grid2';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Company } from '@/models';
-import { useJobStore, useLocationStore } from '@/stores';
+import { useCreateJobStore, useJobStore, useLocationStore } from '@/stores';
 import { useEffect } from 'react';
 import { LocationService, Province } from '@/services';
+import { Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 type RecruitmentProps = {
     company: Company;
@@ -29,6 +28,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     const jobsPerPage = 4; // Số công việc trên mỗi trang
     const jobStore = useJobStore();
     const locationStore = useLocationStore();
+    const createJobStore = useCreateJobStore();
     const [searchKeyword, setSearchKeyword] = React.useState('');
 
 
@@ -64,27 +64,26 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
         jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
     };
 
-    const handleProvinceChange = (event: SelectChangeEvent) => {
-        setProvince(event.target.value);
-        jobStore.provinceId = parseInt(event.target.value);
-        setCurrentPage(1);
-        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
-    };
-
     const handleRefresh = () => {
         setProvince('');
         setSearchKeyword('');
         jobStore.keyword = '';
-        jobStore.provinceId = null;
+        jobStore.provinceId = 0;
         setCurrentPage(1);
         jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
     };
 
-
+    const handleProvinceChange = (event: React.SyntheticEvent, newValue: Province | string | null) => {
+        const code = (newValue as Province)?.code;
+        setProvince((newValue as Province)?.name);
+        jobStore.provinceId = code;
+        setCurrentPage(1);
+        jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
+    };
 
     return (
         <Card className="flex flex-col mb-4">
-            <Box className="bg-gradient-to-r from-colorStartBanner to-colorEndBanner">
+            <Box className="bg-colorPrimary">
                 <Typography variant="h6" className="font-medium p-3 text-white">
                     Tuyển dụng
                 </Typography>
@@ -102,29 +101,40 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                         />
                     </Grid2>
                     <Grid2 size={4}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Tỉnh</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={province}
-                                label="Tỉnh"
+                        {
+                            locationStore.allProvince &&
+                            <Autocomplete
+                                freeSolo
+                                options={locationStore.allProvince}
+                                getOptionLabel={(option) => (typeof option === 'string' ? option : option.name) || ''}
+                                isOptionEqualToValue={(option, value) => option.code === (value as Province)?.code}
+                                className="w-60 -ml-1"
+                                value={locationStore.allProvince.find((province) => province.code === createJobStore.jobData.provinceId)}
                                 onChange={handleProvinceChange}
-                            >
-                                <MenuItem disabled value="">
-                                    <em>Tất cả tỉnh, thành phố</em>
-                                </MenuItem>
-                                {locationStore.allProvince.length > 0 && locationStore.allProvince.map((province: { name: string, code: number }) => (
-                                    <MenuItem key={province.code} value={province.code}>
-                                        {province.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                                inputValue={province}
+                                onInputChange={(event, newInputValue) => setProvince(newInputValue)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Tỉnh/Thành phố"
+                                        size="medium"
+                                        className="text-sm pb-4"
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                        }
                     </Grid2>
                     <Grid2 size={3}>
                         <Button
-                            className="text-white bg-green-500 font-medium items-center"
+                            className="text-white bg-colorPrimaryText font-medium items-center"
                             size="large"
                             variant="contained"
                             startIcon={<RefreshIcon className="text-white" />}
@@ -140,7 +150,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                 <Box mt={3}>
                     {jobStore.jobs.length > 0 ? (
                         jobStore.jobs.map((job) => (
-                            <Card key={job.id} className="mb-4 bg-green-100">
+                            <Card key={job.id} className="mb-4 bg-blue-100">
                                 <CardContent>
                                     <Box key={job.id}>
                                         <Grid2 spacing={3} container>
@@ -156,7 +166,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                                 />
                                             </Grid2>
                                             <Grid2 size={7}>
-                                                <Typography variant="body1" className="font-semibold">
+                                                <Typography variant="body1" className="text-colorPrimary font-semibold">
                                                     {job.title}
                                                 </Typography>
                                                 <Typography
@@ -168,15 +178,15 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                                 </Typography>
                                                 <Typography
                                                     variant="body2"
-                                                    className="bg-slate-200 text-gray-600 font-bold inline-block p-1 mr-3 rounded-md"
+                                                    className="bg-slate-200 shadow-md text-gray-600 font-bold inline-block p-1 mr-3 rounded-md"
                                                 >
                                                     {jobProvinces[job.provinceId]?.name || 'Đang tải...'}
                                                 </Typography>
                                                 <Typography
                                                     variant="body2"
-                                                    className="bg-slate-200 text-gray-600 inline-block p-1 m-0 rounded"
+                                                    className="bg-slate-200 shadow-md text-gray-600 inline-block p-1 m-0 rounded"
                                                 >
-                                                    Ứng tuyển đến hết <b>{new Date(job.closeDate).toLocaleDateString('Vi-VN')}</b>
+                                                    Ngày ngừng ứng tuyển <b>{new Date(job.closeDate).toLocaleDateString('Vi-VN')}</b>
                                                 </Typography>
                                             </Grid2>
                                             <Grid2
@@ -185,13 +195,13 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                             >
                                                 <Typography
                                                     variant="body1"
-                                                    className="mb-10 font-semibold text-green-500"
+                                                    className="mb-10 font-semibold text-colorPrimary"
                                                 >
                                                     Tối đa {job.salary} Triệu
                                                 </Typography>
 
                                                 <Button
-                                                    className="text-white bg-green-500 font-medium items-center"
+                                                    className="text-white bg-colorPrimaryText font-medium items-center"
                                                     size="medium"
                                                     variant="contained"
                                                     style={{ textTransform: 'none' }}
@@ -212,6 +222,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                 {/* Pagination */}
                 <Box mt={3} className="flex justify-center">
                     <Pagination
+                        className='bg-blue-50'
                         count={Math.ceil(jobStore.totalJobs / jobsPerPage)}  // Tính tổng số trang
                         page={currentPage}  // Trang hiện tại
                         onChange={handlePageChange}  // Xử lý thay đổi trang

@@ -14,7 +14,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
     const metadataStore = useMetadataStore();
 
     useEffect(() => {
-        metadataStore.loadMetadata(props.job);
+        metadataStore.loadValueMetadata(props.job);
     }, [props.job]);
 
     return (
@@ -56,10 +56,12 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
                         size={8}
                     >
                         <JobInfo
+                            company={props.job.company}
                             job={props.job}
                             educationLevel={metadataStore.educationLevel}
                             workExperienceRequirement={metadataStore.workExperienceRequirement}
                             genderRequirement={metadataStore.genderRequirement}
+                            skills={props.job.skills}
                         ></JobInfo>
                     </Grid2>
                     <Grid2
