@@ -1,1 +1,2 @@
-export * from './JobStore'
+export * from './JobListStore'
+export * from './JobDetailStore'

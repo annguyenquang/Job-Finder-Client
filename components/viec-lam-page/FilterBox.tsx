@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import React, { useEffect, useState } from 'react'
 import { Metadata } from '@/models/common/Metadata'
 import { TypeTranslation } from '@/models/enum/MetadataValue'
-import { useJobStore } from '@/stores'
+import { useJobListStore } from '@/stores'
 
 type FilterBoxProps = {
   filter: Metadata[]
@@ -13,7 +13,7 @@ type FilterBoxProps = {
 }
 
 const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
-  const jobStore = useJobStore()
+  const jobStore = useJobListStore()
   const [val, setVal] = useState<string>()
   const filterOptions = props.filter.filter((element) => props.type === element.type)
 
@@ -23,9 +23,7 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
     setVal(metadataId) // Update local state to reflect selected value
   }
 
-  useEffect(() => {
-    console.log(`Current selected ID: type ${props.type}/${val}`)
-  }, [val])
+  useEffect(() => {}, [val])
   return (
     <Box
       sx={{

@@ -7,13 +7,14 @@ export class JobParam {
   pagination: Pagination
   metadata?: Metadata[] | undefined
   status: number
-  provinceId?: number
+  provinceId: number | null
   query: string
 
   constructor() {
     this.pagination = { page: 1, pageSize: 6 }
     this.status = 1
     this.query = ''
+    this.provinceId = null
   }
 
   setFilter(newFilter: Metadata[] | undefined): void {
@@ -24,7 +25,7 @@ export class JobParam {
     this.status = newStatus
   }
 
-  setProvinceId(newProvinceId: number): void {
+  setProvinceId(newProvinceId: number | null): void {
     this.provinceId = newProvinceId
   }
 
@@ -57,7 +58,7 @@ export class JobParam {
     })
 
     //Construct provinceID
-    if (this.provinceId != undefined) result += `&JobFilter.ProvinceId=${this.provinceId}`
+    if (this.provinceId != null) result += `&JobFilter.ProvinceId=${this.provinceId}`
 
     return result
   }

@@ -17,14 +17,14 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import React, { useEffect, useState } from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useJobStore } from '@/stores'
+import { useJobListStore } from '@/stores'
 
 interface SearchBarProps {
   location: string
   handleChange: (event: SelectChangeEvent<string>) => void
 }
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
-  const jobStore = useJobStore()
+  const jobStore = useJobListStore()
   // Define your initial options state
   const initialOptions: Province[] = [
     {
@@ -57,7 +57,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         setLoading(true) // Start loading
         try {
           const res = await LocationService.searchProvince(locationDebounce) // Fetch results
-          console.log('Locations:' + JSON.stringify(res!))
           setOptions(res!) // Update options with the fetched results
         } catch (error) {
           console.error('Error fetching provinces:', error) // Error handling
@@ -66,6 +65,11 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         }
       } else {
         setOptions(initialOptions) // Clear options if the query is empty
+        const newParam = jobStore.reqParam
+        newParam.setProvinceId(null)
+        newParam.setPage(1)
+        jobStore.updateParam(newParam)
+        jobStore.loadJobs()
       }
     }
 
@@ -79,6 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     jobStore.updateParam(currentParam)
     jobStore.loadJobs()
   }, [searchDebounce])
+
   return (
     <Container className=' bg-background py-2' maxWidth='xl' disableGutters={true}>
       <Grid2 className='px-0' container spacing={1}>
@@ -127,7 +132,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                   const newParam = jobStore.reqParam
                   // Call the passed setProvinceId function to set the province ID
                   newParam.setProvinceId(selectedProvince.code)
+                  newParam.setPage(1)
                   jobStore.updateParam(newParam)
+                  jobStore.loadJobs()
                 }
               }}
             />

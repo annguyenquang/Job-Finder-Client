@@ -1,6 +1,6 @@
 import axios, { CreateAxiosDefaults } from 'axios'
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7019/api'
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5127/api'
 
 export const http = () => {
   const defaultOption: CreateAxiosDefaults = {

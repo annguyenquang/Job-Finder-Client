@@ -1,4 +1,4 @@
 export enum JobStatus {
-  Open = 0,
-  Close = 1
+  Open = 1,
+  Closed = 0
 }

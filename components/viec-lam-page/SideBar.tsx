@@ -2,22 +2,23 @@
 import { Box, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import FilterBox from './FilterBox'
-import { useJobStore } from '@/stores'
+import { useJobListStore } from '@/stores'
 
 const SideBar = () => {
-  const jobStore = useJobStore()
+  const jobStore = useJobListStore()
   const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
   const [jobStatus, setJobStatus] = useState<number>(1)
 
   useEffect(() => {
-    const updateParam = jobStore.reqParam
-    updateParam.setStatus(jobStatus)
-    jobStore.updateParam(updateParam)
-    jobStore.loadJobs()
+    if (jobStatus) {
+      const updateParam = jobStore.reqParam
+      updateParam.setStatus(jobStatus)
+      jobStore.updateParam(updateParam)
+      jobStore.loadJobs()
+    }
   }, [jobStatus])
 
   useEffect(() => {
-    console.log('Current filter: ' + jobStore.filter)
     const getJob = async () => {
       jobStore.loadJobs()
     }

@@ -3,12 +3,12 @@ import { Grid2 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import JobCard from './JobCard'
 import Pagination from '../common/Pagination'
-import { useJobStore } from '@/stores'
+import { useJobListStore } from '@/stores'
 import { Metadata } from '@/models/common/Metadata'
 import { JobService } from '@/services'
 
 const JobList = () => {
-  const jobStore = useJobStore()
+  const jobStore = useJobListStore()
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= jobStore.total) {
       const updateParam = jobStore.reqParam
@@ -18,9 +18,6 @@ const JobList = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(jobStore.jobs)
-  }, [jobStore.jobs])
   return (
     <Grid2 marginLeft={2} container spacing={1}>
       {jobStore.jobs.map((job, idx) => (

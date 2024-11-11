@@ -3,9 +3,10 @@ import { JobParam } from '@/models/common/JobFilterParam'
 import { Metadata } from '@/models/common/Metadata'
 import { Pagination } from '@/models/common/Pagination'
 import { JobService } from '@/services'
+import { MetadataService } from '@/services/MetadataService'
 import { create } from 'zustand'
 
-type JobStore = {
+type JobListStore = {
   jobs: Job[] // Rename to 'jobs' instead of 'Job' for clarity
   companyJobs: Job[]
   filter: Metadata[]
@@ -14,14 +15,13 @@ type JobStore = {
   loadJobs: () => Promise<void>
   loadFilter: () => Promise<void>
   modifyFilter: (id: string) => void
-  loadJobsByCompanyId: (ownerId: string) => Promise<void>
   updateParam: (newParam: JobParam) => void // Update param state
 }
 
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGESIZE = 6
 
-export const useJobStore = create<JobStore>((set) => ({
+export const useJobListStore = create<JobListStore>((set) => ({
   jobs: [],
   companyJobs: [],
   reqParam: new JobParam(),
@@ -29,7 +29,7 @@ export const useJobStore = create<JobStore>((set) => ({
   total: 0,
 
   loadFilter: async () => {
-    const initialFilter = await JobService.getAndParseMetadata()
+    const initialFilter = await MetadataService.getAndParseMetadata()
     console.log('initialFilter: ' + initialFilter)
     set(() => ({
       filter: initialFilter
@@ -52,17 +52,14 @@ export const useJobStore = create<JobStore>((set) => ({
     }))
   },
   loadJobs: async () => {
-    const { reqParam } = useJobStore.getState()
+    const { reqParam } = useJobListStore.getState()
     const res = await JobService.getJobs(reqParam.constructParam())
     set((state) => ({
-      jobs: res.data || [], // Update the state with the jobs array
-      total: Math.ceil(res.total / state.reqParam.pagination.pageSize)
+      jobs: res?.data || [], // Update the state with the jobs array
+      total: Math.ceil(res ? res.total / state.reqParam.pagination.pageSize : 0)
     }))
   },
-  loadJobsByCompanyId: async (ownerId: string) => {
-    const res = await JobService.getJobsByCompanyId(ownerId)
-    set(() => ({ companyJobs: Array.isArray(res?.jobs) ? res.jobs : [] }))
-  },
+
   updateParam: (newParam: JobParam) => {
     set({ reqParam: newParam })
   }

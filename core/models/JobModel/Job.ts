@@ -1,28 +1,42 @@
-import { JobStatus } from './JobStatus'
-type Requirement = {
+export type metadata = {
   type: number
   value: string
   id: string
 }
+
 export type Job = {
   id: string
   title: string
   description: string
   salary: number
-  status: JobStatus
+  status: number
   closeDate: Date
   provinceId: number
   districtId: number
-  minAgeRequirement: 0
-  maxAgeRequirement: 0
-  genderRequirement: Requirement
-  educationLevelRequirement: Requirement
-  workExperienceRequirement: Requirement
-  workArrangement: Requirement
-  commitmentType: Requirement
-  companyId: string
+  minAgeRequirement: number
+  maxAgeRequirement: number
+  genderRequirement: metadata
+  educationLevelRequirement: metadata
+  workExperienceRequirement: metadata
+  workArrangement: metadata
+  commitmentType: metadata
+  company: {
+    name: string
+    emailContact: string
+    phoneContact: string
+    description: string
+    employeeCount: number
+    provinceId: number
+    districtId: number
+    logo: string
+    slug: string
+    address: string
+    website: string
+    industry: string
+    id: string
+  }
   createdAt: Date
   updatedAt: Date
-  createdBy: string
-  updatedBy: string
+  createdBy: string | null
+  updatedBy: string | null
 }

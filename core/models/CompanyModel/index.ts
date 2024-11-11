@@ -1,1 +1,1 @@
-export * from './CompanyDetail'
+export * from './Company'
