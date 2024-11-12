@@ -18,7 +18,7 @@ export const JobBreadcrumb: React.FC<BreadcrumbProps> = (props: BreadcrumbProps)
                 <Link underline="hover" href="/">
                     Việc làm
                 </Link>
-                <Typography sx={{ color: 'text.primary' }}>{props.currentPosition}</Typography>
+                <Typography sx={{ color: 'text.primary' }}>Tuyển dụng {props.currentPosition}</Typography>
             </Breadcrumbs>
         </div>
     );

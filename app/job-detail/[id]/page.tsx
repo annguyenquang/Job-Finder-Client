@@ -1,16 +1,33 @@
 "use client";
-import { Box, Card, CardContent, Container, Grid2 } from '@mui/material';
+import {
+    Box,
+    Card,
+    CardContent,
+    Container,
+    Grid2
+} from '@mui/material';
 import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components';
 import React, { useEffect } from 'react'
 import { useJobDetailStore } from '@/stores';
+import { useApplicationDialogStore } from '@/stores';
 import { useParams } from 'next/navigation';
 import { useMetadataStore } from '@/stores/MetadataStore';
+import ApplicationDialog from '../../../components/job-detail/ApplicationDialog';
+
 
 
 const JobDetail = () => {
-  const { id } = useParams();
+    const applicationDialogStore = useApplicationDialogStore();
+    const { id } = useParams();
+    const metadataStore = useMetadataStore();
+    useEffect(() => {
+        jobStore.loadJobById(id as string);
+    }, [id]);
   const jobStore = useJobDetailStore();
-  const metadataStore = useMetadataStore();
+
+  const closeApplicationDialog = () => {
+    applicationDialogStore.setIsOpen(false);
+  }
 
   useEffect(() => {
     jobStore.loadJobById(id as string);
@@ -23,7 +40,21 @@ const JobDetail = () => {
   return (
     <Box
       className="flex flex-col">
-      <Container
+        <ApplicationDialog
+          job={jobStore.job}
+          isOpen={applicationDialogStore.isOpen}
+          cvFile={applicationDialogStore.cvFile}
+          phoneNumber={applicationDialogStore.phoneNumber}
+          hasCoverLetter={applicationDialogStore.hasCoverLetter}
+          coverLetter={applicationDialogStore.coverLetter}
+          setCvFile={applicationDialogStore.setCvFile}
+          setPhoneNumber={applicationDialogStore.setPhoneNumber}
+          sendApplication={applicationDialogStore.sendApplication}
+          setHashCoverLetter={applicationDialogStore.setHasCoverLetter}
+          setCoverLetter={applicationDialogStore.setCoverLetter}
+          onClose={closeApplicationDialog} />
+
+        <Container
         component="main"
         maxWidth="lg"
         className="flex-grow p-4">
