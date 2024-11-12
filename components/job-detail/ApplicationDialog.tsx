@@ -24,7 +24,7 @@ import TextField from "@mui/material/TextField";
 import { TransitionProps } from "@mui/material/transitions";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import React from "react";
+import React, { MouseEvent } from "react";
 import { ChangeEvent, useEffect } from "react";
 
 const Transition = React.forwardRef(function Transition(
@@ -44,7 +44,7 @@ type ApplicationDialogProps = {
     coverLetter: string | null;
     job: Job;
     onClose: () => void;
-    setCvFile: (file: File) => void;
+    setCvFile: (file: File | null) => void;
     setPhoneNumber: (newPhone: string) => void;
     sendApplication: () => Promise<void>;
     setCoverLetter: (newValue: string) => void;
@@ -82,6 +82,13 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
             console.log("File uploaded:", file.name);
         }
     };
+    const onClickDropFile = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        dropFile();
+    }
+    const dropFile = () => {
+        props.setCvFile(null);
+    }
 
     function logForm(): void {
         console.log("🚀 ~ logForm ~ props.phoneNumber:", props.phoneNumber)
@@ -137,6 +144,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                             <Typography color={grey[500]} textAlign={"center"}>{formatFileSize(props.cvFile.size)}</Typography>
                             <Button
                                 className="delete-button"
+                                onClick={onClickDropFile}
                                 startIcon={<Delete />}
                                 sx={{
                                     color: red[500],
