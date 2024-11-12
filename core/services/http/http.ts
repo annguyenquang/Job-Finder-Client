@@ -1,15 +1,14 @@
-import axios, { CreateAxiosDefaults } from "axios"
+import axios, { CreateAxiosDefaults } from 'axios'
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5127/api';
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5127/api'
 
 export const http = () => {
   const defaultOption: CreateAxiosDefaults = {
     baseURL,
-    withCredentials: true,
-  };
+    withCredentials: true
+  }
 
-
-  const instance = axios.create(defaultOption);
+  const instance = axios.create(defaultOption)
 
   //       instance.interceptors.request.use(async (request) => {
   //     const session = await getSession();
@@ -21,12 +20,12 @@ export const http = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      return response;
+      return response
     },
     (error) => {
-      console.log(`error`, error);
-    },
-  );
+      console.log(`error`, error)
+    }
+  )
 
-  return instance;
+  return instance
 }
