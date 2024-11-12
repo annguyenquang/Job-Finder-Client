@@ -104,7 +104,7 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                             className='text-colorPrimaryText mr-1 font-semibold'>
                         </AttachMoneyIcon>
                         <Typography className='font-sans font-semibold text-lg text-colorPrimaryText'>
-                            {props.job.salary !== 0 ? `${props.job.salary} Tr/Tháng` : 'Thỏa thuận'}
+                            {props.job.salary !== null ? `${props.job.salary} Tr/Tháng` : 'Thỏa thuận'}
                         </Typography>
                     </Box>
                     <Box className='flex flex-row items-center mt-1'>

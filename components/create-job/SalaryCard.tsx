@@ -9,14 +9,14 @@ import { useCreateJobStore } from '@/stores';
 
 export const SalaryCard: React.FC = () => {
     const createJobStore = useCreateJobStore();
-    const [showSalary, setShowSalary] = React.useState(!!createJobStore.jobData.salary);
+    const [showSalary, setShowSalary] = React.useState(createJobStore.jobData.salary === 0 ? true : !!createJobStore.jobData.salary);
 
 
     const handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
 
         if (value === '') {
-            createJobStore.setSalary(0);
+            createJobStore.setSalary(null);
         } else {
             const numberValue = parseInt(value, 10);
             if (!isNaN(numberValue)) {
@@ -30,22 +30,22 @@ export const SalaryCard: React.FC = () => {
         setShowSalary(isChecked);
 
         if (!isChecked) {
-            createJobStore.setSalary(0);
+            createJobStore.setSalary(null);
         }
 
-        if (createJobStore.jobData.salary === 0) {
+        if (createJobStore.jobData.salary === null) {
             setShowSalary(!isChecked);
         }
     };
 
     React.useEffect(() => {
         if (!showSalary) {
-            createJobStore.setSalary(0);
+            createJobStore.setSalary(null);
         }
     }, [showSalary]);
 
     React.useEffect(() => {
-        if (createJobStore.jobData.salary === 0) {
+        if (createJobStore.jobData.salary === null) {
             setShowSalary(false);
         } else {
             setShowSalary(true);

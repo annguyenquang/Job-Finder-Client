@@ -6,7 +6,7 @@ type CreateJobStore = {
     jobData: Job;
     setJobTitle: (title: string) => void;
     setJobDescription: (description: string) => void;
-    setSalary: (salary: number) => void;
+    setSalary: (salary: number | null) => void;
     setProvinceId: (provinceId: number) => void;
     setDistrictId: (districtId: number) => void;
     setMinAgeRequirement: (minAge: number | null) => void;

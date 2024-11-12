@@ -7,7 +7,7 @@ export type Job = {
     id: string;
     title: string;
     description: string;
-    salary: number;
+    salary: number | null;
     status: number;
     closeDate: Date;
     provinceId: number;
