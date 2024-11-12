@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 type JobdetailProps = {
     job: Job;
+    activeCompanyPreview: Boolean;
 }
 
 export const JobDetail: React.FC<JobdetailProps> = (props) => {
@@ -68,6 +69,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
                         size={4}
                     >
                         <CompanyIntro
+                            activeCompanyPreview={props.activeCompanyPreview}
                             company={props.job.company}
                         ></CompanyIntro>
                         <Card>

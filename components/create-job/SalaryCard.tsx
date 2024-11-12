@@ -8,8 +8,9 @@ import Switch from '@mui/material/Switch';
 import { useCreateJobStore } from '@/stores';
 
 export const SalaryCard: React.FC = () => {
-    const [showSalary, setShowSalary] = React.useState(false);
     const createJobStore = useCreateJobStore();
+    const [showSalary, setShowSalary] = React.useState(!!createJobStore.jobData.salary);
+
 
     const handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -46,6 +47,8 @@ export const SalaryCard: React.FC = () => {
     React.useEffect(() => {
         if (createJobStore.jobData.salary === 0) {
             setShowSalary(false);
+        } else {
+            setShowSalary(true);
         }
     }, [createJobStore.jobData.salary]);
 

@@ -40,7 +40,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     // Gọi loadJobs khi currentPage hoặc từ khóa tìm kiếm thay đổi
     useEffect(() => {
         const pagination = { page: currentPage, pageSize: jobsPerPage };
-        jobStore.loadJobs(company.id, pagination); // Gọi loadJobs với thông tin phân trang
+        jobStore.loadJobs(company.id, pagination);
     }, [currentPage, company.id, jobStore.keyword, jobStore.provinceId]);
 
     useEffect(() => {
@@ -74,12 +74,22 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
     };
 
     const handleProvinceChange = (event: React.SyntheticEvent, newValue: Province | string | null) => {
-        const code = (newValue as Province)?.code;
-        setProvince((newValue as Province)?.name);
+        const code = (newValue as Province)?.code || 0;
+        setProvince((newValue as Province)?.name || '');
         jobStore.provinceId = code;
         setCurrentPage(1);
         jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
     };
+
+    const handleProvinceInputChange = (event: React.ChangeEvent<{}>, newInputValue: string) => {
+        setProvince(newInputValue);
+        if (!newInputValue) {
+            jobStore.provinceId = 0;
+            setCurrentPage(1);
+            jobStore.loadJobs(company.id, { page: 1, pageSize: jobsPerPage });
+        }
+    };
+
 
     return (
         <Card className="flex flex-col mb-4">
@@ -105,14 +115,14 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                             locationStore.allProvince &&
                             <Autocomplete
                                 freeSolo
-                                options={locationStore.allProvince}
+                                options={locationStore.allProvince || []} // Use an empty array if undefined
                                 getOptionLabel={(option) => (typeof option === 'string' ? option : option.name) || ''}
                                 isOptionEqualToValue={(option, value) => option.code === (value as Province)?.code}
                                 className="w-60 -ml-1"
-                                value={locationStore.allProvince.find((province) => province.code === createJobStore.jobData.provinceId)}
+                                value={locationStore.allProvince?.find((province) => province.code === createJobStore.jobData.provinceId) || null}
                                 onChange={handleProvinceChange}
                                 inputValue={province}
-                                onInputChange={(event, newInputValue) => setProvince(newInputValue)}
+                                onInputChange={handleProvinceInputChange}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -130,6 +140,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                                     />
                                 )}
                             />
+
                         }
                     </Grid2>
                     <Grid2 size={3}>

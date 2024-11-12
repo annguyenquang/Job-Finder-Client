@@ -22,7 +22,7 @@ const JobDetailPage = () => {
         metadataStore.loadValueMetadata(jobStore.job);
     }, [jobStore.job]);
     return (
-        <JobDetail job={jobStore.job}></JobDetail>
+        <JobDetail job={jobStore.job} activeCompanyPreview={true}></JobDetail>
     );
 }
 export default JobDetailPage;

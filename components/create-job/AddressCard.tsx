@@ -20,7 +20,28 @@ export const AddressCard: React.FC = () => {
     const createJobStore = useCreateJobStore();
     const locationStore = useLocationStore();
     const [listDistrict, setListDistrict] = React.useState<District[] | undefined>([]);
-    const [inputDistrictText, setInputDistrictText] = React.useState('');
+
+    // Khởi tạo inputDistrictText với tên quận nếu có districtId, nếu không sẽ là chuỗi rỗng
+    const [inputDistrictText, setInputDistrictText] = React.useState<string>('');
+
+    React.useEffect(() => {
+        const fetchDistrictName = async () => {
+            const districtId = createJobStore.jobData.districtId;
+
+            if (locationStore.allDistrict.length === 0) {
+                await locationStore.loadAllDistrict();
+            }
+
+            const districtName = locationStore.allDistrict.find(
+                (district) => district.code === districtId
+            )?.name || '';
+
+            console.log("check districtName: ", districtName);
+            setInputDistrictText(districtName);
+        };
+
+        fetchDistrictName();
+    }, [createJobStore.jobData.districtId, locationStore]);
 
     const handleArrangementChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         createJobStore.setWorkArrangementId(event.target.value);
@@ -28,7 +49,7 @@ export const AddressCard: React.FC = () => {
 
     React.useEffect(() => {
         console.log("workArrangement jobStore: ", createJobStore.jobData.workArrangement)
-    }, [createJobStore.jobData.workArrangement])
+    }, [createJobStore.jobData.workArrangement]);
 
     const handleProvinceChange = (event: React.SyntheticEvent, newValue: Province | string | null) => {
         const code = (newValue as Province)?.code;
@@ -45,11 +66,11 @@ export const AddressCard: React.FC = () => {
 
     React.useEffect(() => {
         console.log("provinceId jobStore: ", createJobStore.jobData.provinceId)
-    }, [createJobStore.jobData.provinceId])
+    }, [createJobStore.jobData.provinceId]);
 
     React.useEffect(() => {
         console.log("districtId jobStore: ", createJobStore.jobData.districtId)
-    }, [createJobStore.jobData.districtId])
+    }, [createJobStore.jobData.districtId]);
 
     React.useEffect(() => {
         const fetchWorkArrangement = async () => {
@@ -71,70 +92,55 @@ export const AddressCard: React.FC = () => {
             };
             fetchAllDistrict(createJobStore.jobData.provinceId);
         }
-    }, [createJobStore.jobData.provinceId])
+    }, [createJobStore.jobData.provinceId]);
 
     return (
-        <Card
-            className="mb-4"
-        >
-            <Box
-                className="p-2 flex-row flex">
-                <Typography
-                    className='font-semibold font-sans text-lg pl-2 pt-2 pb-2'
-                >
+        <Card className="mb-4">
+            <Box className="p-2 flex-row flex">
+                <Typography className='font-semibold font-sans text-lg pl-2 pt-2 pb-2'>
                     Địa điểm làm việc
                 </Typography>
-                <Typography
-                    className='font-semibold font-sans text-red-600 text-xl pt-2'
-                >
+                <Typography className='font-semibold font-sans text-red-600 text-xl pt-2'>
                     *
                 </Typography>
             </Box>
             <Divider variant="fullWidth" />
-            <Box
-                className="p-2"
-            >
-                <Typography
-                    className='font-semibold font-sans text-base pl-2 pt-2'
-                >
+            <Box className="p-2">
+                <Typography className='font-semibold font-sans text-base pl-2 pt-2'>
                     Hình thức làm việc
                 </Typography>
 
                 <FormControl>
-                    <RadioGroup
-                        row
-                        className="pl-2"
-                        value={createJobStore.jobData.workArrangement.id}
-                        onChange={handleArrangementChange}
-                    >
-                        {metadataStore.listWorkArrangement.length > 0 && metadataStore.listWorkArrangement.map((workArrangement) => (
-                            <FormControlLabel
-                                key={workArrangement.id}
-                                value={workArrangement.id}
-                                control={<Radio />}
-                                label={<span className="text-sm">{workArrangement.value}</span>}
-                            />
-                        ))}
-                    </RadioGroup>
+                    {metadataStore.listWorkArrangement.length > 0 && (
+                        <RadioGroup
+                            row
+                            className="pl-2"
+                            value={createJobStore.jobData.workArrangement.id}
+                            onChange={handleArrangementChange}
+                        >
+                            {metadataStore.listWorkArrangement.map((workArrangement) => (
+                                <FormControlLabel
+                                    key={workArrangement.id}
+                                    value={workArrangement.id}
+                                    control={<Radio />}
+                                    label={<span className="text-sm">{workArrangement.value}</span>}
+                                />))}
+                        </RadioGroup>
+                    )}
                 </FormControl>
 
-                <Typography
-                    className='font-semibold font-sans text-base pl-2 pt-2 pb-4'
-                >
+                <Typography className='font-semibold font-sans text-base pl-2 pt-2 pb-4'>
                     Địa điểm làm việc
                 </Typography>
 
-
-                <Box
-                    className="flex flex-row"
-                >
+                <Box className="flex flex-row">
                     {
                         locationStore.allProvince &&
                         <Autocomplete
                             freeSolo
                             options={locationStore.allProvince}
                             getOptionLabel={(option) => (typeof option === 'string' ? option : option.name) || ''}
-                            isOptionEqualToValue={(option, value) => option.code === (value as Province)?.code}
+                            isOptionEqualToValue={(option, value) => option.code === (value)?.code}
                             className="w-60 pl-2 mr-1"
                             value={locationStore.allProvince.find((province) => province.code === createJobStore.jobData.provinceId)}
                             onChange={handleProvinceChange}
@@ -163,7 +169,7 @@ export const AddressCard: React.FC = () => {
                             freeSolo
                             options={listDistrict}
                             getOptionLabel={(option) => (typeof option === 'string' ? option : option.name) || ''}
-                            isOptionEqualToValue={(option, value) => option.code === (value as District)?.code}
+                            isOptionEqualToValue={(option, value) => option.code === (value)?.code}
                             className="w-60 pl-2 mr-1"
                             value={listDistrict.find((district) => district.code === createJobStore.jobData.districtId)}
                             inputValue={inputDistrictText}

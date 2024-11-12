@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 
 type CompanyInfoProps = {
     company: any,
+    activeCompanyPreview: Boolean,
 }
 
 
@@ -63,6 +64,7 @@ export const CompanyIntro: React.FC<CompanyInfoProps> = (props) => {
                     <Button
                         className='w-full'
                         onClick={handleCompanyClick}
+                        disabled={!props.activeCompanyPreview}
                         variant="outlined">
                         Xem công ty
                     </Button>

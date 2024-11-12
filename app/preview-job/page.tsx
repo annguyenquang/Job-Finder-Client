@@ -33,7 +33,7 @@ const PreviewPage = () => {
 
     return (
         <Box>
-            <JobDetail job={jobData} />
+            <JobDetail job={jobData} activeCompanyPreview={false} />
             <Box className="pb-12"></Box>
             <Box className="bg-white shadow fixed bottom-0 left-0 right-0 z-10">
                 <Container maxWidth="md" className="flex-grow flex flex-row justify-between p-4">
