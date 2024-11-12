@@ -1,6 +1,4 @@
 "use client";
-import { Box, Card, CardContent, Container, Grid2 } from '@mui/material';
-import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components';
 import React, { useEffect } from 'react'
 import { useJobStore } from '@/stores';
 import { useParams } from 'next/navigation';

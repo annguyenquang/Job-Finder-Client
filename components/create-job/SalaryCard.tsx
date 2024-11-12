@@ -52,10 +52,6 @@ export const SalaryCard: React.FC = () => {
         }
     }, [createJobStore.jobData.salary]);
 
-    React.useEffect(() => {
-        console.log("salary jobStore: ", createJobStore.jobData.salary)
-    }, [createJobStore.jobData.salary])
-
     return (
         <Card
             className="mb-4"

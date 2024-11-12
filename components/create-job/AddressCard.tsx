@@ -21,7 +21,6 @@ export const AddressCard: React.FC = () => {
     const locationStore = useLocationStore();
     const [listDistrict, setListDistrict] = React.useState<District[] | undefined>([]);
 
-    // Khởi tạo inputDistrictText với tên quận nếu có districtId, nếu không sẽ là chuỗi rỗng
     const [inputDistrictText, setInputDistrictText] = React.useState<string>('');
 
     React.useEffect(() => {
@@ -36,7 +35,6 @@ export const AddressCard: React.FC = () => {
                 (district) => district.code === districtId
             )?.name || '';
 
-            console.log("check districtName: ", districtName);
             setInputDistrictText(districtName);
         };
 
@@ -47,9 +45,6 @@ export const AddressCard: React.FC = () => {
         createJobStore.setWorkArrangementId(event.target.value);
     };
 
-    React.useEffect(() => {
-        console.log("workArrangement jobStore: ", createJobStore.jobData.workArrangement)
-    }, [createJobStore.jobData.workArrangement]);
 
     const handleProvinceChange = (event: React.SyntheticEvent, newValue: Province | string | null) => {
         const code = (newValue as Province)?.code;
@@ -63,14 +58,6 @@ export const AddressCard: React.FC = () => {
         const code = (newValue as District)?.code;
         createJobStore.setDistrictId(code);
     };
-
-    React.useEffect(() => {
-        console.log("provinceId jobStore: ", createJobStore.jobData.provinceId)
-    }, [createJobStore.jobData.provinceId]);
-
-    React.useEffect(() => {
-        console.log("districtId jobStore: ", createJobStore.jobData.districtId)
-    }, [createJobStore.jobData.districtId]);
 
     React.useEffect(() => {
         const fetchWorkArrangement = async () => {

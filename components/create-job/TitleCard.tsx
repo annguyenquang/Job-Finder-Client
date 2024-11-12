@@ -24,14 +24,6 @@ export const TitleCard: React.FC = () => {
     };
 
     React.useEffect(() => {
-        console.log("Title jobStore: ", createJobStore.jobData.title)
-    }, [createJobStore.jobData.title])
-
-    React.useEffect(() => {
-        console.log("CommitmentTypeId jobStore: ", createJobStore.jobData.commitmentType)
-    }, [createJobStore.jobData.commitmentType])
-
-    React.useEffect(() => {
         const fetchCommitment = async () => {
             await metadataStore.loadMetadataByCommitment();
         };

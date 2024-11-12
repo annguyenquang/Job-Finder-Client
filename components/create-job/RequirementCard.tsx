@@ -71,15 +71,6 @@ export const RequirementCard: React.FC = () => {
     };
 
     React.useEffect(() => {
-        console.log(createJobStore.jobData.closeDate);
-    }, [createJobStore.jobData.closeDate])
-
-
-    React.useEffect(() => {
-        console.log(createJobStore.jobData.skills);
-    }, [createJobStore.jobData.skills]);
-
-    React.useEffect(() => {
         const fetchGender = async () => {
             await metadataStore.loadMetadataByGender();
         };

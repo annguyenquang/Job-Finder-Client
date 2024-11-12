@@ -17,10 +17,6 @@ import 'react-quill/dist/quill.snow.css';
 export const DescriptionCard: React.FC = () => {
     const createJobStore = useCreateJobStore();
 
-    React.useEffect(() => {
-        console.log("Description jobStore: ", createJobStore.jobData.description);
-    }, [createJobStore.jobData.description])
-
     const handleQuillChange = (value: string): void => {
         createJobStore.setJobDescription(value);
     };
