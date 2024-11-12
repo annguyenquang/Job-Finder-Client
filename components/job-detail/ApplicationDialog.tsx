@@ -111,7 +111,10 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                     src={props.job.company.logo}></Image>
             </DialogTitle>
             <DialogContent>
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{
+                    display: "flex",
+                    paddingY: 1
+                }}>
                     <InsertDriveFile sx={{ marginRight: 1 }}></InsertDriveFile>
                     <Typography sx={{ fontWeight: "bold" }}>
                         Hồ sơ xin việc *
@@ -171,6 +174,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                     id="upload-cv"
                     type="file"></Input>
                 <Typography
+                    paddingY={1}
                     variant='body2'
                     sx={{ color: grey[500] }} >
                     Lưu ý : đảm bảo hồ sơ xin việc của bạn sử dụng ngôn ngữ trùng khớp với mô tả công việc (Ví dụ: viết CV bằng tiếng Anh nếu mô tả công việc bằng tiếng Anh) và đăng tải dưới dạng PDF dưới 5MB.
@@ -189,7 +193,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                                 </Box>
                         }
                     }}></TextField>
-                <Box display="flex">
+                <Box display="flex" paddingY={1}>
                     <Email sx={{ marginRight: 1 }}></Email>
                     <Typography fontWeight={"bold"}>
                         Thư xin việc
@@ -226,8 +230,10 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                         color="primary">
                         ỨNG TUYỂN NGAY
                     </Button>
-                    <Typography textAlign="center">Bạn chưa chuẩn bị hồ sơ?</Typography>
-                    <Typography textAlign={"center"}>Hãy lưu lại việc làm để ứng tuyển sau.</Typography>
+                    <Box paddingY={1}>
+                        <Typography textAlign="center">Bạn chưa chuẩn bị hồ sơ?</Typography>
+                        <Typography textAlign={"center"}>Hãy lưu lại việc làm để ứng tuyển sau.</Typography>
+                    </Box>
                     <Box
                         display={"flex"}
                         justifyContent={"center"}
