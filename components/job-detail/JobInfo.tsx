@@ -5,9 +5,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import JobDescription from './JobDescription';
-import { Company, CompanyAccount, Job, UserAccount } from '@/models';
+import { Company, Job } from '@/models';
 type JobInfoProps = {
-    company: Company | CompanyAccount | UserAccount
+    company: Company,
     job: Job,
     educationLevel: string,
     workExperienceRequirement: string,
@@ -16,14 +16,24 @@ type JobInfoProps = {
 }
 
 export const JobInfo: React.FC<JobInfoProps> = (props) => {
+    const getAgeRequirement = (job: Job) => {
+        if (job.minAgeRequirement === null && job.maxAgeRequirement === null) {
+            return "Không yêu cầu độ tuổi";
+        }
+        if (job.minAgeRequirement === null && job.maxAgeRequirement !== null) {
+            return `Tối đa ${job.maxAgeRequirement} tuổi`;
+        }
+        if (job.minAgeRequirement !== null && job.maxAgeRequirement === null) {
+            return `Tối thiểu ${job.minAgeRequirement} tuổi`;
+        }
+        return `${job.minAgeRequirement} - ${job.maxAgeRequirement} tuổi`;
+    };
+
     const requirements = [
         props.educationLevel || 'Không yêu cầu trình độ',
         props.workExperienceRequirement || 'Không yêu cầu kinh nghiệm',
         props.genderRequirement || 'Không yêu cầu giới tính',
-        props.job.minAgeRequirement === null && props.job.maxAgeRequirement === null ? "Không yêu cầu độ tuổi"
-            : props.job.minAgeRequirement === null && props.job.maxAgeRequirement ? `Tối đa ${props.job.maxAgeRequirement} tuổi`
-                : props.job.minAgeRequirement && props.job.maxAgeRequirement === null ? `Tối thiểu ${props.job.minAgeRequirement} tuổi`
-                    : `${props.job.minAgeRequirement} - ${props.job.maxAgeRequirement}`
+        getAgeRequirement(props.job)
     ];
 
     return (
