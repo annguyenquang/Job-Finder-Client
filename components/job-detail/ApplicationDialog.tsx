@@ -1,14 +1,17 @@
 import { Job } from "@/models";
+import { formatFileSize } from "@/utils";
+import { Delete } from "@mui/icons-material";
 import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import Email from "@mui/icons-material/Email";
 import InsertDriveFile from "@mui/icons-material/InsertDriveFile";
-import { Input } from "@mui/material";
+import { IconButton, Input } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import blue from "@mui/material/colors/blue";
 import grey from "@mui/material/colors/grey";
 import lightBlue from "@mui/material/colors/lightBlue";
+import red from "@mui/material/colors/red";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -21,7 +24,7 @@ import TextField from "@mui/material/TextField";
 import { TransitionProps } from "@mui/material/transitions";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import React, { MouseEvent } from "react";
+import React from "react";
 import { ChangeEvent, useEffect } from "react";
 
 const Transition = React.forwardRef(function Transition(
@@ -52,13 +55,13 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
     useEffect(() => {
         console.log("🚀 ~ props.phoneNumber:", props.phoneNumber)
     }, [props.phoneNumber])
-    useEffect(() => {
-        console.log("🚀 ~ props.coverLetter:", props.coverLetter)
-    }, [props.coverLetter])
+    // useEffect(() => {
+    //     console.log("🚀 ~ props.coverLetter:", props.coverLetter)
+    // }, [props.coverLetter])
 
-    useEffect(() => {
-        console.log("🚀 ~ props.cvFile:", props.cvFile)
-    }, [props.cvFile])
+    // useEffect(() => {
+    //     console.log("🚀 ~ props.cvFile:", props.cvFile)
+    // }, [props.cvFile])
     const changePhoneNumber = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         props.setPhoneNumber(newValue);
@@ -80,7 +83,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
         }
     };
 
-    function logForm(event: MouseEvent<HTMLButtonElement>): void {
+    function logForm(): void {
         console.log("🚀 ~ logForm ~ props.phoneNumber:", props.phoneNumber)
         console.log("🚀 ~ logForm ~ props.hasCoverLetter:", props.hasCoverLetter)
         console.log("🚀 ~ logForm ~ props.coverLetter:", props.coverLetter)
@@ -108,12 +111,51 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = (props) => {
                     </Typography>
                 </Box>
                 <label htmlFor="upload-cv">
-                    <Box sx={{ border: 1, borderColor: blue[500], borderStyle: "dashed", borderRadius: 1, display: "flex", justifyContent: "center", padding: 2, background: lightBlue[50], color: blue[500] }}>
-                        <InsertDriveFile sx={{ marginX: 1 }}></InsertDriveFile>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                            Đăng tải hồ sơ của tôi
-                        </Typography>
-                    </Box>
+                    {props.cvFile ?
+                        <Box sx={{
+                            '&:hover': {
+                                bgcolor: blue[300],
+                                color: "white"
+                            },
+                            '&:has(> .delete-button:hover)': {
+                                bgcolor: lightBlue[50], // Revert to original when hovering over B
+                                color: blue[500]
+                            },
+                            cursor: "pointer",
+                            border: 1,
+                            borderColor: blue[500],
+                            borderStyle: "dashed",
+                            borderRadius: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            padding: 2,
+                            background: lightBlue[50],
+                            color: blue[500]
+                        }}>
+                            <Typography variant="h6" textAlign={"center"}>{props.cvFile.name}</Typography>
+                            <Typography color={grey[500]} textAlign={"center"}>{formatFileSize(props.cvFile.size)}</Typography>
+                            <Button
+                                className="delete-button"
+                                startIcon={<Delete />}
+                                sx={{
+                                    color: red[500],
+                                    "&:hover": {
+                                        color: "white",
+                                        bgcolor: "red"
+                                    }
+                                }}>
+                                Xóa tập tin
+                            </Button>
+                        </Box>
+                        :
+                        <Box sx={{ cursor: "pointer", border: 1, borderColor: blue[500], borderStyle: "dashed", borderRadius: 1, display: "flex", justifyContent: "center", padding: 2, background: lightBlue[50], color: blue[500] }}>
+                            <InsertDriveFile sx={{ marginX: 1 }}></InsertDriveFile>
+                            <Typography sx={{ fontWeight: "bold" }}>
+                                Đăng tải hồ sơ của tôi
+                            </Typography>
+                        </Box>
+                    }
                 </label>
                 <Input
                     onChange={changeFile}
