@@ -76,8 +76,8 @@ export const Share: React.FC = () => {
                     >
                         <Alert
                             onClose={handleClose}
-                            severity="success"
-                            sx={{ backgroundColor: '#4caf50', color: '#fff' }} // Chỉnh màu ở đây
+                            severity="info"
+                            className='bg-colorPrimaryText text-white shadow-md'
                         >
                             Sao chép thành công
                         </Alert>
