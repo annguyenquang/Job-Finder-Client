@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { useJobStore } from '@/stores';
 import { useParams } from 'next/navigation';
 import { useMetadataStore } from '@/stores/MetadataStore';
-import { JobDetail } from '../../../components/job-detail/JobDetail';
+import { JobDetail } from '@/components';
 
 
 const JobDetailPage = () => {
