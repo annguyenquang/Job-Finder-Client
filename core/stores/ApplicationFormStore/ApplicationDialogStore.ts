@@ -8,7 +8,7 @@ type ApplicationDialogStore = {
     hasCoverLetter: boolean,
     coverLetter: string | null,
     setIsOpen: (isOpen: boolean) => void;
-    setCvFile: (file: File) => void,
+    setCvFile: (file: File | null) => void,
     setPhoneNumber: (newPhone: string) => void,
     setHasCoverLetter: (newValue: boolean) => void,
     sendApplication: () => Promise<void>
@@ -24,7 +24,7 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set) 
     setIsOpen: (isOpen: boolean) => {
         set(() => ({ isOpen: isOpen }))
     },
-    setCvFile: (file) => {
+    setCvFile: (file:File | null) => {
         set(() => ({ cvFile: file }))
     },
     setPhoneNumber: (newPhone: string) => {

@@ -1,1 +1,1 @@
-export * from "./LocationService";
+export * from './LocationService'
