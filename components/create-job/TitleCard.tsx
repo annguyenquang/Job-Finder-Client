@@ -8,8 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { useMetadataStore } from '@/stores/MetadataStore';
-import { useCreateJobStore } from '@/stores';
+import { useCreateJobStore, useMetadataStore } from '@/stores';
 
 export const TitleCard: React.FC = () => {
     const metadataStore = useMetadataStore();

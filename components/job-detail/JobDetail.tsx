@@ -1,13 +1,13 @@
 import { Box, Card, CardContent, Container, Grid2 } from '@mui/material';
 import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components';
 import { Job } from '@/models';
-import { useMetadataStore } from '@/stores/MetadataStore';
+import { useMetadataStore } from '@/stores';
 import { useEffect } from 'react';
 
 
 type JobdetailProps = {
     job: Job;
-    activeCompanyPreview: Boolean;
+    activeCompanyPreview: boolean;
 }
 
 export const JobDetail: React.FC<JobdetailProps> = (props) => {

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 type CompanyInfoProps = {
     company: any,
-    activeCompanyPreview: Boolean,
+    activeCompanyPreview: boolean,
 }
 
 
