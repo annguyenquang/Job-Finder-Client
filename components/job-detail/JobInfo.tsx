@@ -5,31 +5,35 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import JobDescription from './JobDescription';
-import { Job } from '@/models';
+import { Company, Job } from '@/models';
 type JobInfoProps = {
+    company: Company,
     job: Job,
     educationLevel: string,
     workExperienceRequirement: string,
-    genderRequirement: string
+    genderRequirement: string,
+    skills: string[]
 }
 
 export const JobInfo: React.FC<JobInfoProps> = (props) => {
-    const requirements = [
-        props.educationLevel,
-        props.workExperienceRequirement,
-        props.genderRequirement,
-        `${props.job.minAgeRequirement}-${props.job.maxAgeRequirement}`
-    ];
+    const getAgeRequirement = (job: Job) => {
+        if (job.minAgeRequirement === null && job.maxAgeRequirement === null) {
+            return "Không yêu cầu độ tuổi";
+        }
+        if (job.minAgeRequirement === null && job.maxAgeRequirement !== null) {
+            return `Tối đa ${job.maxAgeRequirement} tuổi`;
+        }
+        if (job.minAgeRequirement !== null && job.maxAgeRequirement === null) {
+            return `Tối thiểu ${job.minAgeRequirement} tuổi`;
+        }
+        return `${job.minAgeRequirement} - ${job.maxAgeRequirement} tuổi`;
+    };
 
-    const skills = [
-        "B2C Sales",
-        "Sales Strategy",
-        "Sales Management",
-        "Sales and Marketing",
-        "Negotiation Skills",
-        "Contract Negotiation",
-        "Teamwork",
-        "Sales Operations"
+    const requirements = [
+        props.educationLevel || 'Không yêu cầu trình độ',
+        props.workExperienceRequirement || 'Không yêu cầu kinh nghiệm',
+        props.genderRequirement || 'Không yêu cầu giới tính',
+        getAgeRequirement(props.job)
     ];
 
     return (
@@ -43,7 +47,7 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                         <img
                             alt=""
                             className='w-20 h-20 m-2'
-                            src={props.job.company.logo}>
+                            src={props.company.logo}>
                         </img>
                         <Box
                             className="flex flex-col"
@@ -51,13 +55,13 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                             <Typography
                                 className='font-sans text-lg font-semibold text-black'
                             >
-                                {props.job.createdBy ?? "Tên người tạo tuyển dụng"}
+                                {props.company.name ?? "Tên công ty"}
                             </Typography>
                             <Typography
                                 color="textSecondary"
                                 className='font-sans'
                             >
-                                Nhà tuyển dụng · {props.job.company.name}
+                                Nhà tuyển dụng · {props.company.name}
                             </Typography>
                         </Box>
                     </Box>
@@ -82,9 +86,10 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                 >
                     Kỹ năng
                 </Typography>
-                {skills.map((skill, index) => (
+                {props.skills.length > 0 ? props.skills.map((skill, index) => (
                     <Chip key={`${skill}-${index}`} className='mr-2 mb-2' label={skill} />
-                ))}
+                )) : "Không yêu cầu kỹ năng"
+                }
             </CardContent>
         </Card>
     )
