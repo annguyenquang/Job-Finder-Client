@@ -2,7 +2,7 @@ import { Job, Pagination } from "@/models";
 import { JobService } from "@/services";
 import { create } from "zustand";
 
-type JobStore = {
+type JobDetailStore = {
     job: Job;
     jobs: Job[];
     totalJobs: number;
@@ -72,7 +72,7 @@ export const emptyJob: Job = {
     updatedBy: null,
 };
 
-export const useJobStore = create<JobStore>((set, get) => ({
+export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
     job: emptyJob,
     jobs: [emptyJob],
     totalJobs: 0,

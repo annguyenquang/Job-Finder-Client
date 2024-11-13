@@ -12,6 +12,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { Job } from '@/models';
 import { District, LocationService, Province } from '@/services';
+import { useApplicationDialogStore } from '@/stores';
 
 type BannerProps = {
     job: Job,
@@ -44,9 +45,15 @@ const getTimeSince = (date: Date) => {
 
 
 export const JobBanner: React.FC<BannerProps> = (props) => {
+    const applicationDialogStore = useApplicationDialogStore();
     const [district, setDistrict] = React.useState<District>();
     const [province, setProvince] = React.useState<Province>();
     const [timeSince, setTimeSince] = React.useState<string | null>(null);
+
+    const toggleDialog = () => {
+        const currentState = applicationDialogStore.isOpen;
+        applicationDialogStore.setIsOpen(!currentState);
+    }
 
     React.useEffect(() => {
         const fetchProvince = async () => {
@@ -173,7 +180,7 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
                         >
                         </ShareOutlinedIcon>
                     </IconButton>
-                    <Button className='text-white bg-orange-600 pt-2 pb-2 pl-4 pr-4 font-bold '
+                    <Button onClick={toggleDialog} className='text-white bg-orange-600 pt-2 pb-2 pl-4 pr-4 font-bold '
                         size="medium"
                         variant="contained"
                     >

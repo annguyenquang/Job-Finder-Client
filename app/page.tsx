@@ -1,18 +1,12 @@
 'use client';
-import { Button } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Button, Container, Typography } from '@mui/material';
+import { Navbar } from '@/components';
+import { useRouter } from 'next/navigation';
 
 const Home = () => {
-  const router = useRouter(); 
-  const onClick = () => {
-    router.push('/example-user-page');
-  }
-  return (
-    <div>
-      <h1>This is home</h1>
-      <Button variant='contained' color="primary" onClick={onClick}>Click here</Button>
-    </div>
-  );
-}
+    const router = useRouter();
+
+    return <div>Developing</div>;
+};
 
 export default Home;

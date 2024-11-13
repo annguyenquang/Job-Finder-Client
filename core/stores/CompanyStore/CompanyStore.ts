@@ -1,11 +1,11 @@
-import { Company } from "@/models";
-import { CompanyService } from "@/services";
-import { create } from "zustand";
+import { Company } from '@/models'
+import { CompanyService } from '@/services'
+import { create } from 'zustand'
 
 type CompanyStore = {
-    company: Company; 
-    loadCompany: (slug: string) => void;
-};
+  company: Company
+  loadCompany: (slug: string) => void
+}
 
 // Đối tượng company rỗng
 export const emptyCompany: Company = {
@@ -29,9 +29,10 @@ export const emptyCompany: Company = {
 }
 
 export const useCompanyStore = create<CompanyStore>()((set) => ({
-    company: emptyCompany, // Sử dụng đối tượng company rỗng
-    loadCompany: async (slug: string) => {
-        const res = await CompanyService.GetCompanyBySlug(slug);
-        set(() => ({ company: res?.result })); // Cập nhật trạng thái company với dữ liệu nhận được
-    }
-}));
+  company: emptyCompany, // Sử dụng đối tượng company rỗng
+
+  loadCompany: async (slug: string) => {
+    const res = await CompanyService.GetCompanyBySlug(slug)
+    set(() => ({ company: res?.result })) // Cập nhật trạng thái company với dữ liệu nhận được
+  }
+}))

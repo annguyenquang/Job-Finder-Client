@@ -1,8 +1,11 @@
+"use client";
 import { Box, Card, CardContent, Container, Grid2 } from '@mui/material';
 import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components';
 import { Job } from '@/models';
-import { useMetadataStore } from '@/stores';
+import { useMetadataStore, useApplicationDialogStore } from '@/stores';
 import { useEffect } from 'react';
+import ApplicationDialog from './ApplicationDialog';
+
 
 
 type JobdetailProps = {
@@ -13,6 +16,11 @@ type JobdetailProps = {
 export const JobDetail: React.FC<JobdetailProps> = (props) => {
 
     const metadataStore = useMetadataStore();
+    const applicationDialogStore = useApplicationDialogStore();
+
+    const closeApplicationDialog = () => {
+        applicationDialogStore.setIsOpen(false);
+    }
 
     useEffect(() => {
         metadataStore.loadValueMetadata(props.job);
@@ -21,6 +29,20 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
     return (
         <Box
             className="flex flex-col">
+            <ApplicationDialog
+                job={props.job}
+                isOpen={applicationDialogStore.isOpen}
+                cvFile={applicationDialogStore.cvFile}
+                phoneNumber={applicationDialogStore.phoneNumber}
+                hasCoverLetter={applicationDialogStore.hasCoverLetter}
+                coverLetter={applicationDialogStore.coverLetter}
+                setCvFile={applicationDialogStore.setCvFile}
+                setPhoneNumber={applicationDialogStore.setPhoneNumber}
+                sendApplication={applicationDialogStore.sendApplication}
+                setHashCoverLetter={applicationDialogStore.setHasCoverLetter}
+                setCoverLetter={applicationDialogStore.setCoverLetter}
+                onClose={closeApplicationDialog} />
+
             <Container
                 component="main"
                 maxWidth="lg"

@@ -1,4 +1,3 @@
-import { CompanyAccount, UserAccount } from "../Account";
 import { Metadata } from "../common";
 import { Company } from "../CompanyModel";
 
