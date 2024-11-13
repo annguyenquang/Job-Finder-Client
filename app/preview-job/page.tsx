@@ -6,24 +6,12 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Company } from '@/models';
+
 
 const PreviewPage = () => {
     const createJobStore = useCreateJobStore();
-    const accountStore = useAccountStore();
     const jobData = createJobStore.jobData;
     const router = useRouter();
-
-    useEffect(() => {
-        accountStore.loadAccountByJwt();
-    }, [])
-
-    useEffect(() => {
-        if (accountStore.account) {
-            createJobStore.setCompany(accountStore.account as Company);
-        }
-    }, [accountStore.account])
 
     const handlehandleBackClick = () => {
         router.push('/create-job');

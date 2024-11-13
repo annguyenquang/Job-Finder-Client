@@ -22,6 +22,8 @@ export const AddressCard: React.FC = () => {
     const [listDistrict, setListDistrict] = React.useState<District[] | undefined>([]);
 
     const [inputDistrictText, setInputDistrictText] = React.useState<string>('');
+    const [inputProvinceText, setInputProvinceText] = React.useState<string>('');
+
 
     React.useEffect(() => {
         const fetchDistrictName = async () => {
@@ -72,6 +74,9 @@ export const AddressCard: React.FC = () => {
     }, []);
 
     React.useEffect(() => {
+        if (createJobStore.jobData.provinceId === 0 || null) {
+            setInputProvinceText('');
+        }
         if (createJobStore.jobData.provinceId) {
             const fetchAllDistrict = async (selectedProvinceId: number) => {
                 const listDistrict = await LocationService.getDistrictsByProvinceId(selectedProvinceId);
@@ -130,6 +135,8 @@ export const AddressCard: React.FC = () => {
                             isOptionEqualToValue={(option, value) => option.code === (value)?.code}
                             className="w-60 pl-2 mr-1"
                             value={locationStore.allProvince.find((province) => province.code === createJobStore.jobData.provinceId)}
+                            inputValue={inputProvinceText}
+                            onInputChange={(event, newInputValue) => setInputProvinceText(newInputValue)}
                             onChange={handleProvinceChange}
                             renderInput={(params) => (
                                 <TextField

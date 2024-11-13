@@ -1,13 +1,27 @@
 // CreateJobPage.tsx
 "use client";
-import { Typography, Box, Container, Button } from '@mui/material';
+import { Typography, Box, Container, Button, Snackbar, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation'; // useRouter for navigation
 import { AddressCard, DescriptionCard, RequirementCard, SalaryCard, TitleCard } from '@/components';
-import { useCreateJobStore } from '@/stores';
+import { useAccountStore, useCreateJobStore } from '@/stores';
+import { useEffect } from 'react';
+import { Company } from '@/models';
 
 const CreateJobPage = () => {
     const router = useRouter();
     const createJobStore = useCreateJobStore();
+    const accountStore = useAccountStore();
+
+
+    useEffect(() => {
+        accountStore.loadAccountByJwt();
+    }, [])
+
+    useEffect(() => {
+        if (accountStore.account) {
+            createJobStore.setCompany(accountStore.account as Company);
+        }
+    }, [accountStore.account])
 
     const handlePreviewClick = () => {
         router.push('/preview-job');
@@ -15,6 +29,22 @@ const CreateJobPage = () => {
 
     const handleClearClick = () => {
         createJobStore.resetJobForm();
+    };
+
+    const handleSubmitJob = () => {
+        if (createJobStore.jobData) {
+            createJobStore.submitJob();
+        }
+    };
+
+    useEffect(() => {
+        if (createJobStore.jobData.id) {
+            router.push(`/job-detail/${createJobStore.jobData.id}`);
+        }
+    }, [createJobStore.jobData.id])
+
+    const handleClose = () => {
+        createJobStore.setsucceeded(true);
     };
 
 
@@ -63,11 +93,31 @@ const CreateJobPage = () => {
                         >
                             Xem trước
                         </Button>
-                        <Button variant="contained" className="normal-case">
+                        <Button
+                            onClick={handleSubmitJob}
+                            variant="contained"
+                            className="normal-case">
                             Hoàn tất & Tạo tin đăng
                         </Button>
                     </Box>
                 </Container>
+            </Box>
+
+            <Box>
+                <Snackbar
+                    open={createJobStore.succeeded === null ? false : !createJobStore.succeeded}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="info"
+                        className='bg-colorPrimary text-white shadow-md'
+                    >
+                        Vui lòng điền đầy đủ thông tin cần thiết
+                    </Alert>
+                </Snackbar>
             </Box>
         </Box>
     );
