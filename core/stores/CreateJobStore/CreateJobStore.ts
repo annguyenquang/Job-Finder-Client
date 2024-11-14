@@ -1,9 +1,13 @@
-import { Job, Company } from "@/models"; 
+import { Job, Company, JobStatus } from "@/models"; 
 import { create } from "zustand";
 import { emptyCompany } from "../CompanyStore";
+import { JobService } from "@/services";
 
 type CreateJobStore = {
     jobData: Job;
+    succeeded: boolean | null,
+    setsucceeded: (succeeded: boolean | null) => void;
+    setJobId: (id: string) => void;
     setJobTitle: (title: string) => void;
     setJobDescription: (description: string) => void;
     setSalary: (salary: number | null) => void;
@@ -22,8 +26,7 @@ type CreateJobStore = {
     setCloseDate: (date: Date) => void; 
     setCompany: (company: Company) => void;
     resetJobForm: () => void;
-        // submitJob: () => Promise<void>;
- 
+    submitJob: () => Promise<void>;
 };
 
 const initialJobData: Job = {
@@ -31,7 +34,7 @@ const initialJobData: Job = {
     title: "",
     description: "",
     salary: 0,
-    status: 1,
+    status: JobStatus.Open,
     closeDate: new Date(new Date().setDate(new Date().getDate() + 1)),
     provinceId: 0,
     districtId: 0,
@@ -47,12 +50,14 @@ const initialJobData: Job = {
     updatedAt: new Date(),
     createdBy: "account1",
     updatedBy: null,
-    skills: []
+    skills: [],
 };
 
-export const useCreateJobStore = create<CreateJobStore>((set) => ({
+export const useCreateJobStore = create<CreateJobStore>((set, get) => ({
     jobData: initialJobData,
-
+    succeeded:null,
+    setsucceeded: (succeeded) => set({ succeeded }),
+    setJobId: (id) => set((state) => ({ jobData: { ...state.jobData, id } })), 
     setJobTitle: (title) => set((state) => ({ jobData: { ...state.jobData, title } })),
     setJobDescription: (description) => set((state) => ({ jobData: { ...state.jobData, description } })),
     setSalary: (salary) => set((state) => ({ jobData: { ...state.jobData, salary } })),
@@ -85,15 +90,53 @@ export const useCreateJobStore = create<CreateJobStore>((set) => ({
 
     setCompany: (company) => set((state) => ({ jobData: { ...state.jobData, company } })), 
 
-    resetJobForm: () => set({ jobData: initialJobData }),
+    resetJobForm: () => set({ jobData: initialJobData, succeeded: null }),
 
-        // submitJob: async () => {
-    //     const { jobData } = get();
-    //     try {
-    //         await JobService.createJob(jobData);
-    //         alert("Job created successfully!");
-    //     } catch (error) {
-    //         console.error("Failed to create job:", error);
-    //     }
-    // },
+    submitJob: async () => {
+        const { jobData, setJobId, setsucceeded } = get();
+
+        const data = {
+            title: jobData.title,
+            description: jobData.description,
+            salary: jobData.salary,
+            status: jobData.status,
+            closeDate: jobData.closeDate,
+            provinceId: jobData.provinceId,
+            districtId: jobData.districtId,
+            minAgeRequirement: jobData.minAgeRequirement,
+            maxAgeRequirement: jobData.maxAgeRequirement,
+            workArrangementId: jobData.workArrangement.id,
+            commitmentTypeId: jobData.commitmentType.id,
+            genderRequirementId: jobData.genderRequirement.id,
+            educationLevelRequirementId: jobData.educationLevelRequirement.id,
+            workExperienceRequirementId: jobData.workExperienceRequirement.id,
+            skills: jobData.skills,
+            companyId:  jobData.company.id,
+        }
+
+        const isValidData = data.title && data.description &&
+        data.provinceId && data.districtId && data.closeDate &&
+        data.workArrangementId && data.commitmentTypeId &&
+        data.genderRequirementId && data.educationLevelRequirementId &&
+        data.workExperienceRequirementId && data.companyId;
+
+        if (!isValidData) {
+        console.error("Required fields are missing or invalid in job data:", data);
+        setsucceeded(false);
+        return;
+        }
+
+        try {
+            const res = await JobService.createJob(data as any);
+            if(res?.succeeded){
+                const jobId = res?.result.id;
+                setJobId(jobId);
+                setsucceeded(true);
+            }else{
+                setsucceeded(false)
+            }
+        } catch (error) {
+            console.error("Failed to create job:", error);
+        }
+    },
 }));

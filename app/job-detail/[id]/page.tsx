@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect } from 'react'
-import { useJobDetailStore } from '@/stores';
+import { useCreateJobStore, useJobDetailStore, useMetadataStore } from '@/stores';
 import { useParams } from 'next/navigation';
-import { useMetadataStore } from '@/stores/MetadataStore';
 import { JobDetail } from '@/components';
 
 
@@ -10,9 +9,11 @@ const JobDetailPage = () => {
   const { id } = useParams();
   const jobStore = useJobDetailStore();
   const metadataStore = useMetadataStore();
+  const createJobStore = useCreateJobStore();
 
   useEffect(() => {
     jobStore.loadJobById(id as string);
+    createJobStore.resetJobForm();
   }, [id]);
 
 
