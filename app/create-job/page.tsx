@@ -14,7 +14,9 @@ const CreateJobPage = () => {
 
 
     useEffect(() => {
-        accountStore.loadAccountByJwt();
+        if (!accountStore.account) {
+            accountStore.loadAccountByJwt();
+        }
     }, [])
 
     useEffect(() => {
