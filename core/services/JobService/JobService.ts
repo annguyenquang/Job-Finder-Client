@@ -50,7 +50,6 @@ const createJob = async (jobData: Job): Promise<ApiResult<{id: string}> | undefi
   try {
     const url = '/Job/CreateJob'
     const res = await http().post<ApiResult<{id: string}>>(url, jobData)
-    console.log("res: ", res);
     return res.data;
   } catch (error) {
     console.log(error)
