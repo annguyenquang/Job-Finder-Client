@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect } from 'react'
-import { useCreateJobStore, useJobDetailStore } from '@/stores';
+import { useCreateJobStore, useJobDetailStore, useMetadataStore } from '@/stores';
 import { useParams } from 'next/navigation';
-import { useMetadataStore } from '@/stores/MetadataStore';
 import { JobDetail } from '@/components';
 
 
