@@ -6,6 +6,8 @@ import Pagination from '../common/Pagination'
 import { useJobListStore } from '@/stores'
 import { Metadata } from '@/models/common/Metadata'
 import { JobService } from '@/services'
+import Grid2 from '@mui/material/Grid2'
+import JobCardSkeleton from './skeleton/JobCardSkeleton'
 
 const JobList = () => {
   const jobStore = useJobListStore()
@@ -20,11 +22,17 @@ const JobList = () => {
 
   return (
     <Grid marginLeft={2} container spacing={1}>
-      {jobStore.jobs.map((job, idx) => (
-        <Grid key={idx} size={4}>
-          <JobCard job={job} />
-        </Grid>
-      ))}
+      {jobStore.isLoading
+        ? Array.from({ length: 6 }).map((_, idx) => (
+            <Grid2 key={idx} size={4}>
+              <JobCardSkeleton />
+            </Grid2>
+          ))
+        : jobStore.jobs.map((job, idx) => (
+            <Grid2 key={idx} size={4}>
+              <JobCard job={job} />
+            </Grid2>
+          ))}
       <Grid size={12} display='flex' justifyContent='center'>
         <Pagination
           currentPage={jobStore.reqParam.pagination.page}

@@ -12,6 +12,7 @@ type JobListStore = {
   total: number
   reqParam: JobParam
   resetFlag: boolean // Add resetFlag state
+  isLoading: boolean
   loadJobs: () => Promise<void>
   loadFilter: () => Promise<void>
   triggerReset: () => void
@@ -27,6 +28,7 @@ export const useJobListStore = create<JobListStore>((set) => ({
   companyJobs: [],
   reqParam: new JobParam(),
   resetFlag: false,
+  isLoading: false,
   filter: [],
   total: 0,
 
@@ -55,11 +57,25 @@ export const useJobListStore = create<JobListStore>((set) => ({
   },
   loadJobs: async () => {
     const { reqParam } = useJobListStore.getState()
-    const res = await JobService.getJobs(reqParam.constructParam())
-    set((state) => ({
-      jobs: res?.data || [], // Update the state with the jobs array
-      total: Math.ceil(res ? res.total / state.reqParam.pagination.pageSize : 0)
+
+    set(() => ({
+      isLoading: true
     }))
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      const res = await JobService.getJobs(reqParam.constructParam())
+      set((state) => ({
+        jobs: res?.data || [], // Update the state with the jobs array
+        total: Math.ceil(res ? res.total / state.reqParam.pagination.pageSize : 0)
+      }))
+    } catch (error) {
+      console.log('Cannot load job due to error: ' + error)
+    } finally {
+      set(() => ({
+        isLoading: false
+      }))
+    }
   },
 
   updateParam: (newParam: JobParam) => {

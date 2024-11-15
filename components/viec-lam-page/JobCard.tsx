@@ -1,15 +1,29 @@
 'use client'
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  Divider,
+  Skeleton,
+  Stack,
+  Typography
+} from '@mui/material'
 import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
 import { getProvinceName } from '../../core/utils/LocationUtils'
+import { useJobListStore } from '@/stores'
 type JobCardProps = {
   job: Job
 }
 const JobCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
+  const jobStore = useJobListStore()
   const location = getProvinceName(props.job.company.provinceId)
   return (
     <Card
@@ -27,7 +41,6 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           sx={{ width: '30%', height: '40%', objectFit: 'contain' }}
           image={props.job.company.logo}
         ></CardMedia>
-
         <CardContent>
           <Typography
             sx={{ cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
@@ -52,6 +65,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           />
         </CardContent>
       </div>
+
       <div>
         <Divider />
         <Box
