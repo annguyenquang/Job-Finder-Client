@@ -35,6 +35,7 @@ const SideBar = () => {
     const currentParam = jobStore.reqParam
     const currentActiveFilter = jobStore.filter.filter((e) => e.active === 1) // TODO
     currentParam.setFilter(currentActiveFilter)
+    currentParam.setPage(1)
     jobStore.updateParam(currentParam)
 
     getJob()
