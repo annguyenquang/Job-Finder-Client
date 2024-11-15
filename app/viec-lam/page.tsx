@@ -23,7 +23,7 @@ const ViecLamPage = () => {
           <Grid2 size={2} display='flex' justifyContent='center' alignItems='center'>
             <SideBar />
           </Grid2>
-          <Grid2 size={10} display='flex' justifyContent='center' alignItems='start'>
+          <Grid2 size={10} alignItems='start'>
             <JobList />
           </Grid2>
         </Grid2>

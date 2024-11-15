@@ -4,14 +4,16 @@ import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
+import { getProvinceName } from '../../core/utils/LocationUtils'
 type JobCardProps = {
   job: Job
 }
 const JobCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
+  const location = getProvinceName(props.job.company.provinceId)
   return (
     <Card
-      className='flex flex-col p-3 min-w-[100%]'
+      className='flex flex-col p-3 '
       sx={{
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
@@ -23,7 +25,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
       <div className='flex w-[100%] flex-row items-center'>
         <CardMedia
           sx={{ width: '30%', height: '40%', objectFit: 'contain' }}
-          image='https://lh5.googleusercontent.com/proxy/YO7Q18ATUUZZav_-j7VDbUeDIfCepEAyVfcnXIp-4iSzWIeAG21QzFbUp1DSTEc5aQZd0AtRDsKHfYtgQh8j5-UGmKlxoHgmGwl7ZovSyXxeQeiowMSGCmHejiDPxstTLnnMWMzHkVY'
+          image={props.job.company.logo}
         ></CardMedia>
 
         <CardContent>
@@ -39,9 +41,9 @@ const JobCard: React.FC<JobCardProps> = (props) => {
             {props.job.title}
           </Typography>
           <Typography variant='body1' className='text-primary'>
-            $props.job.company.name
+            {props.job.company.name}
           </Typography>
-          <Typography variant='body2'>$props.job.location</Typography>
+          <Typography variant='body2'>Company location</Typography>
           <Chip
             className='bg-primary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}

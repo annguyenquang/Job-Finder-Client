@@ -1,5 +1,5 @@
 'use client'
-import { Grid2 } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import React, { useEffect, useState } from 'react'
 import JobCard from './JobCard'
 import Pagination from '../common/Pagination'
@@ -19,20 +19,20 @@ const JobList = () => {
   }
 
   return (
-    <Grid2 marginLeft={2} container spacing={1}>
+    <Grid marginLeft={2} container spacing={1}>
       {jobStore.jobs.map((job, idx) => (
-        <Grid2 key={idx} size={4} display='flex' justifyContent='end'>
+        <Grid key={idx} size={4}>
           <JobCard job={job} />
-        </Grid2>
+        </Grid>
       ))}
-      <Grid2 size={12} display='flex' justifyContent='center'>
+      <Grid size={12} display='flex' justifyContent='center'>
         <Pagination
           currentPage={jobStore.reqParam.pagination.page}
           totalPages={jobStore.total}
           onPageChange={handlePageChange}
         />
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   )
 }
 

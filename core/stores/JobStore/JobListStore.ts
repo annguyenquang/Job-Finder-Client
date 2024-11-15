@@ -11,8 +11,10 @@ type JobListStore = {
   filter: Metadata[]
   total: number
   reqParam: JobParam
+  resetFlag: boolean // Add resetFlag state
   loadJobs: () => Promise<void>
   loadFilter: () => Promise<void>
+  triggerReset: () => void
   modifyFilter: (id: string) => void
   updateParam: (newParam: JobParam) => void // Update param state
 }
@@ -24,6 +26,7 @@ export const useJobListStore = create<JobListStore>((set) => ({
   jobs: [],
   companyJobs: [],
   reqParam: new JobParam(),
+  resetFlag: false,
   filter: [],
   total: 0,
 
@@ -61,5 +64,11 @@ export const useJobListStore = create<JobListStore>((set) => ({
 
   updateParam: (newParam: JobParam) => {
     set({ reqParam: newParam })
+  },
+
+  triggerReset: () => {
+    set((state) => ({
+      resetFlag: !state.resetFlag
+    }))
   }
 }))
