@@ -1,15 +1,5 @@
 'use client'
-import {
-  Autocomplete,
-  Container,
-  Grid2,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField
-} from '@mui/material'
+import { Autocomplete, Container, Grid2, InputLabel, SelectChangeEvent, TextField } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import SearchIcon from '@mui/icons-material/Search'
