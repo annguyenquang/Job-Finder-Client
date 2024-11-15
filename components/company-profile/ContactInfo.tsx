@@ -40,7 +40,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props: ContactInfoProps)
         <Card
             className="flex flex-col mb-4">
             <Box
-                className="bg-gradient-to-r from-colorStartBanner to-colorEndBanner">
+                className="bg-colorPrimary">
                 <Typography
                     variant="h6"
                     className="font-medium p-3 text-white"
@@ -50,7 +50,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props: ContactInfoProps)
                 <Box
                     className='flex flex-row mb-2'>
                     <LocationOnIcon
-                        className='mr-2 text-green-600'
+                        className='mr-2 text-colorPrimary'
                         fontSize='medium'
                     ></LocationOnIcon>
                     <Typography

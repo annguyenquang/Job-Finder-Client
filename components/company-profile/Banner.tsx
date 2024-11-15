@@ -23,7 +23,7 @@ type BannerProps = {
 }
 
 export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
-    const BANNER_IMAGE = 'https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/normal-company/cover/company_cover_1.jpg'
+    const BANNER_IMAGE = 'https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/184125/Originals/bo-suu-tap-background-xanh-duong-1.png'
     return (
         <Card className="bg-white shadow-md rounded-lg mt-5 relative">
             <CardMedia
@@ -36,7 +36,7 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
                 src={props.avatar}
                 className='w-44 h-44 absolute left-10 top-40 border-4 border-white'
             />
-            <Box className='flex-1 bg-gradient-to-r from-colorStartBanner to-colorEndBanner'>
+            <Box className='flex-1 bg-colorPrimary'>
                 <CardContent className='ml-60'>
                     <Grid2 container spacing={2}>
                         <Grid2 size={9}>
@@ -71,10 +71,10 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
                         </Grid2>
                         <Grid2 size={3}>
                             <Box className='flex justify-end'>
-                                <Button className='bg-white text-green-500 p-3 font-medium flex justify-center mt-5 mr-5'
+                                <Button className='bg-blue-50 font-sans shadow-sm text-colorPrimary p-3 font-bold flex justify-center mt-5 mr-5'
                                     size="medium"
                                     variant="contained"
-                                    startIcon={<AddIcon className='text-green-500' />}>
+                                    startIcon={<AddIcon className='text-colorPrimary' />}>
                                     Theo dõi công ty
                                 </Button>
 
@@ -84,7 +84,7 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
                     </Grid2>
 
                 </CardContent>
-            </Box>
+            </Box >
         </Card >
     );
 }

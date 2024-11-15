@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Grid2 from '@mui/material/Grid2';
 import { useCompanyStore } from '@/stores';
 
-const Profile = () => {
+const CompanyProfilePage = () => {
     const { slug } = useParams();
     const companyStore = useCompanyStore();
 
@@ -62,4 +62,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default CompanyProfilePage;

@@ -37,9 +37,15 @@ export const TypeTranslation: { [key: number]: string } = {
 
 // For constructing the URL in English
 export const QueryParams: { [key: number]: string } = {
-  0: 'JobFilter.CommitmentTypeId',
-  1: 'JobFilter.WorkArrangementId',
-  2: 'JobFilter.WorkExperienceRequirementId',
-  3: 'JobFilter.EducationLevelRequirementId',
-  4: 'JobFilter.GenderRequirementId'
-}
+  0: "JobFilter.CommitmentTypeId",
+  1: "JobFilter.WorkArrangementId",
+  2: "JobFilter.WorkExperienceRequirementId",
+  3: "JobFilter.EducationLevelRequirementId",
+  4: "JobFilter.GenderRequirementId",
+};
+
+export const COMMITMENTTYPE = 0;
+export const WORKARRANGEMENTTYPE = 1;
+export const WORKEXPERIENCERETYPE = 2;
+export const EDUCATIONLEVELTYPE = 3;
+export const GENDERTYPE = 4;

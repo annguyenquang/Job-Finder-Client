@@ -1,7 +1,6 @@
 import { Job } from '@/models'
 import { JobParam } from '@/models/common/JobFilterParam'
 import { Metadata } from '@/models/common/Metadata'
-import { Pagination } from '@/models/common/Pagination'
 import { JobService } from '@/services'
 import { MetadataService } from '@/services/MetadataService'
 import { create } from 'zustand'

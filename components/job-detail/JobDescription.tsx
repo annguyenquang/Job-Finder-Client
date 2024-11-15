@@ -1,16 +1,21 @@
+import { Box } from '@mui/material';
 import * as React from 'react';
 
 interface JobDescriptionProps {
-    description: string; // Dữ liệu rich text từ backend
+    description: string;
 }
 
 const JobDescription: React.FC<JobDescriptionProps> = ({ description }) => {
+    React.useEffect(() => {
+        console.log('description: ', description);
+    }, [description]);
+
     return (
-        <div className="pl-6">
-            <div
-                dangerouslySetInnerHTML={{ __html: description }} // Render HTML
+        <Box className="pl-2">
+            <Box
+                dangerouslySetInnerHTML={{ __html: description }}
             />
-        </div>
+        </Box>
     );
 };
 

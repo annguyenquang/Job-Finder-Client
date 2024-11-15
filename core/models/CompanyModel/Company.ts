@@ -1,6 +1,5 @@
 export type Company = {
     id: string; // Mã công ty
-    accountId: string; // ID tài khoản
     name: string; // Tên công ty
     emailContact: string; // Email liên hệ 
     phoneContact: string; // Số điện thoại liên hệ 

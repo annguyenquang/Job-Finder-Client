@@ -37,7 +37,7 @@ export const Share: React.FC = () => {
         <Card
             className="flex flex-col">
             <Box
-                className="bg-gradient-to-r from-colorStartBanner to-colorEndBanner">
+                className="bg-colorPrimary">
                 <Typography
                     variant="h6"
                     className="font-medium p-3 text-white"
@@ -47,7 +47,7 @@ export const Share: React.FC = () => {
                 <Box
                     className='flex flex-row mb-2'>
                     <ShareIcon
-                        className='mr-2 text-green-600'
+                        className='mr-2 text-colorPrimary'
                         fontSize='medium'
                     ></ShareIcon>
                     <Typography
@@ -76,8 +76,8 @@ export const Share: React.FC = () => {
                     >
                         <Alert
                             onClose={handleClose}
-                            severity="success"
-                            sx={{ backgroundColor: '#4caf50', color: '#fff' }} // Chỉnh màu ở đây
+                            severity="info"
+                            className='bg-colorPrimaryText text-white shadow-md'
                         >
                             Sao chép thành công
                         </Alert>
