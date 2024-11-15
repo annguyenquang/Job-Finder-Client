@@ -14,8 +14,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { Company } from '@/models'
-import { useJobListStore, useLocationStore } from '@/stores'
-import { useEffect } from 'react'
+import { useJobDetailStore, useLocationStore } from '@/stores'
 import { LocationService, Province } from '@/services'
 
 type RecruitmentProps = {
@@ -27,7 +26,7 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
   const [currentPage, setCurrentPage] = React.useState(1)
   const [jobProvinces, setJobProvinces] = React.useState<{ [key: number]: Province }>({})
   const jobsPerPage = 4 // Số công việc trên mỗi trang
-  const jobStore = useJobListStore()
+  const jobStore = useJobDetailStore()
   const locationStore = useLocationStore()
   const [searchKeyword, setSearchKeyword] = React.useState('')
 
@@ -37,12 +36,12 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
   }
 
   // Gọi loadJobs khi currentPage hoặc từ khóa tìm kiếm thay đổi
-  useEffect(() => {
+  React.useEffect(() => {
     const pagination = { page: currentPage, pageSize: jobsPerPage }
     jobStore.loadJobs(company.id, pagination) // Gọi loadJobs với thông tin phân trang
   }, [currentPage, company.id, jobStore.keyword, jobStore.provinceId])
 
-  useEffect(() => {
+  React.useEffect(() => {
     locationStore.loadAllProvince()
     const fetchProvinces = async () => {
       const provinces: { [key: number]: Province } = {}
