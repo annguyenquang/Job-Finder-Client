@@ -16,7 +16,6 @@ import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
-import { getProvinceName } from '../../core/utils/LocationUtils'
 import { useJobListStore } from '@/stores'
 type JobCardProps = {
   job: Job
@@ -24,7 +23,6 @@ type JobCardProps = {
 const JobCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
   const jobStore = useJobListStore()
-  const location = getProvinceName(props.job.company.provinceId)
   return (
     <Card
       className='flex flex-col p-3 '
@@ -56,7 +54,9 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           <Typography variant='body1' className='text-primary'>
             {props.job.company.name}
           </Typography>
-          <Typography variant='body2'>Company location</Typography>
+          <Typography variant='body2'>
+            Contact: <span>{props.job.company.emailContact}</span>
+          </Typography>
           <Chip
             className='bg-primary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}

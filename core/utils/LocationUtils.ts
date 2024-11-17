@@ -1,3 +1,4 @@
+'use client'
 import { LocationService, Province } from '@/services'
 
 export const getProvinceName = async (provinceId: number) => {
