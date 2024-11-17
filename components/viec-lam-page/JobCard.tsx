@@ -1,17 +1,31 @@
 'use client'
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  Divider,
+  Skeleton,
+  Stack,
+  Typography
+} from '@mui/material'
 import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
+import { useJobListStore } from '@/stores'
 type JobCardProps = {
   job: Job
 }
 const JobCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
+  const jobStore = useJobListStore()
   return (
     <Card
-      className='flex flex-col p-3 min-w-[100%]'
+      className='flex flex-col p-3 '
       sx={{
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
@@ -22,10 +36,9 @@ const JobCard: React.FC<JobCardProps> = (props) => {
     >
       <div className='flex w-[100%] flex-row items-center'>
         <CardMedia
-          sx={{ width: '30%', height: '40%', objectFit: 'contain' }}
-          image='https://lh5.googleusercontent.com/proxy/YO7Q18ATUUZZav_-j7VDbUeDIfCepEAyVfcnXIp-4iSzWIeAG21QzFbUp1DSTEc5aQZd0AtRDsKHfYtgQh8j5-UGmKlxoHgmGwl7ZovSyXxeQeiowMSGCmHejiDPxstTLnnMWMzHkVY'
+          sx={{ width: '100px', height: '32px', objectFit: 'contain' }}
+          image={props.job.company.logo}
         ></CardMedia>
-
         <CardContent>
           <Typography
             sx={{ cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
@@ -39,9 +52,11 @@ const JobCard: React.FC<JobCardProps> = (props) => {
             {props.job.title}
           </Typography>
           <Typography variant='body1' className='text-primary'>
-            $props.job.company.name
+            {props.job.company.name}
           </Typography>
-          <Typography variant='body2'>$props.job.location</Typography>
+          <Typography variant='body2'>
+            Contact: <span>{props.job.company.emailContact}</span>
+          </Typography>
           <Chip
             className='bg-primary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}
@@ -50,6 +65,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           />
         </CardContent>
       </div>
+
       <div>
         <Divider />
         <Box

@@ -14,7 +14,7 @@ type FilterBoxProps = {
 
 const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
   const jobStore = useJobListStore()
-  const [val, setVal] = useState<string>()
+  const [val, setVal] = useState<string>('')
   const filterOptions = props.filter.filter((element) => props.type === element.type)
 
   const handleSelect = (metadataId: string) => {
@@ -23,7 +23,9 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
     setVal(metadataId) // Update local state to reflect selected value
   }
 
-  useEffect(() => {}, [val])
+  useEffect(() => {
+    setVal('')
+  }, [jobStore.resetFlag])
   return (
     <Box
       sx={{

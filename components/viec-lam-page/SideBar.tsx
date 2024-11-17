@@ -1,5 +1,16 @@
 'use client'
-import { Box, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography
+} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import React, { useEffect, useState } from 'react'
 import FilterBox from './FilterBox'
 import { useJobListStore } from '@/stores'
@@ -7,16 +18,6 @@ import { useJobListStore } from '@/stores'
 const SideBar = () => {
   const jobStore = useJobListStore()
   const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
-  const [jobStatus, setJobStatus] = useState<number>(1)
-
-  useEffect(() => {
-    if (jobStatus) {
-      const updateParam = jobStore.reqParam
-      updateParam.setStatus(jobStatus)
-      jobStore.updateParam(updateParam)
-      jobStore.loadJobs()
-    }
-  }, [jobStatus])
 
   useEffect(() => {
     const getJob = async () => {
@@ -34,6 +35,7 @@ const SideBar = () => {
     const currentParam = jobStore.reqParam
     const currentActiveFilter = jobStore.filter.filter((e) => e.active === 1) // TODO
     currentParam.setFilter(currentActiveFilter)
+    currentParam.setPage(1)
     jobStore.updateParam(currentParam)
 
     getJob()
@@ -46,40 +48,16 @@ const SideBar = () => {
     getFilter()
   }, [])
 
+  const handleClearFilter = () => {
+    jobStore.triggerReset()
+    jobStore.loadFilter()
+  }
+
   return (
     <Container disableGutters={true} className='h-[100%] bg-background'>
-      <Box
-        sx={{
-          padding: '0.5rem',
-          width: '100%',
-          backgroundColor: 'white',
-          boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.2)',
-          borderRadius: '8px'
-        }}
-      >
-        <FormControl>
-          <Typography variant='body1' sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-            Trạng thái
-          </Typography>
-          <RadioGroup
-            aria-labelledby='demo-controlled-radio-buttons-group'
-            name='controlled-radio-buttons-group'
-            value={jobStatus}
-            onChange={(e) => setJobStatus(Number(e.target.value))}
-          >
-            <FormControlLabel
-              value={1}
-              control={<Radio />}
-              label={<Typography sx={{ fontSize: '0.875rem' }}>Active</Typography>}
-            />
-            <FormControlLabel
-              value={0}
-              control={<Radio />}
-              label={<Typography sx={{ fontSize: '0.875rem' }}>Inactive</Typography>}
-            />
-          </RadioGroup>
-        </FormControl>
-      </Box>
+      <Button onClick={handleClearFilter} variant='outlined' startIcon={<DeleteIcon />}>
+        Clear Filter
+      </Button>
       {uniqueTypes.map((e) => (
         <FilterBox key={e} type={e} filter={jobStore.filter} />
       ))}

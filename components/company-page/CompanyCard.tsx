@@ -1,10 +1,11 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { companyLogo } from '../../assets'
 import React from 'react'
+import { getProvinceName } from '../../core/utils/LocationUtils'
 
 const CompanyCard = () => {
   return (
-    <Card className='flex flex-row gap-2 p-3' sx={{ maxWidth: 320 }}>
+    <Card className='flex flex-row gap-2 p-3'>
       <div className='flex flex-row items-center'>
         <CardMedia
           sx={{ width: 100, height: '40%', objectFit: 'contain' }}
@@ -19,7 +20,7 @@ const CompanyCard = () => {
           <Typography variant='body1' className='text-primary'>
             Viettel Software
           </Typography>
-          <Typography variant='body2'> Hồ Chí Minh</Typography>
+          <Typography variant='body2'></Typography>
         </CardContent>
         <CardActions>
           <Button variant='contained' size='small'>
