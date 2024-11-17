@@ -36,7 +36,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
     >
       <div className='flex w-[100%] flex-row items-center'>
         <CardMedia
-          sx={{ width: '30%', height: '40%', objectFit: 'contain' }}
+          sx={{ width: '100px', height: '32px', objectFit: 'contain' }}
           image={props.job.company.logo}
         ></CardMedia>
         <CardContent>
