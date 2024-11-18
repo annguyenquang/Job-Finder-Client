@@ -23,7 +23,7 @@ const JobList = () => {
   return (
     <Grid marginLeft={2} container spacing={1}>
       {jobStore.isLoading
-        ? Array.from({ length: 6 }).map((_, idx) => (
+        ? Array.from({ length: 9 }).map((_, idx) => (
             <Grid2 key={idx} size={4}>
               <JobCardSkeleton />
             </Grid2>
