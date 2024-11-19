@@ -16,12 +16,15 @@ export const AIPopup = () => {
   return (
     <div>
       <Box
-        onClick={handleClick}
+        onClick={() => {
+          if (!clicked) handleClick()
+        }}
         sx={{
           position: 'fixed',
           bottom: '20px',
           right: '20px',
           zIndex: 1000,
+          cursor: clicked ? 'default' : 'pointer',
           width: clicked ? '450px' : '64px',
           height: clicked ? '600px' : '64px',
           borderRadius: clicked ? '20px' : '50%',
@@ -30,7 +33,7 @@ export const AIPopup = () => {
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)',
-          transition: 'all 0.6s ease',
+          transition: 'all 0.4s ease',
           transformOrigin: 'right bottom'
         }}
       >
@@ -38,6 +41,8 @@ export const AIPopup = () => {
         {clicked && (
           <Box
             sx={{
+              display: 'flex',
+              flexDirection: 'column',
               width: '100%',
               height: '100%',
               borderRadius: '20px',
@@ -48,13 +53,12 @@ export const AIPopup = () => {
               sx={{
                 display: 'flex',
                 borderRadius: '20px',
-
                 justifyContent: 'space-between',
                 padding: '10px',
-                background: 'linear-gradient(135deg, #7c8e89, #b2deac, #2b9db1)'
+                background: 'linear-gradient(135deg, #f6f6f6, #badbb6, #ffffff)'
               }}
             >
-              <Typography variant='subtitle1' color='white'>
+              <Typography variant='subtitle1' color='black'>
                 AI Assistant
               </Typography>
               <Box
@@ -80,9 +84,49 @@ export const AIPopup = () => {
                   }
                 }}
               >
-                <MinimizeIcon sx={{ fontSize: '20px', color: 'black' }} />
+                <MinimizeIcon sx={{ lineHeight: 1, fontSize: '25px', color: 'black' }} />
               </Box>
             </Container>
+            <Container
+              sx={{
+                width: '100%',
+                background: 'transparent',
+                height: '20%',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Typography
+                sx={{
+                  overflow: 'hidden',
+                  borderRight: '.15em solid purple',
+                  whiteSpace: 'nowrap',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600',
+                  margin: '0 auto',
+                  letterSpacing: '.05em',
+                  animation: 'typing 2.5s steps(40, end), blink-caret .75s step-end infinite',
+                  background: 'linear-gradient(135deg, #0c97ff, #9b36ff, #f92672)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  WebkitTextFillColor: 'transparent'
+                }}
+                variant='h5'
+              >
+                What is your problem ?
+              </Typography>
+            </Container>
+            <Container
+              sx={{
+                width: '100%',
+                background: 'white',
+                flexGrow: 1,
+                borderTopLeftRadius: '20px',
+                borderTopRightRadius: '20px'
+              }}
+            ></Container>
           </Box>
         )}
       </Box>
@@ -100,6 +144,27 @@ export const AIPopup = () => {
           100% {
             box-shadow: 0 0 10px rgba(0, 157, 255, 0.6), 0 0 20px rgba(0, 157, 255, 0.4),
               0 0 30px rgba(0, 157, 255, 0.2);
+          }
+        }
+
+        /* The typing effect */
+        @keyframes typing {
+          from {
+            width: 0;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+          from,
+          to {
+            border-color: transparent;
+          }
+          50% {
+            border-color: purple;
           }
         }
       `}</style>
