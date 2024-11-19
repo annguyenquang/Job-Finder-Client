@@ -46,7 +46,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
             <Container
                 component="main"
                 maxWidth="lg"
-                className="flex-grow p-4">
+                className="flex-grow pb-1">
                 <JobBreadcrumb
                     currentPosition={`Tuyển dụng ${props.job.title}`}>
                 </JobBreadcrumb>

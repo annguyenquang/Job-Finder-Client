@@ -20,7 +20,7 @@ const CompanyProfilePage = () => {
             className="flex flex-col min-h-screen">
             <Container
                 component="main"
-                className="flex-grow p-5">
+                className="flex-grow">
                 <BasicBreadcrumb
                     currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyStore.company.name}`}>
                 </BasicBreadcrumb>
