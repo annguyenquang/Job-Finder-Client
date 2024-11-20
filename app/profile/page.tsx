@@ -1,22 +1,15 @@
 'use client'
-import Image from 'next/image'
-import React, { SyntheticEvent } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import Grid2 from '@mui/material/Grid2'
 import { UserAccount } from '@/models'
+import { BasicInfoSection } from '@/components'
+import Grid2 from '@mui/material/Grid2'
+import { Divider, Typography } from '@mui/material'
 import Edit from '@mui/icons-material/Edit'
 import blue from '@mui/material/colors/blue'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Paper from '@mui/material/Paper'
-import { ArrowDownward, NavigateNext, PlusOne } from '@mui/icons-material'
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
-import Add from '@mui/icons-material/Add'
-import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
-import grey from '@mui/material/colors/grey'
-import { BasicInfoSection } from '@/components'
+import { Person } from '@mui/icons-material'
 
 type ProfileProps = {}
 const TestValue: UserAccount = {
@@ -34,13 +27,72 @@ const Profile: React.FC<ProfileProps> = props => {
   return (<Container>
     <Stack>
       <BasicInfoSection user={user}></BasicInfoSection>
-      <Box></Box>
+      <PersonalInfoSection></PersonalInfoSection>
     </Stack>
   </Container>)
 }
 
 
+type PersonalInfoSectionProps = {
 
+}
+
+const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = props => {
+  return (
+    <Stack>
+      <Box sx={{ cursor: "pointer" }} width={"fit-content"}>
+        <Stack direction={"row"} color={blue[900]} >
+          <Person fontSize='medium'></Person>
+          <Typography variant='subtitle1'><strong>THÔNG TIN CÁ NHÂN</strong></Typography>
+        </Stack>
+        <Divider sx={{ borderBottomWidth: 5, borderColor: blue[900] }} />
+      </Box>
+      <Divider />
+      <PersonalInfoItem label='Họ và tên'>
+        <Typography>{'An Nguyen'}</Typography>
+      </PersonalInfoItem>
+      <PersonalInfoItem label='Họ và tên'>
+        <Typography>{'An Nguyen'}</Typography>
+      </PersonalInfoItem>
+    </Stack>
+  );
+}
+
+type PersonalInfoItemProps = {
+  label: string,
+  isEditable?: boolean,
+  onEdit?: () => void,
+  children?: React.ReactNode
+}
+
+const PersonalInfoItem: React.FC<PersonalInfoItemProps> = ({ label, isEditable = false, children, onEdit }) => {
+  const props = { label, isEditable, children, onEdit }
+  return (
+    <Stack>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}>
+        <Typography
+          variant='h5'
+          fontWeight={"bold"}
+          textTransform={"uppercase"}>
+          {props.label}
+        </Typography>
+        {
+          props.isEditable &&
+          <Stack
+            sx={{ cursor: 'pointer', ":hover": { color: blue[900] }, color: blue[500] }}
+            direction={"row"}>
+            <Edit fontSize='small'></Edit>
+            <Typography>CHỈNH SỬA</Typography>
+          </Stack>
+        }
+      </Box>
+      <Divider />
+      {props.children}
+    </Stack>
+  );
+}
 
 
 export default Profile
