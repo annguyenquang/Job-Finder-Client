@@ -1,1 +1,2 @@
-export * from './BasicInforSection';
+export * from './BasicInfo'
+export * from './PersonalInfo'

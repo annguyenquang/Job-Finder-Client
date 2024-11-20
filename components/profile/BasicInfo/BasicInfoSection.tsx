@@ -1,7 +1,7 @@
 import { UserAccount } from "@/models"
 import Grid2 from "@mui/material/Grid2"
-import RightBasicInfo from "./RightBasicInfo";
-import LeftBasicInfo from "./LeftBasicInfo";
+import RightBasicInfo from "./RightBasicInfo"
+import LeftBasicInfo from "./LeftBasicInfo"
 
 export const BasicInfoSection: React.FC<{ user: UserAccount | null }> = ({ user }) => {
 
