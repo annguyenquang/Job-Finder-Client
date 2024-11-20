@@ -1,10 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Draggable from 'react-draggable'
 import { Paper, Typography, Box, Stack, Container, Button } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Material UI
 import { InitialLayout } from './InitialLayout'
+import { useAIStore } from '@/stores/AIPopupStore'
+import { LoadingLayout } from './LoadingLayout'
 
 const AICaption = {
   INITIAL: 'Seeking for help ?',
@@ -12,11 +13,15 @@ const AICaption = {
   DONE: 'Hope you like our suggestions'
 }
 
-type ProcessState = 'INITIAL' | 'LOADING' | 'DONE'
-
 export const AIPopup = () => {
   const [clicked, setClicked] = useState(false)
-  const [processState, setProcessState] = useState<ProcessState>('INITIAL')
+  const AIStore = useAIStore()
+
+  const layoutMap = {
+    INITIAL: <InitialLayout />,
+    LOADING: <LoadingLayout />,
+    DONE: <></> // Add other states if needed
+  }
 
   const AICaption = {
     INITIAL: 'Seeking for help ?',
@@ -26,7 +31,7 @@ export const AIPopup = () => {
 
   const handleClick = () => {
     setClicked((prev) => !prev)
-    setProcessState('INITIAL')
+    AIStore.updateProcessState('INITIAL')
   }
 
   return (
@@ -114,7 +119,7 @@ export const AIPopup = () => {
               }}
             >
               <Typography
-                key={processState} // Add key to re-render on state change
+                key={AIStore.processState} // Add key to re-render on state change
                 sx={{
                   overflow: 'hidden',
                   borderRight: '.15em solid purple',
@@ -132,7 +137,7 @@ export const AIPopup = () => {
                 }}
                 variant='h5'
               >
-                {AICaption[processState]}
+                {AICaption[AIStore.processState]}
               </Typography>
             </Container>
             <Container
@@ -147,7 +152,7 @@ export const AIPopup = () => {
                 justifyContent: 'center'
               }}
             >
-              <InitialLayout />
+              {layoutMap[AIStore.processState]}
             </Container>
           </Box>
         )}

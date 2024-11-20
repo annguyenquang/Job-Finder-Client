@@ -5,9 +5,9 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Divider from '@mui/material/Divider'
 import InputAdornment from '@mui/material/InputAdornment'
-import SearchIcon from '@mui/icons-material/Search'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 
-import { Autocomplete, Chip, TextField, Typography } from '@mui/material'
+import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material'
 import { useCreateJobStore } from '@/stores'
 import { useAIStore } from '@/stores/AIPopupStore'
 
@@ -99,7 +99,7 @@ export function InitialLayout() {
                 <Chip
                   key={key}
                   sx={{
-                    background: 'linear-gradient(to right, #aa4ad0, #1547ac)', // Gradient colors
+                    background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Gradient colors
                     color: '#fff', // Text color
                     '& .MuiChip-deleteIcon': {
                       color: '#fff' // Delete icon color
@@ -127,9 +127,50 @@ export function InitialLayout() {
                   </>
                 )
               }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px', // Rounded corners
+                  '& fieldset': {
+                    borderColor: '#76f5d5' // Default border color
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#76f5d5', // Remove blue border
+                    borderWidth: 2
+                  }
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#4fb7c5' // Label color
+                }
+              }}
             />
           )}
         />
+        <Button
+          variant='contained'
+          onClick={() => AIPopupStore.updateProcessState('LOADING')}
+          startIcon={<AutoAwesomeIcon />}
+          sx={{
+            background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
+            color: 'white',
+            fontWeight: 'bold',
+            borderRadius: '25px', // Rounded corners
+            padding: '10px 20px',
+            textTransform: 'none',
+            transition: 'all 0.3s ease',
+            boxShadow: '0px 4px 10px rgba(116, 219, 174, 0.3)', // Subtle shadow
+            '&:hover': {
+              background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Brighter gradient on hover
+              transform: 'scale(1.05)', // Slight zoom effect
+              boxShadow: '0px 6px 15px rgba(83, 226, 185, 0.5)' // More prominent shadow
+            },
+            '& .MuiButton-startIcon': {
+              color: 'white', // Ensure the icon matches the text color
+              animation: 'sparkle 1.5s infinite' // Custom sparkle animation
+            }
+          }}
+        >
+          Start Generating
+        </Button>
       </Box>
     </Card>
   )
