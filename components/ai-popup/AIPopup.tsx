@@ -1,16 +1,32 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Draggable from 'react-draggable'
-import { Paper, Typography, Box, Stack, Container } from '@mui/material'
+import { Paper, Typography, Box, Stack, Container, Button } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Material UI
+import { InitialLayout } from './InitialLayout'
+
+const AICaption = {
+  INITIAL: 'Seeking for help ?',
+  LOADING: 'Waiting for us to process ...',
+  DONE: 'Hope you like our suggestions'
+}
+
+type ProcessState = 'INITIAL' | 'LOADING' | 'DONE'
 
 export const AIPopup = () => {
   const [clicked, setClicked] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [processState, setProcessState] = useState<ProcessState>('INITIAL')
+
+  const AICaption = {
+    INITIAL: 'Seeking for help ?',
+    LOADING: 'Waiting for us to proccess ...',
+    DONE: 'Hope you like our suggestions'
+  }
 
   const handleClick = () => {
     setClicked((prev) => !prev)
+    setProcessState('INITIAL')
   }
 
   return (
@@ -98,6 +114,7 @@ export const AIPopup = () => {
               }}
             >
               <Typography
+                key={processState} // Add key to re-render on state change
                 sx={{
                   overflow: 'hidden',
                   borderRight: '.15em solid purple',
@@ -106,8 +123,8 @@ export const AIPopup = () => {
                   fontWeight: '600',
                   margin: '0 auto',
                   letterSpacing: '.05em',
-                  animation: 'typing 2.5s steps(40, end), blink-caret .75s step-end infinite',
-                  background: 'linear-gradient(135deg, #0c97ff, #9b36ff, #f92672)',
+                  animation: 'typing 1.5s steps(40, end), blink-caret .75s step-end infinite',
+                  background: 'linear-gradient(135deg, #0c97ff, #e64165, #00dce8)',
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   color: 'transparent',
@@ -115,18 +132,23 @@ export const AIPopup = () => {
                 }}
                 variant='h5'
               >
-                What is your problem ?
+                {AICaption[processState]}
               </Typography>
             </Container>
             <Container
+              disableGutters={true}
               sx={{
                 width: '100%',
                 background: 'white',
                 flexGrow: 1,
                 borderTopLeftRadius: '20px',
-                borderTopRightRadius: '20px'
+                borderTopRightRadius: '20px',
+                display: 'flex',
+                justifyContent: 'center'
               }}
-            ></Container>
+            >
+              <InitialLayout />
+            </Container>
           </Box>
         )}
       </Box>
@@ -153,7 +175,7 @@ export const AIPopup = () => {
             width: 0;
           }
           to {
-            width: 100%;
+            width: 300px;
           }
         }
 

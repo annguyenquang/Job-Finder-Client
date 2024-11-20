@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Navbar } from '@/components'
-import { AIPopup } from '../components/common/AIPopup'
+import { AIPopup } from '../components/ai-popup/AIPopup'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
