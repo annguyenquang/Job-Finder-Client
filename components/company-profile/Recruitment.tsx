@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +15,7 @@ import { useCreateJobStore, useJobDetailStore, useLocationStore } from '@/stores
 import { LocationService, Province } from '@/services';
 import { Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useRouter } from 'next/navigation';
 
 
 type RecruitmentProps = {
@@ -29,6 +31,13 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
   const locationStore = useLocationStore();
   const createJobStore = useCreateJobStore();
   const [searchKeyword, setSearchKeyword] = React.useState('');
+  const router = useRouter();
+
+  const handleOpenJobDetail = (jobId: string) => {
+    setTimeout(() => {
+      router.push(`/job-detail/${jobId}`);
+    }, 500);
+  }
 
 
   // Hàm xử lý thay đổi trang
@@ -172,11 +181,14 @@ export const Recruitment: React.FC<RecruitmentProps> = ({ company }) => {
                         <Avatar
                           alt="avatar"
                           src={company.logo}
-                          className="border-4 w-20 h-20 border-white"
+                          className="border-4 w-20 h-20 border-white cursor-pointer"
+                          onClick={() => handleOpenJobDetail(job.id)}
                         />
                       </Grid2>
                       <Grid2 size={7}>
-                        <Typography variant="body1" className="text-colorPrimary font-semibold">
+                        <Typography variant="body1"
+                          className="text-colorPrimary font-semibold cursor-pointer"
+                          onClick={() => handleOpenJobDetail(job.id)}>
                           {job.title}
                         </Typography>
                         <Typography
