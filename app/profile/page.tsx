@@ -1,9 +1,10 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import { UserAccount } from '@/models'
+import { AccountType, UserAccount } from '@/models'
 import { BasicInfoSection, PersonalInfoSection } from '@/components'
+import { useAccountStore } from '@/stores'
 
 type ProfileProps = {}
 const TestValue: UserAccount = {
@@ -13,10 +14,27 @@ const TestValue: UserAccount = {
   lastName: 'Nguyen',
   phone: '0389553233',
   email: 'annguyeen0@gmail.com',
+  selfDescription: 'I am a software engineer',
+  skills: ['React', 'NodeJS'],
+  certifications: [],
   dateOfBirth: new Date()
 }
+
 const Profile: React.FC<ProfileProps> = props => {
+  const accountStore = useAccountStore();
   const [user, setUser] = React.useState<UserAccount | null>(TestValue)
+  useEffect(() => {
+    if (!accountStore.account) {
+      accountStore.loadAccountByJwt();
+    }
+  }, [])
+
+  useEffect(() => {
+    if (accountStore.accountType === AccountType.User) {
+      setUser(accountStore.account as UserAccount)
+    }
+    console.log('account', accountStore.account)
+  }, [accountStore.account, accountStore.accountType])
 
   return (<Container>
     <Stack>

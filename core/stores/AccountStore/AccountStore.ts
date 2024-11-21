@@ -1,6 +1,6 @@
-import {create} from "zustand";
-import {Account, AccountType, CompanyAccount, UserAccount} from "@/models";
-import {AccountService} from "@/services";
+import { create } from "zustand";
+import { Account, AccountType, CompanyAccount, UserAccount } from "@/models";
+import { AccountService } from "@/services";
 
 
 type AccountStore = {
@@ -19,14 +19,15 @@ export const useAccountStore = create<AccountStore>()((set) => ({
     },
     loadAccountByJwt: async () => {
         const account = await AccountService.getAccountByCookie();
-        if(isUserAccount(account)) {
-            set(() => ({accountType: AccountType.User}))
+        if (isUserAccount(account)) {
+            account.dateOfBirth = new Date(account.dateOfBirth);
+            set(() => ({ accountType: AccountType.User }))
         } else if (isCompanyAccount(account)) {
-            set(() => ({accountType: AccountType.Company}))
+            set(() => ({ accountType: AccountType.Company }))
         } else {
-            set(() => ({accountType: null}))
+            set(() => ({ accountType: null }))
         }
-        set(() => ({account: account}));
+        set(() => ({ account: account }));
     }
 }));
 

@@ -23,11 +23,11 @@ const RightBasicInfo: React.FC<{ user: UserAccount | null }> = ({ user }) => {
                 </Stack>
                 <Grid2 container>
                     <Grid2 size={6}>
-                        <InfoWithLabel label={'SỐ ĐIỆN THOẠI'} value={user ? user.phone : "_"}></InfoWithLabel>
-                        <InfoWithLabel label={'NGÀY SINH'} value={user ? user.dateOfBirth.toLocaleDateString() : ""}></InfoWithLabel>
+                        <InfoWithLabel label={'SỐ ĐIỆN THOẠI'} value={user?.phone ? user.phone : "_"}></InfoWithLabel>
+                        <InfoWithLabel label={'NGÀY SINH'} value={user?.dateOfBirth ? user.dateOfBirth.toLocaleDateString() : ""}></InfoWithLabel>
                     </Grid2>
                     <Grid2 size={6}>
-                        <InfoWithLabel label={'EMAIL'} value={user ? user.email : "_"}></InfoWithLabel>
+                        <InfoWithLabel label={'EMAIL'} value={user?.email ? user.email : "_"}></InfoWithLabel>
                         <InfoWithLabel label={'Giới tính'} value="_"></InfoWithLabel>
                     </Grid2>
                 </Grid2>
