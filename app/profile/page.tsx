@@ -20,12 +20,12 @@ const TestValue: UserAccount = {
   dateOfBirth: new Date()
 }
 
-const Profile: React.FC<ProfileProps> = props => {
-  const accountStore = useAccountStore();
+const Profile: React.FC<ProfileProps> = (props) => {
+  const accountStore = useAccountStore()
   const [user, setUser] = React.useState<UserAccount | null>(TestValue)
   useEffect(() => {
     if (!accountStore.account) {
-      accountStore.loadAccountByJwt();
+      accountStore.loadAccountByJwt()
     }
   }, [])
 
@@ -33,20 +33,16 @@ const Profile: React.FC<ProfileProps> = props => {
     if (accountStore.accountType === AccountType.User) {
       setUser(accountStore.account as UserAccount)
     }
-    console.log('account', accountStore.account)
   }, [accountStore.account, accountStore.accountType])
 
-  return (<Container>
-    <Stack>
-      <BasicInfoSection user={user}></BasicInfoSection>
-      <PersonalInfoSection user={user}></PersonalInfoSection>
-    </Stack>
-  </Container>)
+  return (
+    <Container>
+      <Stack>
+        <BasicInfoSection user={user}></BasicInfoSection>
+        <PersonalInfoSection user={user}></PersonalInfoSection>
+      </Stack>
+    </Container>
+  )
 }
-
-
-
-
-
 
 export default Profile
