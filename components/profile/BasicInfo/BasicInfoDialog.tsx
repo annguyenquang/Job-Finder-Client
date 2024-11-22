@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import { UserAccount } from '@/models'
 import Close from '@mui/icons-material/Close'
 import Box from '@mui/material/Box/Box'
@@ -11,19 +12,60 @@ import DialogTitle from '@mui/material/DialogTitle/DialogTitle'
 import Divider from '@mui/material/Divider/Divider'
 import Grid2 from '@mui/material/Grid2/Grid2'
 import IconButton from '@mui/material/IconButton/IconButton'
-import Input from '@mui/material/Input/Input'
 import Stack from '@mui/material/Stack/Stack'
 import TextField from '@mui/material/TextField/TextField'
 import Typography from '@mui/material/Typography/Typography'
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { DatePicker, DateValidationError, LocalizationProvider, PickerChangeHandlerContext } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDateFnsV3'
 import { enGB } from 'date-fns/locale/en-GB'
+import { set } from 'date-fns'
 
 const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onClose: () => void }> = (props) => {
+  const [user, setUser] = React.useState<UserAccount>(props.user as UserAccount)
+
+  const onClose = () => {
+    setUser(props.user as UserAccount)
+    props.onClose()
+  }
+  const onSaveUser = () => {
+    // Console.log for call api simulation
+    console.log(user)
+  }
+
+  const onFirstNameChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setUser({
+      ...user,
+      firstName: event.target.value
+    })
+  }
+
+  const onLastNameChangonLastName = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setUser({
+      ...user,
+      lastName: event.target.value
+    })
+  }
+
+  const onPhoneChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setUser({
+      ...user,
+      phone: event.target.value
+    })
+  }
+
+  const onChangeDateOfBirth = (value: Date | null, context: PickerChangeHandlerContext<DateValidationError>) => {
+    if (value) {
+      setUser({
+        ...user,
+        dateOfBirth: value
+      })
+    }
+  }
+
   return (
     <Dialog
       open={props.isOpen}
-      onClose={props.onClose}
+      onClose={onClose}
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -44,18 +86,20 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
             <TextField
               fullWidth
               required
-              value={props.user?.firstName}
+              value={user?.firstName}
               label='Tên'
               type='text'
+              onChange={onFirstNameChange}
             />
           </Grid2>
           <Grid2 size={6}>
             <TextField
               fullWidth
               required
-              value={props.user?.lastName}
+              value={user?.lastName}
               label='Tên lót và họ'
               type='text'
+              onChange={onLastNameChangonLastName}
             />
           </Grid2>
           <Grid2 size={12}>
@@ -64,7 +108,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
                 fullWidth
                 required
                 label='Số điện thoại'
-                value={props.user?.phone}
+                value={user?.phone}
                 type='number'
                 sx={{ marginTop: 1 }}
                 slotProps={{
@@ -82,6 +126,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
                     )
                   }
                 }}
+                onChange={onPhoneChange}
               ></TextField>
               <Typography variant='caption'>
                 Nhà tuyển dụng cần thông tin này để liên lạc với bạn nhanh chóng.
@@ -105,7 +150,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
                 justifyContent: 'space-between'
               }}
             >
-              <Typography fontWeight={'bold'}>{props.user?.email}</Typography>
+              <Typography fontWeight={'bold'}>{user?.email}</Typography>
               <Typography
                 sx={{
                   cursor: 'pointer',
@@ -125,8 +170,10 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
               adapterLocale={enGB}
             >
               <DatePicker
+                label='Ngày sinh'
                 sx={{ width: '100%' }}
-                value={props.user?.dateOfBirth}
+                value={user?.dateOfBirth}
+                onChange={onChangeDateOfBirth}
               ></DatePicker>
             </LocalizationProvider>
           </Grid2>
@@ -136,13 +183,14 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
         <Button
           variant='outlined'
           sx={{ color: [grey[500]], borderColor: [grey[500]], textTransform: 'none' }}
-          onClick={props.onClose}
+          onClick={onClose}
         >
           Hủy
         </Button>
         <Button
           variant='contained'
           sx={{ textTransform: 'none' }}
+          onClick={onSaveUser}
         >
           Lưu
         </Button>
