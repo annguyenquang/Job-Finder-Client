@@ -26,7 +26,7 @@ export const Navbar = () => {
   ])
 
   return (
-    <div className='flex flex-row justify-between mb-3 gap-6 h-[75px] border-b-4 border-[#4acd8d]-500 bg-primary'>
+    <div className='flex flex-row justify-between mb-3 gap-6 h-[75px] border-b-4 border-[#4acd8d]-500 bg-colorPrimary'>
       <div className='flex flex-row '>
         <div className='ml-2 w-[52px] h-[100%] cursor-pointer rounded-full flex flex-row justify-between items-center'>
           <Image src={logo} alt='user' className='w-[80%] h-[80%] object-contain' />
