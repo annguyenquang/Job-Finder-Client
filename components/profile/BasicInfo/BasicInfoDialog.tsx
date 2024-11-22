@@ -11,9 +11,13 @@ import DialogTitle from '@mui/material/DialogTitle/DialogTitle'
 import Divider from '@mui/material/Divider/Divider'
 import Grid2 from '@mui/material/Grid2/Grid2'
 import IconButton from '@mui/material/IconButton/IconButton'
+import Input from '@mui/material/Input/Input'
 import Stack from '@mui/material/Stack/Stack'
 import TextField from '@mui/material/TextField/TextField'
 import Typography from '@mui/material/Typography/Typography'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDateFnsV3'
+import { enGB } from 'date-fns/locale/en-GB'
 
 const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onClose: () => void }> = (props) => {
   return (
@@ -24,10 +28,11 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           Thông tin cơ bản
-          <IconButton>
+          <IconButton onClick={props.onClose}>
             <Close />
           </IconButton>
         </Box>
+        <Divider></Divider>
       </DialogTitle>
       <DialogContent>
         <Grid2
@@ -39,6 +44,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
             <TextField
               fullWidth
               required
+              value={props.user?.firstName}
               label='Tên'
               type='text'
             />
@@ -47,6 +53,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
             <TextField
               fullWidth
               required
+              value={props.user?.lastName}
               label='Tên lót và họ'
               type='text'
             />
@@ -57,6 +64,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
                 fullWidth
                 required
                 label='Số điện thoại'
+                value={props.user?.phone}
                 type='number'
                 sx={{ marginTop: 1 }}
                 slotProps={{
@@ -112,17 +120,15 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
             container
             size={12}
           >
-            <TextField
-              fullWidth
-              required
-              label='Ngày sinh'
-              type='date'
-              slotProps={{
-                input: {
-                  startAdornment: <></>
-                }
-              }}
-            ></TextField>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={enGB}
+            >
+              <DatePicker
+                sx={{ width: '100%' }}
+                value={props.user?.dateOfBirth}
+              ></DatePicker>
+            </LocalizationProvider>
           </Grid2>
         </Grid2>
       </DialogContent>
@@ -130,6 +136,7 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
         <Button
           variant='outlined'
           sx={{ color: [grey[500]], borderColor: [grey[500]], textTransform: 'none' }}
+          onClick={props.onClose}
         >
           Hủy
         </Button>
