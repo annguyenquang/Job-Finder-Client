@@ -10,7 +10,7 @@ import InfoWithLabel from './InfoWithLabel'
 import BasicInfoDialog from './BasicInfoDialog'
 
 const LeftBasicInfo: React.FC<{ user: UserAccount | null }> = ({ user }) => {
-  const [isOpenBasicInfoDialog, setIsOpenBasicInfoDialog] = React.useState<boolean>(true)
+  const [isOpenBasicInfoDialog, setIsOpenBasicInfoDialog] = React.useState<boolean>(false)
   const closeBasicInfoDialog = () => {
     setIsOpenBasicInfoDialog(false)
   }
