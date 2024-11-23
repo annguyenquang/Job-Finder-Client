@@ -10,8 +10,6 @@ import grey from '@mui/material/colors/grey'
 import AddCircle from '@mui/icons-material/AddCircle'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Badge from '@mui/material/Badge'
-import Avatar from '@mui/material/Avatar'
 import React from 'react'
 import { DescriptionDiaglog } from './DescriptionDialog'
 
@@ -21,6 +19,7 @@ type PersonalInfoSectionProps = {
 
 export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) => {
   const [isOpenDescriptionDialog, setIsOpenDescriptionDialog] = React.useState<boolean>(false)
+  const [isEditingSkills, setIsEditingSkills] = React.useState<boolean>(false)
   const closeDescriptionDialog = () => {
     setIsOpenDescriptionDialog(false)
   }
@@ -31,24 +30,6 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
     if (!props.user?.selfDescription || props.user?.selfDescription.length === 0) return null
     return <Typography>{props.user?.selfDescription}</Typography>
   }
-
-  const generateSkillsComponent = () => {
-    if (!props.user?.skills || props.user?.skills.length === 0) return null
-    return (
-      <Stack
-        direction={'row'}
-        spacing={1}
-      >
-        {props.user?.skills.map((skill, index) => (
-          <Chip
-            key={skill}
-            label={skill}
-          ></Chip>
-        ))}
-      </Stack>
-    )
-  }
-
   const generateCertificationsComponent = () => {
     if (!props.user?.certifications || props.user?.certifications.length === 0) return null
     return props.user?.certifications?.map((certificate) => (
@@ -88,6 +69,15 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
       </Stack>
     ))
   }
+  const tougleEditSkills = () => {
+    setIsEditingSkills(!isEditingSkills)
+  }
+  const onCancelEditSkills = () => {
+    setIsEditingSkills(false)
+  }
+  const onSaveEditSkills = () => {
+    setIsEditingSkills(false)
+  }
   return (
     <Stack spacing={4}>
       <DescriptionDiaglog
@@ -121,8 +111,17 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
       <PersonalInfoItem
         label='Kỹ năng'
         emptyLabel='Thông tin về kỹ năng của bạn khiến nhà tuyển dụng để mắt đến bạn hơn'
+        isEditable={true}
+        onEdit={tougleEditSkills}
       >
-        {generateSkillsComponent()}
+        {!props.user || !props.user.skills || props.user.skills.length === 0 ? null : (
+          <PersonalSkills
+            skills={props?.user?.skills ?? []}
+            isEditing={isEditingSkills}
+            onCancel={onCancelEditSkills}
+            onSave={onSaveEditSkills}
+          ></PersonalSkills>
+        )}
       </PersonalInfoItem>
       <PersonalInfoItem
         label='CHỨNG CHỈ'
@@ -215,6 +214,56 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
           </Button>
         </Box>
       </PersonalInfoItem>
+    </Stack>
+  )
+}
+
+const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: () => void; onCancel: () => void }> = (
+  props
+) => {
+  const [skills, setSkills] = React.useState<string[]>(props.skills)
+
+  const onDeleteSkill = (index: number) => {
+    console.log('delete skill at index', index)
+    setSkills(skills.filter((_, i) => i != index))
+  }
+  const onCancel = () => {
+    setSkills(props.skills)
+    props.onCancel()
+  }
+  const onSave = () => {
+    //Call api
+    props.onSave()
+  }
+
+  return (
+    <Stack
+      direction={'row'}
+      spacing={1}
+      position={'relative'}
+    >
+      {skills.map((skill, index) => (
+        <Chip
+          key={skill}
+          label={skill}
+          variant='outlined'
+          onDelete={props.isEditing ? () => onDeleteSkill(index) : undefined}
+        ></Chip>
+      ))}
+      {props.isEditing && (
+        <Stack
+          direction={'row'}
+          sx={{ position: 'absolute', right: 0 }}
+        >
+          <Button
+            onClick={onSave}
+            variant='contained'
+          >
+            Lưu
+          </Button>
+          <Button onClick={onCancel}>Hủy</Button>
+        </Stack>
+      )}
     </Stack>
   )
 }
