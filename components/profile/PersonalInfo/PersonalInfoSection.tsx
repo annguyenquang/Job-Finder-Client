@@ -12,6 +12,10 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import React from 'react'
 import { DescriptionDiaglog } from './DescriptionDialog'
+import Autocomplete from '@mui/material/Autocomplete/Autocomplete'
+import TextField from '@mui/material/TextField/TextField'
+import InputAdornment from '@mui/material/InputAdornment/InputAdornment'
+import Search from '@mui/icons-material/Search'
 
 type PersonalInfoSectionProps = {
   user: UserAccount | null
@@ -69,8 +73,8 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
       </Stack>
     ))
   }
-  const tougleEditSkills = () => {
-    setIsEditingSkills(!isEditingSkills)
+  const editSkills = () => {
+    setIsEditingSkills(true)
   }
   const onCancelEditSkills = () => {
     setIsEditingSkills(false)
@@ -112,7 +116,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
         label='Kỹ năng'
         emptyLabel='Thông tin về kỹ năng của bạn khiến nhà tuyển dụng để mắt đến bạn hơn'
         isEditable={true}
-        onEdit={tougleEditSkills}
+        onEdit={editSkills}
       >
         {!props.user || !props.user.skills || props.user.skills.length === 0 ? null : (
           <PersonalSkills
@@ -227,6 +231,9 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: (
     console.log('delete skill at index', index)
     setSkills(skills.filter((_, i) => i != index))
   }
+  const onSkillChange = (_: React.ChangeEvent<object>, value: string[]) => {
+    setSkills(value)
+  }
   const onCancel = () => {
     setSkills(props.skills)
     props.onCancel()
@@ -242,14 +249,47 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: (
       spacing={1}
       position={'relative'}
     >
-      {skills.map((skill, index) => (
-        <Chip
-          key={skill}
-          label={skill}
-          variant='outlined'
-          onDelete={props.isEditing ? () => onDeleteSkill(index) : undefined}
-        ></Chip>
-      ))}
+      {props.isEditing ? (
+        <Autocomplete
+          multiple
+          freeSolo
+          options={[]}
+          className='w-96 pl-2'
+          value={skills}
+          onChange={onSkillChange}
+          renderTags={(value: string[], getTagProps) =>
+            value.map((option: string, index: number) => {
+              const { key, ...tagProps } = getTagProps({ index })
+              return (
+                <Chip
+                  variant='outlined'
+                  key={key}
+                  label={option}
+                  {...tagProps}
+                  onDelete={() => onDeleteSkill(index)}
+                  size='small'
+                />
+              )
+            })
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label='Tìm kỹ năng'
+              size='small'
+              className='text-sm pb-4'
+            />
+          )}
+        />
+      ) : (
+        skills.map((skill, index) => (
+          <Chip
+            key={index}
+            label={skill}
+            size='small'
+          />
+        ))
+      )}
       {props.isEditing && (
         <Stack
           direction={'row'}
