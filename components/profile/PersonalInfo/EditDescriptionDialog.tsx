@@ -15,12 +15,12 @@ import React from 'react'
 
 const MAX_DESCRIPTION_LENGTH = 2600
 
-type DescriptionDiaglogProps = {
+type EditDescriptionDiaglogProps = {
   description: string
   isOpen: boolean
   onClose: () => void
 }
-export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => {
+export const EditDescriptionDiaglog: React.FC<EditDescriptionDiaglogProps> = (props) => {
   const [description, setDescription] = React.useState<string>(props.description)
 
   React.useEffect(() => {
@@ -79,8 +79,8 @@ export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => 
               position: 'absolute',
               right: 10,
               bottom: 10,
-              background: 'rgba(255, 255, 255, 0.8)', // Optional: Add a background for contrast
-              pointerEvents: 'none' // Prevent interaction with the overlay
+              background: 'rgba(255, 255, 255, 0.8)',
+              pointerEvents: 'none'
             }}
           >
             {description.length}/{MAX_DESCRIPTION_LENGTH}

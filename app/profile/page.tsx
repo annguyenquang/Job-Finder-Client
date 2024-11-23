@@ -16,7 +16,9 @@ const TestValue: UserAccount = {
   email: 'annguyeen0@gmail.com',
   selfDescription: 'I am a software engineer',
   skills: ['React', 'NodeJS'],
-  certifications: [],
+  certifications: [
+    { issueDate: new Date(), expirationDate: new Date(), name: 'React', issuingOrganization: 'Facebook' }
+  ],
   dateOfBirth: new Date()
 }
 

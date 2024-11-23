@@ -1,22 +1,22 @@
-import { UserAccount } from '@/models'
-import Person from '@mui/icons-material/Person'
-import Box from '@mui/material/Box'
+import React from 'react'
+import grey from '@mui/material/colors/grey'
 import blue from '@mui/material/colors/blue'
+import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import PersonalInfoItem from './PersonalInfoItem'
-import grey from '@mui/material/colors/grey'
-import AddCircle from '@mui/icons-material/AddCircle'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import React from 'react'
-import { DescriptionDiaglog } from './DescriptionDialog'
-import Autocomplete from '@mui/material/Autocomplete/Autocomplete'
-import TextField from '@mui/material/TextField/TextField'
-import InputAdornment from '@mui/material/InputAdornment/InputAdornment'
-import Search from '@mui/icons-material/Search'
-
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Edit from '@mui/icons-material/Edit'
+import Delete from '@mui/icons-material/Delete'
+import AddCircle from '@mui/icons-material/AddCircle'
+import Person from '@mui/icons-material/Person'
+import { Certification, UserAccount } from '@/models'
+import { EditCertificationDialog } from './EditCertificationDialog'
+import { EditDescriptionDiaglog } from './EditDescriptionDialog'
+import PersonalInfoItem from './PersonalInfoItem'
 type PersonalInfoSectionProps = {
   user: UserAccount | null
 }
@@ -34,45 +34,6 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
     if (!props.user?.selfDescription || props.user?.selfDescription.length === 0) return null
     return <Typography>{props.user?.selfDescription}</Typography>
   }
-  const generateCertificationsComponent = () => {
-    if (!props.user?.certifications || props.user?.certifications.length === 0) return null
-    return props.user?.certifications?.map((certificate) => (
-      <Stack
-        key={certificate.name}
-        direction={'row'}
-        spacing={1}
-      >
-        <Box
-          width={50}
-          height={'70'}
-          bgcolor={'silver'}
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
-          <Typography
-            color='white'
-            variant='h6'
-            textAlign={'center'}
-          >
-            {certificate.issuingOrganization.slice(0, 3)}
-          </Typography>
-        </Box>
-        <Stack>
-          <Typography fontWeight={'bold'}>{certificate.name}</Typography>
-          <Typography>{certificate.issuingOrganization}</Typography>
-          <Stack
-            direction={'row'}
-            color={grey[500]}
-            spacing={1}
-          >
-            <Typography>{'Issued ' + certificate?.issueDate?.toLocaleString()}</Typography>
-            <Typography>{'Expires ' + certificate?.issueDate?.toLocaleString()}</Typography>
-          </Stack>
-        </Stack>
-      </Stack>
-    ))
-  }
   const editSkills = () => {
     setIsEditingSkills(true)
   }
@@ -84,11 +45,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
   }
   return (
     <Stack spacing={4}>
-      <DescriptionDiaglog
+      <EditDescriptionDiaglog
         description={props.user?.selfDescription ?? ' '}
         isOpen={isOpenDescriptionDialog}
         onClose={closeDescriptionDialog}
-      ></DescriptionDiaglog>
+      ></EditDescriptionDiaglog>
       <Box
         sx={{ cursor: 'pointer' }}
         width={'fit-content'}
@@ -131,7 +92,9 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
         label='CHỨNG CHỈ'
         emptyLabel='Thêm các chứng chỉ mà bạn có giúp gây ấn tưởng với nhà tuyển dụng'
       >
-        {generateCertificationsComponent()}
+        {!props.user || !props.user.certifications || props.user.certifications.length === 0 ? null : (
+          <PersonalCertifications certifications={props.user.certifications}></PersonalCertifications>
+        )}
       </PersonalInfoItem>
       <PersonalInfoItem label='Vị hồ sơ ứng tuyển (CV)'>
         <Box
@@ -305,5 +268,71 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: (
         </Stack>
       )}
     </Stack>
+  )
+}
+const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
+  const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(true)
+  const [editingCertification, setEditingCertification] = React.useState<Certification | null>(null)
+  const onClose = () => {
+    setIsOpenEditCertificationDialog(false)
+  }
+  return (
+    <>
+      <EditCertificationDialog
+        isOpen={isOpenEditCertificationDialog}
+        onClose={onClose}
+        certification={editingCertification}
+      ></EditCertificationDialog>
+      {props.certifications.map((certificate) => (
+        <Stack
+          key={certificate.name}
+          direction={'row'}
+          spacing={1}
+          position={'relative'}
+        >
+          <Box
+            width={50}
+            height={'70'}
+            bgcolor={'silver'}
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Typography
+              color='white'
+              variant='h6'
+              textAlign={'center'}
+            >
+              {certificate.issuingOrganization.slice(0, 3)}
+            </Typography>
+          </Box>
+          <Stack>
+            <Typography fontWeight={'bold'}>{certificate.name}</Typography>
+            <Typography>{certificate.issuingOrganization}</Typography>
+            <Stack
+              direction={'row'}
+              color={grey[500]}
+              spacing={2}
+            >
+              <Typography>{'Issued ' + certificate?.issueDate?.toLocaleDateString()}</Typography>
+              <Typography>{'Expires ' + certificate?.issueDate?.toLocaleDateString()}</Typography>
+            </Stack>
+          </Stack>
+          <Stack
+            position={'absolute'}
+            direction={'row'}
+            right={0}
+          >
+            <Button startIcon={<Edit />}>Chỉnh sửa</Button>
+            <Button
+              color='error'
+              startIcon={<Delete />}
+            >
+              Xóa
+            </Button>
+          </Stack>
+        </Stack>
+      ))}
+    </>
   )
 }
