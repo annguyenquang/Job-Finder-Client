@@ -24,9 +24,13 @@ export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => 
   const [description, setDescription] = React.useState<string>(props.description)
 
   React.useEffect(() => {
-    console.log('Set')
     setDescription(props.description)
   }, [])
+
+  const onClose = () => {
+    setDescription(props.description)
+    props.onClose()
+  }
 
   const onDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > MAX_DESCRIPTION_LENGTH) return
@@ -40,7 +44,7 @@ export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => 
   return (
     <Dialog
       open={props.isOpen}
-      onClose={props.onClose}
+      onClose={onClose}
     >
       <DialogTitle>
         <Box sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -50,7 +54,7 @@ export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => 
           >
             Giới thiệu bản thân
           </Typography>
-          <IconButton onClick={props.onClose}>
+          <IconButton onClick={onClose}>
             <Close />
           </IconButton>
         </Box>
@@ -87,7 +91,7 @@ export const DescriptionDiaglog: React.FC<DescriptionDiaglogProps> = (props) => 
         <Button
           variant='outlined'
           sx={{ color: [grey[500]], borderColor: [grey[500]], textTransform: 'none' }}
-          onClick={props.onClose}
+          onClick={onClose}
         >
           Hủy
         </Button>
