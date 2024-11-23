@@ -28,8 +28,8 @@ const LeftBasicInfo: React.FC<{ user: UserAccount | null }> = ({ user }) => {
         user={user}
         isOpen={isOpenBasicInfoDialog}
         onClose={closeBasicInfoDialog}
-      ></BasicInfoDialog>
-      <Avatar sx={{ width: 150, height: 150, fontSize: '20px' }}></Avatar>
+      />
+      <Avatar sx={{ width: 150, height: 150, fontSize: '20px' }} />
       <Stack direction={'column'}>
         <Stack
           spacing={2}
