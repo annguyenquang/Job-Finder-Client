@@ -25,12 +25,12 @@ const TestValue: UserAccount = {
 const Profile: React.FC<ProfileProps> = (props) => {
   const accountStore = useAccountStore()
   const [user, setUser] = React.useState<UserAccount | null>(TestValue)
+
   useEffect(() => {
     if (!accountStore.account) {
       accountStore.loadAccountByJwt()
     }
   }, [])
-
   useEffect(() => {
     if (accountStore.accountType === AccountType.User) {
       setUser(accountStore.account as UserAccount)

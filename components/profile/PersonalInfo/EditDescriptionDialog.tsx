@@ -1,3 +1,4 @@
+import React from 'react'
 import Close from '@mui/icons-material/Close'
 import Box from '@mui/material/Box/Box'
 import Button from '@mui/material/Button/Button'
@@ -11,7 +12,6 @@ import Divider from '@mui/material/Divider/Divider'
 import IconButton from '@mui/material/IconButton/IconButton'
 import TextField from '@mui/material/TextField/TextField'
 import Typography from '@mui/material/Typography/Typography'
-import React from 'react'
 
 const MAX_DESCRIPTION_LENGTH = 2600
 
@@ -23,23 +23,21 @@ type EditDescriptionDiaglogProps = {
 export const EditDescriptionDiaglog: React.FC<EditDescriptionDiaglogProps> = (props) => {
   const [description, setDescription] = React.useState<string>(props.description)
 
-  React.useEffect(() => {
-    setDescription(props.description)
-  }, [])
-
   const onClose = () => {
     setDescription(props.description)
     props.onClose()
   }
-
   const onDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > MAX_DESCRIPTION_LENGTH) return
     setDescription(event.target.value)
   }
-
   const onSave = () => {
     console.log(description)
   }
+
+  React.useEffect(() => {
+    setDescription(props.description)
+  }, [])
 
   return (
     <Dialog

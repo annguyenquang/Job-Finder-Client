@@ -33,28 +33,24 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
     // Console.log for call api simulation
     console.log(user)
   }
-
   const onFirstNameChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUser({
       ...user,
       firstName: event.target.value
     })
   }
-
   const onLastNameChangonLastName = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUser({
       ...user,
       lastName: event.target.value
     })
   }
-
   const onPhoneChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUser({
       ...user,
       phone: event.target.value
     })
   }
-
   const onChangeDateOfBirth = (value: Date | null, context: PickerChangeHandlerContext<DateValidationError>) => {
     if (value) {
       setUser({
