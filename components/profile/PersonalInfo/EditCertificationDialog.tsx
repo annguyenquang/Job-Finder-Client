@@ -52,6 +52,9 @@ export const EditCertificationDialog: React.FC<{
   const onExpirationDateChange = (value: Date | null) => {
     setExpirationDate(value)
   }
+  const onSave = () => {
+    console.log(name, issuingOrganization, issueDate, expirationDate, additionalInfo)
+  }
 
   React.useEffect(() => {
     if (props.certification) {
@@ -168,7 +171,7 @@ export const EditCertificationDialog: React.FC<{
         <Button
           variant='contained'
           sx={{ textTransform: 'none' }}
-          // onClick={onSave}
+          onClick={onSave}
         >
           Lưu
         </Button>
