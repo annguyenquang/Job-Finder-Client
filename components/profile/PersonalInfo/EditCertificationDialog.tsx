@@ -32,6 +32,7 @@ export const EditCertificationDialog: React.FC<{
   const [issueDate, setIssueDate] = React.useState<Date | null>(null)
   const [expirationDate, setExpirationDate] = React.useState<Date | null>(null)
   const [additionalInfo, setAdditionalInfo] = React.useState<string>('')
+
   const onClose = () => {
     props.onClose()
   }
@@ -39,6 +40,19 @@ export const EditCertificationDialog: React.FC<{
     if (event.target.value.length > MAX_ADDITIONAL_INFO_LENGTH) return
     setAdditionalInfo(event.target.value)
   }
+  const onNameChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setName(event.target.value)
+  }
+  const onIssuingOrganizationChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setIssuingOrganization(event.target.value)
+  }
+  const onIssueDateChange = (value: Date | null) => {
+    setIssueDate(value)
+  }
+  const onExpirationDateChange = (value: Date | null) => {
+    setExpirationDate(value)
+  }
+
   React.useEffect(() => {
     if (props.certification) {
       setName(props.certification.name)
@@ -46,7 +60,8 @@ export const EditCertificationDialog: React.FC<{
       setIssueDate(props.certification.issueDate ?? null)
       setExpirationDate(props.certification.expirationDate ?? null)
     }
-  }, [])
+  }, [props.certification])
+
   return (
     <Dialog
       fullWidth
@@ -75,31 +90,40 @@ export const EditCertificationDialog: React.FC<{
           <TextField
             value={name}
             label='Tên chứng chỉ'
+            onChange={onNameChange}
             required
           ></TextField>
           <TextField
             value={issuingOrganization}
+            onChange={onIssuingOrganizationChange}
             label='Tổ chức cấp'
             required
           ></TextField>
-          <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            adapterLocale={enGB}
+          <Stack
+            direction={'row'}
+            spacing={1}
           >
-            <DatePicker
-              value={issueDate}
-              label='Ngày cấp'
-            ></DatePicker>
-          </LocalizationProvider>
-          <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            adapterLocale={enGB}
-          >
-            <DatePicker
-              label='Ngày hết hạn'
-              value={expirationDate}
-            ></DatePicker>
-          </LocalizationProvider>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={enGB}
+            >
+              <DatePicker
+                value={issueDate}
+                onChange={onIssueDateChange}
+                label='Ngày cấp'
+              ></DatePicker>
+            </LocalizationProvider>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={enGB}
+            >
+              <DatePicker
+                label='Ngày hết hạn'
+                onChange={onExpirationDateChange}
+                value={expirationDate}
+              ></DatePicker>
+            </LocalizationProvider>
+          </Stack>
           <FormControl>
             <FormControlLabel
               label={<Typography variant='overline'>Chứng chỉ này là vô hạn</Typography>}
@@ -115,6 +139,7 @@ export const EditCertificationDialog: React.FC<{
               value={additionalInfo}
               onChange={onAdditionalInfoChange}
             ></TextField>
+
             <Typography
               variant='caption'
               color='textSecondary'

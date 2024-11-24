@@ -277,7 +277,7 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
     setIsOpenEditCertificationDialog(false)
   }
   const onEditCertification = (certification: Certification) => {
-    setEditingCertification({ ...certification })
+    setEditingCertification(certification)
     setIsOpenEditCertificationDialog(true)
   }
   return (
@@ -287,9 +287,9 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
         onClose={onClose}
         certification={editingCertification}
       ></EditCertificationDialog>
-      {props.certifications.map((certificate) => (
+      {props.certifications.map((cert) => (
         <Stack
-          key={certificate.name}
+          key={cert.name}
           direction={'row'}
           spacing={1}
           position={'relative'}
@@ -307,19 +307,19 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
               variant='h6'
               textAlign={'center'}
             >
-              {certificate.issuingOrganization.slice(0, 3)}
+              {cert.issuingOrganization.slice(0, 3)}
             </Typography>
           </Box>
           <Stack>
-            <Typography fontWeight={'bold'}>{certificate.name}</Typography>
-            <Typography>{certificate.issuingOrganization}</Typography>
+            <Typography fontWeight={'bold'}>{cert.name}</Typography>
+            <Typography>{cert.issuingOrganization}</Typography>
             <Stack
               direction={'row'}
               color={grey[500]}
               spacing={2}
             >
-              <Typography>{'Issued ' + certificate?.issueDate?.toLocaleDateString()}</Typography>
-              <Typography>{'Expires ' + certificate?.issueDate?.toLocaleDateString()}</Typography>
+              <Typography>{'Issued ' + cert?.issueDate?.toLocaleDateString()}</Typography>
+              <Typography>{'Expires ' + cert?.issueDate?.toLocaleDateString()}</Typography>
             </Stack>
           </Stack>
           <Stack
@@ -328,7 +328,9 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
             right={0}
           >
             <Button
-              onClick={() => onEditCertification(certificate)}
+              onClick={() => {
+                onEditCertification(cert)
+              }}
               startIcon={<Edit />}
             >
               Chỉnh sửa
