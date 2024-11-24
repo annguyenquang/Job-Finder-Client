@@ -27,6 +27,10 @@ export const EditCertificationDialog: React.FC<{
   onClose: () => void
   certification: Certification | null
 }> = (props) => {
+  const [name, setName] = React.useState<string>('')
+  const [issuingOrganization, setIssuingOrganization] = React.useState<string>('')
+  const [issueDate, setIssueDate] = React.useState<Date | null>(null)
+  const [expirationDate, setExpirationDate] = React.useState<Date | null>(null)
   const [additionalInfo, setAdditionalInfo] = React.useState<string>('')
   const onClose = () => {
     props.onClose()
@@ -35,7 +39,14 @@ export const EditCertificationDialog: React.FC<{
     if (event.target.value.length > MAX_ADDITIONAL_INFO_LENGTH) return
     setAdditionalInfo(event.target.value)
   }
-
+  React.useEffect(() => {
+    if (props.certification) {
+      setName(props.certification.name)
+      setIssuingOrganization(props.certification.issuingOrganization)
+      setIssueDate(props.certification.issueDate ?? null)
+      setExpirationDate(props.certification.expirationDate ?? null)
+    }
+  }, [])
   return (
     <Dialog
       fullWidth
@@ -62,10 +73,12 @@ export const EditCertificationDialog: React.FC<{
           spacing={2}
         >
           <TextField
+            value={name}
             label='Tên chứng chỉ'
             required
           ></TextField>
           <TextField
+            value={issuingOrganization}
             label='Tổ chức cấp'
             required
           ></TextField>
@@ -73,13 +86,19 @@ export const EditCertificationDialog: React.FC<{
             dateAdapter={AdapterDateFns}
             adapterLocale={enGB}
           >
-            <DatePicker label='Ngày cấp'></DatePicker>
+            <DatePicker
+              value={issueDate}
+              label='Ngày cấp'
+            ></DatePicker>
           </LocalizationProvider>
           <LocalizationProvider
             dateAdapter={AdapterDateFns}
             adapterLocale={enGB}
           >
-            <DatePicker label='Ngày hết hạn'></DatePicker>
+            <DatePicker
+              label='Ngày hết hạn'
+              value={expirationDate}
+            ></DatePicker>
           </LocalizationProvider>
           <FormControl>
             <FormControlLabel

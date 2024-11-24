@@ -271,10 +271,14 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: (
   )
 }
 const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
-  const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(true)
+  const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(false)
   const [editingCertification, setEditingCertification] = React.useState<Certification | null>(null)
   const onClose = () => {
     setIsOpenEditCertificationDialog(false)
+  }
+  const onEditCertification = (certification: Certification) => {
+    setEditingCertification({ ...certification })
+    setIsOpenEditCertificationDialog(true)
   }
   return (
     <>
@@ -323,7 +327,12 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
             direction={'row'}
             right={0}
           >
-            <Button startIcon={<Edit />}>Chỉnh sửa</Button>
+            <Button
+              onClick={() => onEditCertification(certificate)}
+              startIcon={<Edit />}
+            >
+              Chỉnh sửa
+            </Button>
             <Button
               color='error'
               startIcon={<Delete />}
