@@ -23,9 +23,16 @@ type JobCardProps = {
 const JobCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
   const jobStore = useJobListStore()
+
+  const handleOpenJobdetail = () => {
+    setTimeout(() => {
+      router.push(`job-detail/${props.job.id}`);
+    }, 500);
+  }
   return (
     <Card
-      className='flex flex-col p-3 '
+      onClick={handleOpenJobdetail}
+      className='flex flex-col p-3 cursor-pointer'
       sx={{
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
@@ -42,9 +49,6 @@ const JobCard: React.FC<JobCardProps> = (props) => {
         <CardContent>
           <Typography
             sx={{ cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-            onClick={() => {
-              router.push(`viec-lam/${props.job.id}`)
-            }}
             gutterBottom
             className='text-lg text-primary font-bold'
             component='div'

@@ -21,19 +21,33 @@ const JobList = () => {
   }
 
   return (
-    <Grid marginLeft={2} container spacing={1}>
+    <Grid
+      marginLeft={2}
+      container
+      spacing={1}
+    >
       {jobStore.isLoading
         ? Array.from({ length: 9 }).map((_, idx) => (
-            <Grid2 key={idx} size={4}>
+            <Grid2
+              key={idx}
+              size={4}
+            >
               <JobCardSkeleton />
             </Grid2>
           ))
         : jobStore.jobs.map((job, idx) => (
-            <Grid2 key={idx} size={4}>
+            <Grid2
+              key={idx}
+              size={4}
+            >
               <JobCard job={job} />
             </Grid2>
           ))}
-      <Grid size={12} display='flex' justifyContent='center'>
+      <Grid
+        size={12}
+        display='flex'
+        justifyContent='center'
+      >
         <Pagination
           currentPage={jobStore.reqParam.pagination.page}
           totalPages={jobStore.total}
