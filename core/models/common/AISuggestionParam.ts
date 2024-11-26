@@ -28,6 +28,9 @@ export class AISuggestionParam {
     this.skills = newSkils
   }
 
+  setUserId(newId: string) {
+    this.userId = newId
+  }
   constructParam(): string {
     let result = ''
 
@@ -45,6 +48,13 @@ export class AISuggestionParam {
     if (this.recentQueries) {
       this.recentQueries.forEach((e) => {
         result += `&LatestSearchKeywords=${e}`
+      })
+    }
+
+    //Construct query
+    if (this.skills) {
+      this.skills.forEach((e) => {
+        result += `&Skill=${e}`
       })
     }
 

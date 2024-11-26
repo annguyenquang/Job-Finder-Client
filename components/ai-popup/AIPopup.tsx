@@ -6,6 +6,8 @@ import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Ma
 import { InitialLayout } from './InitialLayout'
 import { useAIStore } from '@/stores/AIPopupStore'
 import { LoadingLayout } from './LoadingLayout'
+import { useAccountStore } from '@/stores'
+import { DoneLayout } from './DoneLayout'
 
 const AICaption = {
   INITIAL: 'Seeking for help ?',
@@ -16,10 +18,19 @@ const AICaption = {
 export const AIPopup = () => {
   const [clicked, setClicked] = useState(false)
   const AIStore = useAIStore()
+  const accountStore = useAccountStore()
+
+  useEffect(() => {
+    const userId = accountStore.account?.id
+    const param = AIStore.reqParam
+    if (userId) param.setUserId(userId)
+
+    AIStore.updateParam(param)
+  }, [])
 
   const layoutMap = {
     INITIAL: <InitialLayout />,
-    LOADING: <LoadingLayout />,
+    LOADING: <DoneLayout />,
     DONE: <></> // Add other states if needed
   }
 
@@ -49,7 +60,8 @@ export const AIPopup = () => {
           width: clicked ? '450px' : '64px',
           height: clicked ? '600px' : '64px',
           borderRadius: clicked ? '20px' : '50%',
-          background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
+          // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
+          background: 'linear-gradient(135deg, #000000, #808080)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -67,7 +79,8 @@ export const AIPopup = () => {
               width: '100%',
               height: '100%',
               borderRadius: '20px',
-              background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)'
+              // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)'
+              background: 'black'
             }}
           >
             <Container
@@ -76,7 +89,8 @@ export const AIPopup = () => {
                 borderRadius: '20px',
                 justifyContent: 'space-between',
                 padding: '10px',
-                background: 'linear-gradient(135deg, #f6f6f6, #badbb6, #ffffff)'
+                // background: 'linear-gradient(135deg, #f6f6f6, #badbb6, #ffffff)'
+                background: 'white'
               }}
             >
               <Typography variant='subtitle1' color='black'>

@@ -19,7 +19,7 @@ const GradientSpinner = () => {
             height: 96, // Equivalent to h-24 in Tailwind
             animation: 'spin 2s linear infinite', // Using CSS animation
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1fcaf5, #22e2a5, #5a5151)' // Gradient from Tailwind
+            background: 'linear-gradient(135deg, #1b1b1b, #22e2a5, #5a5151)' // Gradient from Tailwind
           }}
         >
           <Box

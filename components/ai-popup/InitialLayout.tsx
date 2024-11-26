@@ -99,7 +99,8 @@ export function InitialLayout() {
                 <Chip
                   key={key}
                   sx={{
-                    background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Gradient colors
+                    // background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Gradient colors
+                    background: 'black',
                     color: '#fff', // Text color
                     '& .MuiChip-deleteIcon': {
                       color: '#fff' // Delete icon color
@@ -131,10 +132,10 @@ export function InitialLayout() {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '8px', // Rounded corners
                   '& fieldset': {
-                    borderColor: '#76f5d5' // Default border color
+                    borderColor: '#7a7c7c' // Default border color
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#76f5d5', // Remove blue border
+                    borderColor: '#6a6a6a', // Remove blue border
                     borderWidth: 2
                   }
                 },
@@ -150,7 +151,9 @@ export function InitialLayout() {
           onClick={() => AIPopupStore.updateProcessState('LOADING')}
           startIcon={<AutoAwesomeIcon />}
           sx={{
-            background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
+            // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
+            background: 'linear-gradient(135deg, #000000, #808080)',
+
             color: 'white',
             fontWeight: 'bold',
             borderRadius: '25px', // Rounded corners
@@ -159,9 +162,10 @@ export function InitialLayout() {
             transition: 'all 0.3s ease',
             boxShadow: '0px 4px 10px rgba(116, 219, 174, 0.3)', // Subtle shadow
             '&:hover': {
-              background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Brighter gradient on hover
+              // background: 'linear-gradient(135deg, #76f5d5, #4fb7c5)', // Brighter gradient on hover
+              background: 'black',
               transform: 'scale(1.05)', // Slight zoom effect
-              boxShadow: '0px 6px 15px rgba(83, 226, 185, 0.5)' // More prominent shadow
+              boxShadow: '0px 6px 15px rgba(24, 139, 181, 0.5)' // More prominent shadow
             },
             '& .MuiButton-startIcon': {
               color: 'white', // Ensure the icon matches the text color
