@@ -25,7 +25,7 @@ type BannerProps = {
 export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
     const BANNER_IMAGE = 'https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/184125/Originals/bo-suu-tap-background-xanh-duong-1.png'
     return (
-        <Card className="bg-white shadow-md rounded-lg mt-5 relative">
+        <Card className="bg-white shadow-md rounded-lg mt-2 relative">
             <CardMedia
                 className='h-full min-h-64'
                 image={BANNER_IMAGE}

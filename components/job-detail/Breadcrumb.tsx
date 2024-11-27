@@ -2,24 +2,22 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
 
 type BreadcrumbProps = {
     currentPosition: string;
 }
 
-function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.preventDefault();
-}
-
 export const JobBreadcrumb: React.FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
+
     return (
-        <div role="presentation" onClick={handleClick}>
+        <Box>
             <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" href="/">
+                <Link underline="hover" color="inherit" href="/viec-lam">
                     Việc làm
                 </Link>
-                <Typography sx={{ color: 'text.primary' }}>Tuyển dụng {props.currentPosition}</Typography>
+                <Typography className='text-colorPrimary'>Tuyển dụng {props.currentPosition}</Typography>
             </Breadcrumbs>
-        </div>
+        </Box>
     );
 }
