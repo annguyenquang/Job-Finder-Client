@@ -12,6 +12,7 @@ import Divider from '@mui/material/Divider/Divider'
 import IconButton from '@mui/material/IconButton/IconButton'
 import TextField from '@mui/material/TextField/TextField'
 import Typography from '@mui/material/Typography/Typography'
+import { useAccountStore, useUserStore } from '@/stores'
 
 const MAX_DESCRIPTION_LENGTH = 2600
 
@@ -31,13 +32,15 @@ export const EditDescriptionDiaglog: React.FC<EditDescriptionDiaglogProps> = (pr
     if (event.target.value.length > MAX_DESCRIPTION_LENGTH) return
     setDescription(event.target.value)
   }
-  const onSave = () => {
-    console.log(description)
+  const onSave = async () => {
+    await useUserStore.getState().updateDescription(description)
+    await useAccountStore.getState().loadAccountByJwt()
+    onClose()
   }
 
   React.useEffect(() => {
     setDescription(props.description)
-  }, [])
+  }, [props.description])
 
   return (
     <Dialog
@@ -73,7 +76,7 @@ export const EditDescriptionDiaglog: React.FC<EditDescriptionDiaglogProps> = (pr
           <Typography
             variant='caption'
             color='textSecondary'
-            style={{
+            sx={{
               position: 'absolute',
               right: 10,
               bottom: 10,

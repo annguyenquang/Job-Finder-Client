@@ -318,8 +318,8 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
               color={grey[500]}
               spacing={2}
             >
-              <Typography>{'Issued ' + cert?.issueDate?.toLocaleDateString()}</Typography>
-              <Typography>{'Expires ' + cert?.issueDate?.toLocaleDateString()}</Typography>
+              <Typography>{'Issued ' + cert?.issueDate}</Typography>
+              <Typography>{'Expires ' + cert?.expirationDate}</Typography>
             </Stack>
           </Stack>
           <Stack
