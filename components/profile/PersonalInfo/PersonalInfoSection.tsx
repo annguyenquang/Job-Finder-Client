@@ -18,13 +18,17 @@ import { EditCertificationDialog } from './EditCertificationDialog'
 import { EditDescriptionDiaglog } from './EditDescriptionDialog'
 import PersonalInfoItem from './PersonalInfoItem'
 import { useAccountStore, useUserStore } from '@/stores'
+import CreateCertificationDialog from './CreateCertificationDialog'
+import PersonalCertifications from './PersonalCertifications'
 type PersonalInfoSectionProps = {
   user: UserAccount | null
 }
 
 export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) => {
+  const [isOpenCreateCertificantionDialog, setIsOpenCreateCertificantionDialog] = React.useState<boolean>(false)
   const [isOpenDescriptionDialog, setIsOpenDescriptionDialog] = React.useState<boolean>(false)
   const [isEditingSkills, setIsEditingSkills] = React.useState<boolean>(false)
+
   const closeDescriptionDialog = () => {
     setIsOpenDescriptionDialog(false)
   }
@@ -41,13 +45,28 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
   const onCancelEditSkills = () => {
     setIsEditingSkills(false)
   }
+  const onCreateCertification = () => {
+    setIsOpenCreateCertificantionDialog(true)
+  }
+  const onCloseCreateCertificationDialog = () => {
+    setIsOpenCreateCertificantionDialog(false)
+  }
+
   return (
     <Stack spacing={4}>
       <EditDescriptionDiaglog
         description={props.user?.selfDescription ?? ' '}
         isOpen={isOpenDescriptionDialog}
         onClose={closeDescriptionDialog}
-      ></EditDescriptionDiaglog>
+      />
+      <CreateCertificationDialog
+        isOpen={isOpenCreateCertificantionDialog}
+        onClose={onCloseCreateCertificationDialog}
+      />
+      <CreateCertificationDialog
+        isOpen={false}
+        onClose={() => {}}
+      />
       <Box
         sx={{ cursor: 'pointer' }}
         width={'fit-content'}
@@ -89,9 +108,10 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
         label='CHỨNG CHỈ'
         emptyLabel='Thêm các chứng chỉ mà bạn có giúp gây ấn tưởng với nhà tuyển dụng'
         isEditable
+        onEdit={onCreateCertification}
       >
         {!props.user || !props.user.certifications || props.user.certifications.length === 0 ? null : (
-          <PersonalCertifications certifications={props.user.certifications}></PersonalCertifications>
+          <PersonalCertifications certifications={props.user.certifications} />
         )}
       </PersonalInfoItem>
       <PersonalInfoItem label='Vị hồ sơ ứng tuyển (CV)'>
@@ -268,85 +288,5 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onCancel:
         </Stack>
       )}
     </Stack>
-  )
-}
-const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
-  const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(false)
-  const [editingCertification, setEditingCertification] = React.useState<Certification | null>(null)
-  const [certificationIndex, setCertificationIndex] = React.useState<number>(-1)
-  const onClose = () => {
-    setIsOpenEditCertificationDialog(false)
-  }
-  const onEditCertification = (certification: Certification, index: number) => {
-    setCertificationIndex(index)
-    setEditingCertification(certification)
-    setIsOpenEditCertificationDialog(true)
-  }
-  return (
-    <>
-      <EditCertificationDialog
-        isOpen={isOpenEditCertificationDialog}
-        onClose={onClose}
-        index={certificationIndex}
-        certification={editingCertification}
-      />
-      {props.certifications.map((cert, idx) => (
-        <Stack
-          key={cert.name}
-          direction={'row'}
-          spacing={1}
-          position={'relative'}
-        >
-          <Box
-            width={50}
-            height={'70'}
-            bgcolor={'silver'}
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <Typography
-              color='white'
-              variant='h6'
-              textAlign={'center'}
-            >
-              {cert.issuingOrganization.slice(0, 3)}
-            </Typography>
-          </Box>
-          <Stack>
-            <Typography fontWeight={'bold'}>{cert.name}</Typography>
-            <Typography>{cert.issuingOrganization}</Typography>
-            <Stack
-              direction={'row'}
-              color={grey[500]}
-              spacing={2}
-            >
-              <Typography>{'Issued ' + cert?.issueDate}</Typography>
-              <Typography>{'Expires ' + cert?.expirationDate}</Typography>
-            </Stack>
-          </Stack>
-          <Stack
-            position={'absolute'}
-            direction={'row'}
-            right={0}
-          >
-            <Button
-              onClick={() => {
-                onEditCertification(cert, idx)
-              }}
-              startIcon={<Edit />}
-            >
-              Chỉnh sửa
-            </Button>
-            <Button
-              color='error'
-              startIcon={<Delete />}
-            >
-              Xóa
-            </Button>
-          </Stack>
-        </Stack>
-      ))}
-    </>
   )
 }

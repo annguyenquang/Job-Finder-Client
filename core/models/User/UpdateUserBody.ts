@@ -12,8 +12,8 @@ export type UpdateUserBody = {
 type UpdateUserBodyCertification = {
   name: string
   issuingOrganization: string
-  issueDate?: string
-  expirationDate?: string
-  credentialId?: string
-  credentialUrl?: string
+  issueDate: string | null
+  expirationDate: string | null
+  credentialId: string | null
+  credentialUrl?: string | null
 }

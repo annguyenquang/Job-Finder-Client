@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import { Certification, UserAccount } from '@/models'
 import Dialog from '@mui/material/Dialog/Dialog'
 import DialogTitle from '@mui/material/DialogTitle/DialogTitle'
@@ -22,12 +22,13 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDate
 import { enGB } from 'date-fns/locale/en-GB'
 
 const MAX_ADDITIONAL_INFO_LENGTH = 2600
-export const EditCertificationDialog: React.FC<{
+const CertificationDialog: React.FC<{
+  title: string
   isOpen: boolean
   onClose: () => void
-  onSave: () => Promise<void>
+  onSave: (certification: Certification) => Promise<void>
   certification: Certification | null
-  index: number
+  index: number | null
 }> = (props) => {
   const [name, setName] = React.useState<string>('')
   const [issuingOrganization, setIssuingOrganization] = React.useState<string>('')
@@ -55,7 +56,13 @@ export const EditCertificationDialog: React.FC<{
     setExpirationDate(value ?? undefined)
   }
   const onSave = async () => {
-    await props.onSave()
+    const certifciation: Certification = {
+      name: name,
+      issuingOrganization: issuingOrganization,
+      issueDate: issueDate,
+      expirationDate: expirationDate
+    }
+    await props.onSave(certifciation)
   }
 
   React.useEffect(() => {
@@ -79,7 +86,7 @@ export const EditCertificationDialog: React.FC<{
             variant='h6'
             sx={{ fontWeight: 'bold' }}
           >
-            Thêm chứng chỉ
+            {props.title}
           </Typography>
           <IconButton onClick={onClose}>
             <Close />
@@ -181,3 +188,5 @@ export const EditCertificationDialog: React.FC<{
     </Dialog>
   )
 }
+
+export default CertificationDialog
