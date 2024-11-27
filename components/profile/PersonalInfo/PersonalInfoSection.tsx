@@ -88,6 +88,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
       <PersonalInfoItem
         label='CHỨNG CHỈ'
         emptyLabel='Thêm các chứng chỉ mà bạn có giúp gây ấn tưởng với nhà tuyển dụng'
+        isEditable
       >
         {!props.user || !props.user.certifications || props.user.certifications.length === 0 ? null : (
           <PersonalCertifications certifications={props.user.certifications}></PersonalCertifications>
@@ -288,7 +289,7 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
         onClose={onClose}
         index={certificationIndex}
         certification={editingCertification}
-      ></EditCertificationDialog>
+      />
       {props.certifications.map((cert, idx) => (
         <Stack
           key={cert.name}
