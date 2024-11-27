@@ -17,6 +17,7 @@ import { Certification, UserAccount } from '@/models'
 import { EditCertificationDialog } from './EditCertificationDialog'
 import { EditDescriptionDiaglog } from './EditDescriptionDialog'
 import PersonalInfoItem from './PersonalInfoItem'
+import { useAccountStore, useUserStore } from '@/stores'
 type PersonalInfoSectionProps = {
   user: UserAccount | null
 }
@@ -38,9 +39,6 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
     setIsEditingSkills(true)
   }
   const onCancelEditSkills = () => {
-    setIsEditingSkills(false)
-  }
-  const onSaveEditSkills = () => {
     setIsEditingSkills(false)
   }
   return (
@@ -84,7 +82,6 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
             skills={props?.user?.skills ?? []}
             isEditing={isEditingSkills}
             onCancel={onCancelEditSkills}
-            onSave={onSaveEditSkills}
           ></PersonalSkills>
         )}
       </PersonalInfoItem>
@@ -185,13 +182,10 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
   )
 }
 
-const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: () => void; onCancel: () => void }> = (
-  props
-) => {
+const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onCancel: () => void }> = (props) => {
   const [skills, setSkills] = React.useState<string[]>(props.skills)
 
   const onDeleteSkill = (index: number) => {
-    console.log('delete skill at index', index)
     setSkills(skills.filter((_, i) => i != index))
   }
   const onSkillChange = (_: React.ChangeEvent<object>, value: string[]) => {
@@ -201,10 +195,15 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: (
     setSkills(props.skills)
     props.onCancel()
   }
-  const onSave = () => {
-    //Call api
-    props.onSave()
+  const onSave = async () => {
+    await useUserStore.getState().updateSkills(skills)
+    await useAccountStore.getState().loadAccountByJwt()
+    onCancel()
   }
+
+  React.useEffect(() => {
+    setSkills(props.skills)
+  }, [props.skills])
 
   return (
     <Stack

@@ -5,6 +5,7 @@ import { create } from 'zustand'
 
 type UserStore = {
   updateDescription: (description: string) => Promise<void>
+  updateSkills: (skills: string[]) => Promise<void>
 }
 
 export const useUserStore = create<UserStore>()((set) => ({
@@ -16,8 +17,20 @@ export const useUserStore = create<UserStore>()((set) => ({
         return
       }
       const user = account as UpdateUserParams
-      console.log('User', user)
       await UserService.updateUser(account.id, { ...user, selfDescription: description })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  updateSkills: async (skills: string[]) => {
+    try {
+      const account = useAccountStore.getState().account
+      if (!account) {
+        console.log('No account found')
+        return
+      }
+      const user = account as UpdateUserParams
+      await UserService.updateUser(account.id, { ...user, skills: skills })
     } catch (error) {
       console.log(error)
     }
