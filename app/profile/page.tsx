@@ -7,24 +7,10 @@ import { BasicInfoSection, PersonalInfoSection } from '@/components'
 import { useAccountStore } from '@/stores'
 
 type ProfileProps = {}
-const TestValue: UserAccount = {
-  id: '123',
-  username: 'annguyeen0',
-  firstName: 'An',
-  lastName: 'Nguyen',
-  phone: '0389553233',
-  email: 'annguyeen0@gmail.com',
-  selfDescription: 'I am a software engineer',
-  skills: ['React', 'NodeJS'],
-  certifications: [
-    { issueDate: new Date(), expirationDate: new Date(), name: 'React', issuingOrganization: 'Facebook' }
-  ],
-  dateOfBirth: new Date()
-}
 
 const Profile: React.FC<ProfileProps> = (props) => {
   const accountStore = useAccountStore()
-  const [user, setUser] = React.useState<UserAccount | null>(TestValue)
+  const [user, setUser] = React.useState<UserAccount | null>(null)
 
   useEffect(() => {
     if (!accountStore.account) {
