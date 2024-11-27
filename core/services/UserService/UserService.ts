@@ -11,9 +11,12 @@ const updateUser = async (id: string, params: UpdateUserParams) => {
       dateOfBirth: dateToString(params.dateOfBirth),
       skills: params.skills,
       selfDescription: params.selfDescription,
-      certifications: params.certifications
+      certifications: params.certifications.map((certification) => ({
+        ...certification,
+        issueDate: certification.issueDate ? dateToString(certification.issueDate) : undefined,
+        expirationDate: certification.expirationDate ? dateToString(certification.expirationDate) : undefined
+      }))
     }
-    console.log('Body', body)
     const res = await http().post<ApiResult<string>>(url, body)
     return res.data
   } catch (error) {

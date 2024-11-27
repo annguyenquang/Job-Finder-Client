@@ -1,5 +1,5 @@
-import React from 'react'
-import { Certification } from '@/models'
+import React, { use } from 'react'
+import { Certification, UserAccount } from '@/models'
 import Dialog from '@mui/material/Dialog/Dialog'
 import DialogTitle from '@mui/material/DialogTitle/DialogTitle'
 import Box from '@mui/material/Box/Box'
@@ -20,17 +20,19 @@ import Button from '@mui/material/Button/Button'
 import grey from '@mui/material/colors/grey'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDateFnsV3'
 import { enGB } from 'date-fns/locale/en-GB'
+import { useAccountStore, useUserStore } from '@/stores'
 
 const MAX_ADDITIONAL_INFO_LENGTH = 2600
 export const EditCertificationDialog: React.FC<{
   isOpen: boolean
   onClose: () => void
   certification: Certification | null
+  index: number
 }> = (props) => {
   const [name, setName] = React.useState<string>('')
   const [issuingOrganization, setIssuingOrganization] = React.useState<string>('')
-  const [issueDate, setIssueDate] = React.useState<Date | null>(null)
-  const [expirationDate, setExpirationDate] = React.useState<Date | null>(null)
+  const [issueDate, setIssueDate] = React.useState<Date | undefined>()
+  const [expirationDate, setExpirationDate] = React.useState<Date | undefined>()
   const [additionalInfo, setAdditionalInfo] = React.useState<string>('')
 
   const onClose = () => {
@@ -47,22 +49,34 @@ export const EditCertificationDialog: React.FC<{
     setIssuingOrganization(event.target.value)
   }
   const onIssueDateChange = (value: Date | null) => {
-    setIssueDate(value)
+    setIssueDate(value ?? undefined)
   }
   const onExpirationDateChange = (value: Date | null) => {
-    setExpirationDate(value)
+    setExpirationDate(value ?? undefined)
   }
-  const onSave = () => {
-    console.log(name, issuingOrganization, issueDate, expirationDate, additionalInfo)
+  const onSave = async () => {
+    if (!name || !issuingOrganization) return
+    const newCertification: Certification = {
+      name: name,
+      issuingOrganization: issuingOrganization,
+      issueDate: issueDate,
+      expirationDate: expirationDate
+    }
+    const user = useAccountStore.getState().account as UserAccount
+    const newCertifications = user.certifications.filter((_, index) => index !== props.index).concat(newCertification)
+    await useUserStore.getState().updateCertifications(newCertifications)
+    await useAccountStore.getState().loadAccountByJwt()
+    onClose()
   }
 
   React.useEffect(() => {
     if (props.certification) {
       setName(props.certification.name)
       setIssuingOrganization(props.certification.issuingOrganization)
-      setIssueDate(props.certification.issueDate ?? null)
-      setExpirationDate(props.certification.expirationDate ?? null)
+      setIssueDate(new Date(props.certification.issueDate as any as string))
+      setExpirationDate(new Date(props.certification.expirationDate as any as string))
     }
+    console.log('certification: ', props.certification)
   }, [props.certification])
 
   return (

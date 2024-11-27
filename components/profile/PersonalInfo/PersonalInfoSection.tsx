@@ -272,10 +272,12 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onCancel:
 const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
   const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(false)
   const [editingCertification, setEditingCertification] = React.useState<Certification | null>(null)
+  const [certificationIndex, setCertificationIndex] = React.useState<number>(-1)
   const onClose = () => {
     setIsOpenEditCertificationDialog(false)
   }
-  const onEditCertification = (certification: Certification) => {
+  const onEditCertification = (certification: Certification, index: number) => {
+    setCertificationIndex(index)
     setEditingCertification(certification)
     setIsOpenEditCertificationDialog(true)
   }
@@ -284,9 +286,10 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
       <EditCertificationDialog
         isOpen={isOpenEditCertificationDialog}
         onClose={onClose}
+        index={certificationIndex}
         certification={editingCertification}
       ></EditCertificationDialog>
-      {props.certifications.map((cert) => (
+      {props.certifications.map((cert, idx) => (
         <Stack
           key={cert.name}
           direction={'row'}
@@ -328,7 +331,7 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
           >
             <Button
               onClick={() => {
-                onEditCertification(cert)
+                onEditCertification(cert, idx)
               }}
               startIcon={<Edit />}
             >

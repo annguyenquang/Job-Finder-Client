@@ -6,5 +6,14 @@ export type UpdateUserBody = {
   dateOfBirth: string
   skills: string[]
   selfDescription: string
-  certifications: Certification[]
+  certifications: UpdateUserBodyCertification[]
+}
+
+type UpdateUserBodyCertification = {
+  name: string
+  issuingOrganization: string
+  issueDate?: string
+  expirationDate?: string
+  credentialId?: string
+  credentialUrl?: string
 }
