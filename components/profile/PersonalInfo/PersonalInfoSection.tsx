@@ -6,24 +6,23 @@ import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import Autocomplete from '@mui/material/Autocomplete'
-import TextField from '@mui/material/TextField'
-import Edit from '@mui/icons-material/Edit'
-import Delete from '@mui/icons-material/Delete'
 import AddCircle from '@mui/icons-material/AddCircle'
 import Person from '@mui/icons-material/Person'
-import { Certification, UserAccount } from '@/models'
-import { EditCertificationDialog } from './EditCertificationDialog'
+import { UserAccount } from '@/models'
 import { EditDescriptionDiaglog } from './EditDescriptionDialog'
 import PersonalInfoItem from './PersonalInfoItem'
+import CreateCertificationDialog from './CreateCertificationDialog'
+import PersonalCertifications from './PersonalCertifications'
+import PersonalSkills from './PersonalSkills'
 type PersonalInfoSectionProps = {
   user: UserAccount | null
 }
 
 export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) => {
+  const [isOpenCreateCertificantionDialog, setIsOpenCreateCertificantionDialog] = React.useState<boolean>(false)
   const [isOpenDescriptionDialog, setIsOpenDescriptionDialog] = React.useState<boolean>(false)
   const [isEditingSkills, setIsEditingSkills] = React.useState<boolean>(false)
+
   const closeDescriptionDialog = () => {
     setIsOpenDescriptionDialog(false)
   }
@@ -40,16 +39,28 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
   const onCancelEditSkills = () => {
     setIsEditingSkills(false)
   }
-  const onSaveEditSkills = () => {
-    setIsEditingSkills(false)
+  const onCreateCertification = () => {
+    setIsOpenCreateCertificantionDialog(true)
   }
+  const onCloseCreateCertificationDialog = () => {
+    setIsOpenCreateCertificantionDialog(false)
+  }
+
   return (
     <Stack spacing={4}>
       <EditDescriptionDiaglog
         description={props.user?.selfDescription ?? ' '}
         isOpen={isOpenDescriptionDialog}
         onClose={closeDescriptionDialog}
-      ></EditDescriptionDiaglog>
+      />
+      <CreateCertificationDialog
+        isOpen={isOpenCreateCertificantionDialog}
+        onClose={onCloseCreateCertificationDialog}
+      />
+      <CreateCertificationDialog
+        isOpen={false}
+        onClose={() => {}}
+      />
       <Box
         sx={{ cursor: 'pointer' }}
         width={'fit-content'}
@@ -84,16 +95,17 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
             skills={props?.user?.skills ?? []}
             isEditing={isEditingSkills}
             onCancel={onCancelEditSkills}
-            onSave={onSaveEditSkills}
           ></PersonalSkills>
         )}
       </PersonalInfoItem>
       <PersonalInfoItem
         label='CHỨNG CHỈ'
         emptyLabel='Thêm các chứng chỉ mà bạn có giúp gây ấn tưởng với nhà tuyển dụng'
+        isEditable
+        onEdit={onCreateCertification}
       >
         {!props.user || !props.user.certifications || props.user.certifications.length === 0 ? null : (
-          <PersonalCertifications certifications={props.user.certifications}></PersonalCertifications>
+          <PersonalCertifications certifications={props.user.certifications} />
         )}
       </PersonalInfoItem>
       <PersonalInfoItem label='Vị hồ sơ ứng tuyển (CV)'>
@@ -182,168 +194,5 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = (props) =
         </Box>
       </PersonalInfoItem>
     </Stack>
-  )
-}
-
-const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onSave: () => void; onCancel: () => void }> = (
-  props
-) => {
-  const [skills, setSkills] = React.useState<string[]>(props.skills)
-
-  const onDeleteSkill = (index: number) => {
-    console.log('delete skill at index', index)
-    setSkills(skills.filter((_, i) => i != index))
-  }
-  const onSkillChange = (_: React.ChangeEvent<object>, value: string[]) => {
-    setSkills(value)
-  }
-  const onCancel = () => {
-    setSkills(props.skills)
-    props.onCancel()
-  }
-  const onSave = () => {
-    //Call api
-    props.onSave()
-  }
-
-  return (
-    <Stack
-      direction={'row'}
-      spacing={1}
-      position={'relative'}
-    >
-      {props.isEditing ? (
-        <Autocomplete
-          multiple
-          freeSolo
-          options={[]}
-          className='w-96 pl-2'
-          value={skills}
-          onChange={onSkillChange}
-          renderTags={(value: string[], getTagProps) =>
-            value.map((option: string, index: number) => {
-              const { key, ...tagProps } = getTagProps({ index })
-              return (
-                <Chip
-                  variant='outlined'
-                  key={key}
-                  label={option}
-                  {...tagProps}
-                  onDelete={() => onDeleteSkill(index)}
-                  size='small'
-                />
-              )
-            })
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label='Tìm kỹ năng'
-              size='small'
-              className='text-sm pb-4'
-            />
-          )}
-        />
-      ) : (
-        skills.map((skill, index) => (
-          <Chip
-            key={index}
-            label={skill}
-            size='small'
-          />
-        ))
-      )}
-      {props.isEditing && (
-        <Stack
-          direction={'row'}
-          sx={{ position: 'absolute', right: 0 }}
-        >
-          <Button
-            onClick={onSave}
-            variant='contained'
-          >
-            Lưu
-          </Button>
-          <Button onClick={onCancel}>Hủy</Button>
-        </Stack>
-      )}
-    </Stack>
-  )
-}
-const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
-  const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(false)
-  const [editingCertification, setEditingCertification] = React.useState<Certification | null>(null)
-  const onClose = () => {
-    setIsOpenEditCertificationDialog(false)
-  }
-  const onEditCertification = (certification: Certification) => {
-    setEditingCertification(certification)
-    setIsOpenEditCertificationDialog(true)
-  }
-  return (
-    <>
-      <EditCertificationDialog
-        isOpen={isOpenEditCertificationDialog}
-        onClose={onClose}
-        certification={editingCertification}
-      ></EditCertificationDialog>
-      {props.certifications.map((cert) => (
-        <Stack
-          key={cert.name}
-          direction={'row'}
-          spacing={1}
-          position={'relative'}
-        >
-          <Box
-            width={50}
-            height={'70'}
-            bgcolor={'silver'}
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <Typography
-              color='white'
-              variant='h6'
-              textAlign={'center'}
-            >
-              {cert.issuingOrganization.slice(0, 3)}
-            </Typography>
-          </Box>
-          <Stack>
-            <Typography fontWeight={'bold'}>{cert.name}</Typography>
-            <Typography>{cert.issuingOrganization}</Typography>
-            <Stack
-              direction={'row'}
-              color={grey[500]}
-              spacing={2}
-            >
-              <Typography>{'Issued ' + cert?.issueDate?.toLocaleDateString()}</Typography>
-              <Typography>{'Expires ' + cert?.issueDate?.toLocaleDateString()}</Typography>
-            </Stack>
-          </Stack>
-          <Stack
-            position={'absolute'}
-            direction={'row'}
-            right={0}
-          >
-            <Button
-              onClick={() => {
-                onEditCertification(cert)
-              }}
-              startIcon={<Edit />}
-            >
-              Chỉnh sửa
-            </Button>
-            <Button
-              color='error'
-              startIcon={<Delete />}
-            >
-              Xóa
-            </Button>
-          </Stack>
-        </Stack>
-      ))}
-    </>
   )
 }
