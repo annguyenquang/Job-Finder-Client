@@ -21,7 +21,7 @@ const CreateCertificationDialog: React.FC<CreateCertificationDialogProps> = (pro
       onSave={onSave}
       certification={null}
       index={null}
-    ></CertificationDialog>
+    />
   )
 }
 

@@ -1,12 +1,10 @@
 import type { ApiResult, UpdateUserBody, UpdateUserParams } from '@/models'
 import { http } from '../http'
 import { dateToString } from '@/utils'
-import { is } from 'date-fns/locale'
 
 const updateUser = async (id: string, params: UpdateUserParams) => {
   try {
     const url = `/User/UpdateUser?id=${id}`
-    console.log('params', params)
     const body: UpdateUserBody = {
       firstName: params.firstName,
       lastName: params.lastName,

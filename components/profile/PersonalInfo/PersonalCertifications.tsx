@@ -8,6 +8,7 @@ import grey from '@mui/material/colors/grey'
 import Button from '@mui/material/Button'
 import Edit from '@mui/icons-material/Edit'
 import Delete from '@mui/icons-material/Delete'
+import { useAccountStore, useUserStore } from '@/stores'
 
 const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (props) => {
   const [isOpenEditCertificationDialog, setIsOpenEditCertificationDialog] = React.useState<boolean>(false)
@@ -21,6 +22,12 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
   }
   const onCloseEditCertificationDialog = () => {
     setIsOpenEditCertificationDialog(false)
+  }
+
+  const onDeleteCertification = async (index: number) => {
+    const newCertifications = props.certifications.filter((_, idx) => idx !== index)
+    await useUserStore.getState().updateCertifications(newCertifications)
+    await useAccountStore.getState().loadAccountByJwt()
   }
 
   return (
@@ -82,6 +89,9 @@ const PersonalCertifications: React.FC<{ certifications: Certification[] }> = (p
             <Button
               color='error'
               startIcon={<Delete />}
+              onClick={() => {
+                onDeleteCertification(idx)
+              }}
             >
               Xóa
             </Button>
