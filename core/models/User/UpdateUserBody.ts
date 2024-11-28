@@ -15,5 +15,5 @@ type UpdateUserBodyCertification = {
   issueDate: string | null
   expirationDate: string | null
   credentialId: string | null
-  credentialUrl?: string | null
+  credentialUrl: string | null
 }
