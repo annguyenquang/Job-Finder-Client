@@ -1,12 +1,19 @@
 'use client'
 
-import { Avatar, Button, Card, CardContent, Divider, Grid2, Link, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import React from 'react'
 import blue from '@mui/material/colors/blue'
 import Image from 'next/image'
-import AccountAndPasswordForm from '../../components/login/AccountAndPasswordForm'
-import React from 'react'
+import Grid2 from '@mui/material/Grid2'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import Link from '@mui/material/Link'
+import Button from '@mui/material/Button'
+import Avatar from '@mui/material/Avatar'
 import { useAccountStore } from '@/stores'
-import { useRouter } from 'next/navigation'
+import AccountAndPasswordForm from '../../components/login/AccountAndPasswordForm'
 
 const LoginPage: React.FC = () => {
   const accountStore = useAccountStore()
