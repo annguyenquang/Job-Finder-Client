@@ -14,16 +14,26 @@ const CompanyCard = () => {
       </div>
       <div>
         <CardContent>
-          <Typography gutterBottom className='text-lg' component='div'>
+          <Typography
+            gutterBottom
+            className='text-lg'
+            component='div'
+          >
             Công ty Viettel Software
           </Typography>
-          <Typography variant='body1' className='text-primary'>
+          <Typography
+            variant='body1'
+            className='text-colorPrimary'
+          >
             Viettel Software
           </Typography>
           <Typography variant='body2'></Typography>
         </CardContent>
         <CardActions>
-          <Button variant='contained' size='small'>
+          <Button
+            variant='contained'
+            size='small'
+          >
             Chi tiết
           </Button>
         </CardActions>

@@ -8,12 +8,14 @@ export class AISuggestionParam {
   skills: string[]
   userId: string
   recentQueries: string[]
+  provinceId: number | null
 
   constructor() {
     this.pagination = { page: 1, pageSize: 6 }
     this.userId = ''
     this.skills = []
     this.recentQueries = []
+    this.provinceId = null
   }
 
   setPage(newPage: number): void {
@@ -31,12 +33,23 @@ export class AISuggestionParam {
   setUserId(newId: string) {
     this.userId = newId
   }
+
+  setProvinceId(newId: number | null) {
+    this.provinceId = newId
+  }
+
+  setRecentQueries(newQueries: string[]) {
+    const updateQueries = [...this.recentQueries, ...newQueries]
+    this.recentQueries = updateQueries
+  }
   constructParam(): string {
     let result = ''
 
     //Construct userId
     if (this.userId) result += `?UserId=${this.userId}`
 
+    //Construct provinceId
+    if (this.provinceId) result += `&JobFilter.ProvinceId=${this.provinceId}`
     //Construct query
     if (this.recentQueries) {
       this.recentQueries.forEach((e) => {

@@ -6,7 +6,7 @@ import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'
 
 import Carousel from 'react-material-ui-carousel'
 
-import { Autocomplete, Button, Chip, Divider, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Button, Chip, Divider, Skeleton, Stack, TextField, Typography } from '@mui/material'
 import { useCreateJobStore } from '@/stores'
 import { useAIStore } from '@/stores/AIPopupStore'
 import GradientSpinner from '../common/GradientSpinner'
@@ -14,7 +14,7 @@ import JobCard from '../viec-lam-page/JobCard'
 import { Job } from '@/models'
 import JobSuggestionCard from './JobSuggestionCard'
 
-export function DoneLayout() {
+export function DoneLayoutSkeleton() {
   const AIPopupStore = useAIStore()
   function Item({ item }: { item: { description: string } }) {
     return <div style={{ width: '100%', height: '100%' }}>{item.description}</div>
@@ -275,9 +275,8 @@ export function DoneLayout() {
           padding: 2
         }}
       >
-        <Typography sx={{ fontSize: '13px', fontWeight: '400', fontFamily: 'sans-serif', display: 'inline' }}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the standard
-          specimen book.Lorem Ipsum has been the standard specimen book.
+        <Typography sx={{ fontSize: '70px', fontWeight: '400', fontFamily: 'sans-serif', display: 'inline' }}>
+          <Skeleton />
         </Typography>
 
         <Box
@@ -291,7 +290,8 @@ export function DoneLayout() {
             sx={{
               p: 1,
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              gap: 4
             }}
           >
             <Typography
@@ -302,7 +302,7 @@ export function DoneLayout() {
                 color: 'primary'
               }}
             >
-              Your skills:
+              <Skeleton />
             </Typography>
             <Stack
               direction='row'
@@ -311,18 +311,23 @@ export function DoneLayout() {
                 flex: 1
               }}
             >
-              <Chip
-                color='primary'
-                label='Java'
-                size='small'
+              <Skeleton
+                variant='rectangular'
+                width={40}
+                height={24}
+                sx={{ borderRadius: '12px' }}
               />
-              <Chip
-                label='SQL'
-                size='small'
+              <Skeleton
+                variant='rectangular'
+                width={40}
+                height={24}
+                sx={{ borderRadius: '12px' }}
               />
-              <Chip
-                label='Angular'
-                size='small'
+              <Skeleton
+                variant='rectangular'
+                width={40}
+                height={24}
+                sx={{ borderRadius: '12px' }}
               />
             </Stack>
           </Box>
@@ -331,14 +336,15 @@ export function DoneLayout() {
             sx={{
               p: 1,
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              gap: 4
             }}
           >
             <Typography
               variant='body2'
               sx={{ width: '100px', fontWeight: '700', color: 'primary' }}
             >
-              Certificates:
+              <Skeleton />
             </Typography>
             <Stack
               direction='row'
@@ -354,14 +360,17 @@ export function DoneLayout() {
                 }
               }}
             >
-              <Chip
-                label='Google Developer Certificates'
-                size='small'
+              <Skeleton
+                variant='rectangular'
+                width={40}
+                height={24}
+                sx={{ borderRadius: '20px' }}
               />
-
-              <Chip
-                label='Amazon Webservice Associated'
-                size='small'
+              <Skeleton
+                variant='rectangular'
+                width={40}
+                height={24}
+                sx={{ borderRadius: '20px' }}
               />
             </Stack>
           </Box>
@@ -370,14 +379,15 @@ export function DoneLayout() {
             sx={{
               p: 1,
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              gap: 4
             }}
           >
             <Typography
               variant='body2'
               sx={{ width: '100px', fontWeight: '700', color: 'primary' }}
             >
-              Location:
+              <Skeleton />
             </Typography>
             <Stack
               direction='row'
@@ -393,12 +403,18 @@ export function DoneLayout() {
                 }
               }}
             >
-              <Typography
-                variant='body2'
-                sx={{ width: '100px', color: 'primary' }}
-              >
-                Quận 3, TP. Hồ Chí Minh
-              </Typography>
+              <Skeleton
+                variant='rectangular'
+                width='40%'
+                height={24}
+                sx={{ borderRadius: '12px' }}
+              />
+              <Skeleton
+                variant='rectangular'
+                width='40%'
+                height={24}
+                sx={{ borderRadius: '12px' }}
+              />
             </Stack>
           </Box>
         </Box>
@@ -407,32 +423,16 @@ export function DoneLayout() {
       <Box
         sx={{
           width: '100%',
-          flex: 1,
-          padding: 2,
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', // Adds depth
-          borderRadius: '16px', // Rounds the corners
-          overflow: 'hidden', // Keeps the content tidy
-          backgroundColor: '#ffffff' // Sets a background color for the carousel
+          p: 2,
+          height: '60%'
         }}
       >
-        <div>
-          <Carousel
-            index={index}
-            interval={4000}
-            animation='slide'
-            indicators={false}
-            stopAutoPlayOnHover
-            swipe
-            className='w-[100%] h-[100%]'
-          >
-            {items.map((item, i) => (
-              <JobSuggestionCard
-                key={item.id}
-                job={item}
-              />
-            ))}
-          </Carousel>
-        </div>
+        <Skeleton
+          height={'100%'}
+          sx={{
+            height: '100%'
+          }}
+        />
       </Box>
     </Box>
   )

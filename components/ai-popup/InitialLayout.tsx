@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -7,9 +7,11 @@ import Divider from '@mui/material/Divider'
 import InputAdornment from '@mui/material/InputAdornment'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 
-import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material'
-import { useCreateJobStore } from '@/stores'
+import { Autocomplete, Button, Chip, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import { useAIStore } from '@/stores/AIPopupStore'
+import SearchBar from './SearchBar'
+import { LocationService, Province } from '@/services'
+import { useDebounce } from '../../hooks/useDebounce'
 
 export function InitialLayout() {
   const AIPopupStore = useAIStore()
@@ -26,6 +28,56 @@ export function InitialLayout() {
     param.setSkills(updatedSkills)
     AIPopupStore.updateParam(param)
   }
+
+  const [location, setLocation] = useState<string>('TP. Hồ Chí Minh')
+  const handleLocationChange = (event: SelectChangeEvent<string>) => {
+    setLocation(event.target.value)
+  }
+  const [locationQuery, setLocationQuery] = useState('')
+
+  const locationDebounce = useDebounce<string>(locationQuery)
+
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      if (locationDebounce) {
+        // Only fetch if there's a query
+        try {
+          const res = await LocationService.searchProvince(locationDebounce) // Fetch results
+          setOptions(res!) // Update options with the fetched results
+        } catch (error) {
+          console.error('Error fetching provinces:', error) // Error handling
+        }
+      } else {
+        setOptions(initialOptions) // Clear options if the query is empty
+        const newParam = AIPopupStore.reqParam
+        newParam.setProvinceId(null)
+        newParam.setPage(1)
+        AIPopupStore.updateParam(newParam)
+      }
+    }
+
+    fetchProvinces()
+  }, [locationDebounce])
+  const initialOptions: Province[] = [
+    {
+      name: 'Thành phố Hà Nội',
+      code: 1,
+      districts: []
+    },
+    {
+      name: 'Thành phố Hồ Chí Minh',
+      code: 79,
+      districts: []
+    },
+    {
+      name: 'Thành phố Đà Nẵng',
+      code: 48,
+      districts: []
+    }
+  ]
+  const [options, setOptions] = useState<Province[]>(initialOptions)
+  // Define your initial options state
+
   return (
     <Card
       sx={{
@@ -78,6 +130,7 @@ export function InitialLayout() {
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'space-between',
           alignItems: 'center'
         }}
       >
@@ -146,14 +199,47 @@ export function InitialLayout() {
             />
           )}
         />
+        <Typography variant='subtitle1'>Lựa chọn địa điểm: </Typography>
+        <Autocomplete
+          disablePortal
+          options={options.map((option) => option.name)}
+          filterOptions={(options) => options}
+          sx={{ width: '85%' }}
+          loadingText='Đang tải...' // custom loading text
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label='Chọn địa điểm'
+            />
+          )}
+          onInputChange={(e, newInputValue) => {
+            setLocationQuery(newInputValue)
+          }}
+          onChange={(event, value) => {
+            const selectedProvince = options.find((option) => option.name === value)
+            if (selectedProvince) {
+              const newParam = AIPopupStore.reqParam
+              // Call the passed setProvinceId function to set the province ID
+              newParam.setProvinceId(selectedProvince.code)
+              newParam.setPage(1)
+              AIPopupStore.updateParam(newParam)
+            }
+          }}
+        />
         <Button
           variant='contained'
-          onClick={() => AIPopupStore.updateProcessState('LOADING')}
+          onClick={() => {
+            AIPopupStore.updateProcessState('LOADING')
+            console.log('AI popup current param: ' + JSON.stringify(AIPopupStore.reqParam))
+            setTimeout(() => {
+              AIPopupStore.updateProcessState('DONE')
+            }, 5000)
+          }}
           startIcon={<AutoAwesomeIcon />}
           sx={{
             // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
             background: 'linear-gradient(135deg, #000000, #808080)',
-
+            marginTop: 4,
             color: 'white',
             fontWeight: 'bold',
             borderRadius: '25px', // Rounded corners

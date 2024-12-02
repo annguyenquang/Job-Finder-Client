@@ -13,17 +13,35 @@ const ViecLamPage = () => {
   }
   return (
     <div>
-      <Container className='h-screen flex flex-col bg-background rounded-sm' maxWidth={false} sx={{ maxWidth: '95%' }}>
+      <Container
+        className='h-screen flex flex-col bg-background rounded-sm'
+        maxWidth={false}
+        sx={{ maxWidth: '95%' }}
+      >
         <SearchBar {...{ location, handleChange: handleLocationChange }} />
-        <Typography variant='h6' className='font-semibold text-primary'>
+        <Typography
+          variant='h6'
+          className='font-semibold text-colorPrimary'
+        >
           Danh sách việc làm
         </Typography>
         <p>Tìm kiếm cho bạn danh sách việc làm phù hợp nhất tại đây</p>
-        <Grid2 container className='flex-grow pt-2'>
-          <Grid2 size={2} display='flex' justifyContent='center' alignItems='center'>
+        <Grid2
+          container
+          className='flex-grow pt-2'
+        >
+          <Grid2
+            size={2}
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
             <SideBar />
           </Grid2>
-          <Grid2 size={10} alignItems='start'>
+          <Grid2
+            size={10}
+            alignItems='start'
+          >
             <JobList />
           </Grid2>
         </Grid2>

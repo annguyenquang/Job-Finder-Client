@@ -8,6 +8,8 @@ import { useAIStore } from '@/stores/AIPopupStore'
 import { LoadingLayout } from './LoadingLayout'
 import { useAccountStore } from '@/stores'
 import { DoneLayout } from './DoneLayout'
+import { DoneLayoutSkeleton } from './DoneLayoutSkeleton'
+import { AccountType, UserAccount } from '@/models'
 
 const AICaption = {
   INITIAL: 'Seeking for help ?',
@@ -20,18 +22,42 @@ export const AIPopup = () => {
   const AIStore = useAIStore()
   const accountStore = useAccountStore()
 
+  const TestValue: UserAccount = {
+    id: '123',
+    username: 'annguyeen0',
+    firstName: 'An',
+    lastName: 'Nguyen',
+    phone: '0389553233',
+    email: 'annguyeen0@gmail.com',
+    selfDescription: 'I am a software engineer',
+    skills: ['React', 'NodeJS'],
+    certifications: [
+      { issueDate: new Date(), expirationDate: new Date(), name: 'React', issuingOrganization: 'Facebook' }
+    ],
+    dateOfBirth: new Date()
+  }
+  const [user, setUser] = React.useState<UserAccount | null>(TestValue)
+
   useEffect(() => {
+    if (!accountStore.account) {
+      accountStore.loadAccountByJwt()
+    }
+    console.log('Account: ' + accountStore.account)
     const userId = accountStore.account?.id
     const param = AIStore.reqParam
     if (userId) param.setUserId(userId)
-
     AIStore.updateParam(param)
   }, [])
+  useEffect(() => {
+    if (accountStore.accountType === AccountType.User) {
+      setUser(accountStore.account as UserAccount)
+    }
+  }, [accountStore.account, accountStore.accountType])
 
   const layoutMap = {
     INITIAL: <InitialLayout />,
-    LOADING: <DoneLayout />,
-    DONE: <></> // Add other states if needed
+    LOADING: <DoneLayoutSkeleton />,
+    DONE: <DoneLayout></DoneLayout>
   }
 
   const AICaption = {
@@ -58,7 +84,7 @@ export const AIPopup = () => {
           zIndex: 1000,
           cursor: clicked ? 'default' : 'pointer',
           width: clicked ? '450px' : '64px',
-          height: clicked ? '600px' : '64px',
+          height: clicked ? '700px' : '64px',
           borderRadius: clicked ? '20px' : '50%',
           // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',
           background: 'linear-gradient(135deg, #000000, #808080)',
@@ -93,7 +119,10 @@ export const AIPopup = () => {
                 background: 'white'
               }}
             >
-              <Typography variant='subtitle1' color='black'>
+              <Typography
+                variant='subtitle1'
+                color='black'
+              >
                 AI Assistant
               </Typography>
               <Box
