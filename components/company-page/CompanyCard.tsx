@@ -1,42 +1,75 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
 import { companyLogo } from '../../assets'
 import React from 'react'
 import { getProvinceName } from '../../core/utils/LocationUtils'
+import { Company } from '@/models'
 
-const CompanyCard = () => {
+type CompanyCardProps = {
+  company: Company
+}
+
+const CompanyCard: React.FC<CompanyCardProps> = (props) => {
   return (
-    <Card className='flex flex-row gap-2 p-3'>
-      <div className='flex flex-row items-center'>
+    <Card
+      className='flex flex-col p-3 '
+      sx={{
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        '&:hover': {
+          boxShadow: '0 4px 20px rgb(106 147 217 / var(--tw-bg-opacity))',
+          transform: 'scale(1.02)'
+        }
+      }}
+    >
+      <div className='flex w-[100%] flex-row items-center'>
         <CardMedia
-          sx={{ width: 100, height: '40%', objectFit: 'contain' }}
-          image='https://lh5.googleusercontent.com/proxy/YO7Q18ATUUZZav_-j7VDbUeDIfCepEAyVfcnXIp-4iSzWIeAG21QzFbUp1DSTEc5aQZd0AtRDsKHfYtgQh8j5-UGmKlxoHgmGwl7ZovSyXxeQeiowMSGCmHejiDPxstTLnnMWMzHkVY'
+          sx={{ width: 100, height: '32px', objectFit: 'contain' }}
+          image={props.company.logo}
         ></CardMedia>
-      </div>
-      <div>
         <CardContent>
           <Typography
             gutterBottom
             className='text-lg'
             component='div'
           >
-            Công ty Viettel Software
+            {props.company.name}
           </Typography>
           <Typography
             variant='body1'
-            className='text-colorPrimary'
+            className='text-primary'
           >
-            Viettel Software
+            {props.company.description}
           </Typography>
-          <Typography variant='body2'></Typography>
+          <Typography variant='body2'>{props.company.address}</Typography>
         </CardContent>
-        <CardActions>
-          <Button
-            variant='contained'
-            size='small'
+      </div>
+      <div>
+        <Divider />
+        <Box
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            alignContent: 'center'
+          }}
+        >
+          <Typography
+            gutterBottom
+            variant='body2'
+            sx={{ width: '30%', fontWeight: '700', color: 'primary' }}
           >
-            Chi tiết
-          </Button>
-        </CardActions>
+            Lĩnh vực:
+          </Typography>
+          <Stack
+            direction='row'
+            spacing={1}
+          >
+            <Chip
+              label={props.company.industry}
+              size='medium'
+            />
+          </Stack>
+        </Box>
       </div>
     </Card>
   )

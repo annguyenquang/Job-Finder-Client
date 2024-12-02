@@ -1,2 +1,2 @@
-export * from './CompanyCard';
-export * from './CompanyGrid';
+export * from './CompanyCard'
+export * from './CompanyList'

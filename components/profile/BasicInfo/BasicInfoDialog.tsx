@@ -21,6 +21,7 @@ import { DateValidationError } from '@mui/x-date-pickers/models/validation'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDateFnsV3'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker/DatePicker'
+import { useAccountStore, useUserStore } from '@/stores'
 
 const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onClose: () => void }> = (props) => {
   const [user, setUser] = React.useState<UserAccount>(props.user as UserAccount)
@@ -29,9 +30,10 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
     setUser(props.user as UserAccount)
     props.onClose()
   }
-  const onSaveUser = () => {
-    // Console.log for call api simulation
-    console.log(user)
+  const onSaveUser = async () => {
+    await useUserStore.getState().updateUser(user)
+    await useAccountStore.getState().loadAccountByJwt()
+    onClose()
   }
   const onFirstNameChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUser({
@@ -59,6 +61,10 @@ const BasicInfoDialog: React.FC<{ user: UserAccount | null; isOpen: boolean; onC
       })
     }
   }
+
+  React.useEffect(() => {
+    setUser(props.user as UserAccount)
+  }, [props.user])
 
   return (
     <Dialog
