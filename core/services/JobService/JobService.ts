@@ -46,11 +46,11 @@ const getJobs = async (param: string) => {
   }
 }
 
-const createJob = async (jobData: Job): Promise<ApiResult<{id: string}> | undefined> => {
+const createJob = async (jobData: Job): Promise<ApiResult<{ id: string }> | undefined> => {
   try {
     const url = '/Job/CreateJob'
-    const res = await http().post<ApiResult<{id: string}>>(url, jobData)
-    return res.data;
+    const res = await http().post<ApiResult<{ id: string }>>(url, jobData)
+    return res.data
   } catch (error) {
     console.log(error)
   }

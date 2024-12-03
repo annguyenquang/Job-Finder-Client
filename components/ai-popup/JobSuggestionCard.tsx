@@ -18,7 +18,8 @@ import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
 import { useJobListStore } from '@/stores'
 type JobCardProps = {
-  job: Job
+  job: Job | undefined
+  Explanation: string
 }
 const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
   const router = useRouter()
@@ -26,7 +27,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
 
   const handleOpenJobdetail = () => {
     setTimeout(() => {
-      router.push(`job-detail/${props.job.id}`)
+      router.push(`job-detail/${props.job?.id}`)
     }, 500)
   }
   return (
@@ -44,7 +45,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
       <div className='flex w-[100%] flex-row items-center'>
         <CardMedia
           sx={{ width: '100px', height: '32px', objectFit: 'contain' }}
-          image={props.job.company.logo}
+          image={props.job?.company.logo}
         ></CardMedia>
         <CardContent>
           <Typography
@@ -53,7 +54,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
             className='text-colorPrimary font-bold'
             component='div'
           >
-            {props.job.title}
+            {props.job?.title}
           </Typography>
           <Box
             sx={{
@@ -87,7 +88,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
                   flex: 1 // Flexible width for the content
                 }}
               >
-                {props.job.company.name}
+                {props.job?.company.name}
               </Typography>
             </Box>
             <Box
@@ -114,7 +115,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
                   flex: 1 // Flexible width for the content
                 }}
               >
-                {props.job.company.emailContact}
+                {props.job?.company.emailContact}
               </Typography>
             </Box>
 
@@ -137,7 +138,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
               <Chip
                 className='bg-colorPrimary text-text'
                 icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}
-                label={props.job.salary}
+                label={props.job?.salary}
                 size='small'
               />
             </Box>
@@ -187,7 +188,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
             variant='body2'
             sx={{ width: '30%', fontWeight: '700', color: 'primary' }}
           >
-            Explaination:
+            Explanation:
           </Typography>
           <Stack
             direction='row'
@@ -201,7 +202,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
                 display: 'inline'
               }}
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+              {props.Explanation}
             </Typography>
           </Stack>
         </Box>

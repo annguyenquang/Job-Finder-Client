@@ -84,7 +84,7 @@ export const AIPopup = () => {
           right: '20px',
           zIndex: 1000,
           cursor: clicked ? 'default' : 'pointer',
-          width: clicked ? '450px' : '64px',
+          width: clicked ? '600px' : '64px',
           height: clicked ? '700px' : '64px',
           borderRadius: clicked ? '20px' : '50%',
           // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',

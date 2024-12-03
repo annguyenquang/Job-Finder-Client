@@ -10,3 +10,5 @@ const getSuggestion = async (param: string) => {
     console.log(error)
   }
 }
+
+export const AIService = { getSuggestion }

@@ -10,8 +10,9 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import { Autocomplete, Button, Chip, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import { useAIStore } from '@/stores/AIPopupStore'
 import SearchBar from './SearchBar'
-import { LocationService, Province } from '@/services'
+import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
+import { JobSuggestion, ParsedJobSuggestion } from '@/models'
 
 export function InitialLayout() {
   const AIPopupStore = useAIStore()
@@ -29,10 +30,31 @@ export function InitialLayout() {
     AIPopupStore.updateParam(param)
   }
 
-  const [location, setLocation] = useState<string>('TP. Hồ Chí Minh')
-  const handleLocationChange = (event: SelectChangeEvent<string>) => {
-    setLocation(event.target.value)
+  const handleGenerate = async () => {
+    AIPopupStore.updateProcessState('LOADING')
+    console.log('AI popup current param: ' + JSON.stringify(AIPopupStore.reqParam))
+    try {
+      const suggestionParam = AIPopupStore.reqParam.constructParam()
+      const suggestions = await AIService.getSuggestion(suggestionParam)
+      const jobSuggestion = suggestions?.result.suggestions
+      const explanation = suggestions?.result.explanation
+      if (jobSuggestion && explanation) {
+        const parsedSuggestion: ParsedJobSuggestion[] = await Promise.all(
+          jobSuggestion.map(async (e, i) => {
+            const jobDetail = await JobService.getJobById(e.jobId)
+            return { job: jobDetail?.result, detailExplanation: e.detailExplanation }
+          })
+        )
+        AIPopupStore.updateSuggestionJobs(parsedSuggestion)
+        AIPopupStore.updateOverallExplanation(explanation)
+        console.log('Suggestion Jobs: ' + JSON.stringify(parsedSuggestion))
+      }
+    } catch (error) {
+    } finally {
+      AIPopupStore.updateProcessState('DONE')
+    }
   }
+
   const [locationQuery, setLocationQuery] = useState('')
 
   const locationDebounce = useDebounce<string>(locationQuery)
@@ -76,7 +98,6 @@ export function InitialLayout() {
     }
   ]
   const [options, setOptions] = useState<Province[]>(initialOptions)
-  // Define your initial options state
 
   return (
     <Card
@@ -228,13 +249,7 @@ export function InitialLayout() {
         />
         <Button
           variant='contained'
-          onClick={() => {
-            AIPopupStore.updateProcessState('LOADING')
-            console.log('AI popup current param: ' + JSON.stringify(AIPopupStore.reqParam))
-            setTimeout(() => {
-              AIPopupStore.updateProcessState('DONE')
-            }, 5000)
-          }}
+          onClick={handleGenerate}
           startIcon={<AutoAwesomeIcon />}
           sx={{
             // background: 'linear-gradient(135deg, #53e2b9, #b2deac, #2b9db1)',

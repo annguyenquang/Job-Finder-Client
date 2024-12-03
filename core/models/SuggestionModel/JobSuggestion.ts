@@ -1,11 +1,11 @@
 import { Job } from '@/models/JobModel'
 
 export type ParsedJobSuggestion = {
-  job: Job
-  detailExplaintation: string
+  job: Job | undefined
+  detailExplanation: string
 }
 
 export type JobSuggestion = {
   jobId: string
-  detailExplaination: string
+  detailExplanation: string
 }
