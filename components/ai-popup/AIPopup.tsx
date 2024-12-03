@@ -42,16 +42,17 @@ export const AIPopup = () => {
     if (!accountStore.account) {
       accountStore.loadAccountByJwt()
     }
-    console.log('Account: ' + accountStore.account)
-    const userId = accountStore.account?.id
-    const param = AIStore.reqParam
-    if (userId) param.setUserId(userId)
-    AIStore.updateParam(param)
   }, [])
+
   useEffect(() => {
     if (accountStore.accountType === AccountType.User) {
       setUser(accountStore.account as UserAccount)
     }
+    console.log('Account: ' + JSON.stringify(accountStore.account))
+    const userId = accountStore.account?.id
+    const param = AIStore.reqParam
+    if (userId) param.setUserId(userId)
+    AIStore.updateParam(param)
   }, [accountStore.account, accountStore.accountType])
 
   const layoutMap = {
