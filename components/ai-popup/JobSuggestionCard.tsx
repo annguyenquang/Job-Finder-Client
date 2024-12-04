@@ -27,7 +27,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
 
   const handleOpenJobdetail = () => {
     setTimeout(() => {
-      router.push(`job-detail/${props.job?.id}`)
+      router.push(`/job-detail/${props.job?.id}`)
     }, 500)
   }
   return (

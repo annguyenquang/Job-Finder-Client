@@ -67,7 +67,7 @@ export class AISuggestionParam {
     //Construct query
     if (this.skills) {
       this.skills.forEach((e) => {
-        result += `&Skill=${e}`
+        result += `&AdditionSkills=${e}`
       })
     }
 
