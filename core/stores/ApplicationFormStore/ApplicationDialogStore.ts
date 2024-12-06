@@ -4,13 +4,13 @@ import { useAccountStore } from '@/stores'
 import { JobApplicationService } from '@/services'
 
 type ApplicationDialogStore = {
-  readonly setJob: (job: Job) => void
   job: Job | null
   isOpen: boolean
   cvFile: File | null
   phoneNumber: string | null
   hasCoverLetter: boolean
   coverLetter: string | null
+  readonly setJob: (job: Job) => void
   readonly setIsOpen: (isOpen: boolean) => void
   readonly setCvFile: (file: File | null) => void
   readonly setPhoneNumber: (newPhone: string) => void
@@ -52,7 +52,6 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set, 
       console.log('Can not find user, maybe not logged in')
       return
     }
-    console.log('send application', job?.id, cvFile, hasCoverLetter, coverLetter, phoneNumber)
     await JobApplicationService.CreateJobApplication({
       userId: userId,
       jobId: job?.id ?? '',
@@ -60,5 +59,6 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set, 
       coverLetter: hasCoverLetter ? coverLetter : null,
       phoneNumber: phoneNumber
     })
+    set(() => ({ isOpen: false }))
   }
 }))

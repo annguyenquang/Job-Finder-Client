@@ -1,11 +1,10 @@
-import { Job } from '@/models'
 import { useApplicationDialogStore } from '@/stores'
 import { formatFileSize } from '@/utils'
 import { Delete } from '@mui/icons-material'
 import BookmarkBorder from '@mui/icons-material/BookmarkBorder'
 import Email from '@mui/icons-material/Email'
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile'
-import { IconButton, Input } from '@mui/material'
+import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -25,8 +24,7 @@ import TextField from '@mui/material/TextField'
 import { TransitionProps } from '@mui/material/transitions'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
-import React, { MouseEvent } from 'react'
-import { ChangeEvent } from 'react'
+import React, { MouseEvent, ChangeEvent } from 'react'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
