@@ -69,7 +69,9 @@ const CertificationDialog: React.FC<{
     if (props.certification) {
       setName(props.certification.name)
       setIssuingOrganization(props.certification.issuingOrganization)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setIssueDate(new Date(props.certification.issueDate as any as string))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setExpirationDate(new Date(props.certification.expirationDate as any as string))
     }
   }, [props.certification])

@@ -15,7 +15,7 @@ type ApplicationDialogStore = {
   readonly setCvFile: (file: File | null) => void
   readonly setPhoneNumber: (newPhone: string) => void
   readonly setHasCoverLetter: (newValue: boolean) => void
-  readonly sendApplication: () => Promise<void>
+  readonly sendApplication: () => Promise<string | undefined>
   readonly setCoverLetter: (newValue: string) => void
 }
 
@@ -33,7 +33,6 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set, 
     set(() => ({ isOpen: isOpen }))
   },
   setCvFile: (file: File | null) => {
-    console.log('set cv file', file)
     set(() => ({ cvFile: file }))
   },
   setPhoneNumber: (newPhone: string) => {
@@ -52,7 +51,7 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set, 
       console.log('Can not find user, maybe not logged in')
       return
     }
-    await JobApplicationService.CreateJobApplication({
+    const res = await JobApplicationService.CreateJobApplication({
       userId: userId,
       jobId: job?.id ?? '',
       CVFile: cvFile,
@@ -60,5 +59,6 @@ export const useApplicationDialogStore = create<ApplicationDialogStore>()((set, 
       phoneNumber: phoneNumber
     })
     set(() => ({ isOpen: false }))
+    return res
   }
 }))

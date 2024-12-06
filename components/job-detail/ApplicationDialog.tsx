@@ -1,10 +1,10 @@
-import { useApplicationDialogStore } from '@/stores'
+import { useAlertStore, useApplicationDialogStore } from '@/stores'
 import { formatFileSize } from '@/utils'
 import { Delete } from '@mui/icons-material'
 import BookmarkBorder from '@mui/icons-material/BookmarkBorder'
 import Email from '@mui/icons-material/Email'
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile'
-import { Input } from '@mui/material'
+import { AlertProps, AlertTitle, Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -44,6 +44,7 @@ const Transition = React.forwardRef(function Transition(
 
 const ApplicationDialog: React.FC = (props) => {
   const applicationDialogStore = useApplicationDialogStore()
+  const alertStore = useAlertStore()
 
   const changePhoneNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value
@@ -69,8 +70,40 @@ const ApplicationDialog: React.FC = (props) => {
   const dropFile = () => {
     applicationDialogStore.setCvFile(null)
   }
-  const onSendApplication = () => {
-    applicationDialogStore.sendApplication()
+  const onSendApplication = async () => {
+    if (!applicationDialogStore.cvFile) {
+      const missingFileAlertSettings: AlertProps = {
+        severity: 'error',
+        children: <AlertTitle>Vui lòng đính kèm hồ sơ xin việc</AlertTitle>
+      }
+      alertStore.alert({ ...alertStore.snackbarSettings, TransitionComponent: Transition }, missingFileAlertSettings)
+      return
+    }
+
+    const res = await applicationDialogStore.sendApplication()
+
+    const serverErrorAlertSettings: AlertProps = {
+      severity: 'error',
+      children: <AlertTitle>Đã có lỗi xảy ra trong quá trình ứng tuyển, vui lòng thử lại sau</AlertTitle>
+    }
+    const sucessAlertSettings: AlertProps = {
+      severity: 'success',
+      children: (
+        <AlertTitle>
+          Bạn đã ứng tuyển vị trí
+          <b>{` ${applicationDialogStore.job?.title}-${applicationDialogStore.job?.company.name} `}</b>
+          thành công
+        </AlertTitle>
+      )
+    }
+    const alertSetting: AlertProps = res ? sucessAlertSettings : serverErrorAlertSettings
+    alertStore.alert(
+      { ...alertStore.snackbarSettings, TransitionComponent: Transition },
+      {
+        ...alertStore.alertSettings,
+        ...alertSetting
+      }
+    )
   }
   const onClose = () => {
     applicationDialogStore.setIsOpen(false)

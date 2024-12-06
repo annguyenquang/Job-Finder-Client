@@ -11,7 +11,7 @@ type JobApplictionParams = {
 
 type CreateJobApplicationBody = JobApplictionParams
 
-const CreateJobApplication = async (jobApplication: JobApplictionParams) => {
+const CreateJobApplication = async (jobApplication: JobApplictionParams): Promise<string | undefined> => {
   try {
     const url = `/JobApplication/CreateJobApplication`
     const body: CreateJobApplicationBody = {
