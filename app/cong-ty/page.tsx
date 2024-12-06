@@ -1,7 +1,7 @@
 'use client'
 
 import { Container, SelectChangeEvent, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import CompanyList from '../../components/company-page/CompanyList'
 import Pagination from '../../components/common/Pagination'
 import { useCompanyStore } from '@/stores'
@@ -9,7 +9,7 @@ import SearchBar from '../../components/company-page/SearchBar'
 
 const CompanyPage: React.FC = () => {
   const companyStore = useCompanyStore()
-  const [location, setLocation] = useState<string>('TP. Hồ Chí Minh')
+  const [location, setLocation] = React.useState<string>('TP. Hồ Chí Minh')
   const handleLocationChange = (event: SelectChangeEvent<string>) => {
     setLocation(event.target.value)
   }
@@ -23,7 +23,7 @@ const CompanyPage: React.FC = () => {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     companyStore.loadCompanies()
   }, [])
 

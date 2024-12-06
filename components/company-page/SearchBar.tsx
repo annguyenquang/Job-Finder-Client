@@ -2,7 +2,7 @@
 import { Autocomplete, Container, Grid2, InputLabel, SelectChangeEvent, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import LoadingButton from '@mui/lab/LoadingButton'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useCompanyStore, useJobListStore } from '@/stores'
@@ -31,14 +31,14 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       districts: []
     }
   ]
-  const [loading, setLoading] = useState(false)
-  const [options, setOptions] = useState<Province[]>(initialOptions)
-  const [locationQuery, setLocationQuery] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [options, setOptions] = React.useState<Province[]>(initialOptions)
+  const [locationQuery, setLocationQuery] = React.useState('')
+  const [searchQuery, setSearchQuery] = React.useState('')
   const locationDebounce = useDebounce<string>(locationQuery)
   const searchDebounce = useDebounce<string>(searchQuery)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchProvinces = async () => {
       if (locationDebounce) {
         // Only fetch if there's a query
@@ -64,7 +64,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     fetchProvinces()
   }, [locationDebounce])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const currentParam = companyStore.reqParam
     currentParam.setQuery(searchDebounce)
     currentParam.setPage(1)
@@ -73,9 +73,22 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   }, [searchDebounce])
 
   return (
-    <Container className=' bg-background py-2' maxWidth='xl' disableGutters={true}>
-      <Grid2 className='px-0' container spacing={1}>
-        <Grid2 size={6} display='flex' justifyContent='center' alignItems='center'>
+    <Container
+      className=' bg-background py-2'
+      maxWidth='xl'
+      disableGutters={true}
+    >
+      <Grid2
+        className='px-0'
+        container
+        spacing={1}
+      >
+        <Grid2
+          size={6}
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+        >
           <TextField
             onChange={(e) => {
               setSearchQuery(e.target.value)
@@ -86,7 +99,12 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             id='fullWidth'
           />
         </Grid2>
-        <Grid2 size={6} display='flex' justifyContent='space-between' alignItems='center'>
+        <Grid2
+          size={6}
+          display='flex'
+          justifyContent='space-between'
+          alignItems='center'
+        >
           <Container className='flex flex-row items-center justify-between'>
             <InputLabel id='demo-simple-select-label'>Địa điểm</InputLabel>
             {/* <Select
@@ -110,7 +128,12 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               sx={{ width: '85%' }}
               loading={loading} // loading state
               loadingText='Đang tải...' // custom loading text
-              renderInput={(params) => <TextField {...params} label='Chọn địa điểm' />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label='Chọn địa điểm'
+                />
+              )}
               onInputChange={(e, newInputValue) => {
                 setLocationQuery(newInputValue)
               }}

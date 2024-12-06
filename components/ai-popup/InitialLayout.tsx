@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -54,11 +54,11 @@ export function InitialLayout() {
     }
   }
 
-  const [locationQuery, setLocationQuery] = useState('')
+  const [locationQuery, setLocationQuery] = React.useState('')
 
   const locationDebounce = useDebounce<string>(locationQuery)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchProvinces = async () => {
       if (locationDebounce) {
         // Only fetch if there's a query
@@ -96,7 +96,7 @@ export function InitialLayout() {
       districts: []
     }
   ]
-  const [options, setOptions] = useState<Province[]>(initialOptions)
+  const [options, setOptions] = React.useState<Province[]>(initialOptions)
 
   return (
     <Card

@@ -1,9 +1,9 @@
 'use client'
+import React from 'react'
 import { Box, Card, CardContent, Container, Grid2 } from '@mui/material'
 import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList } from '@/components'
 import { Job } from '@/models'
 import { useAccountStore, useMetadataStore } from '@/stores'
-import { useEffect } from 'react'
 import ApplicationDialog from './ApplicationDialog'
 
 type JobdetailProps = {
@@ -15,11 +15,11 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
   const metadataStore = useMetadataStore()
   const accountStore = useAccountStore()
 
-  useEffect(() => {
+  React.useEffect(() => {
     metadataStore.loadValueMetadata(props.job)
   }, [props.job])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (accountStore.account == null) {
       accountStore.loadAccountByJwt()
     }

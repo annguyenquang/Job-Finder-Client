@@ -1,25 +1,17 @@
 'use client'
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Typography
-} from '@mui/material'
+
+import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
-import React, { useEffect, useState } from 'react'
+import Container from '@mui/material/Container'
+import Button from '@mui/material/Button'
 import FilterBox from './FilterBox'
 import { useJobListStore } from '@/stores'
 
 const SideBar = () => {
   const jobStore = useJobListStore()
-  const [uniqueTypes, setUniqueTypes] = useState<number[]>([])
+  const [uniqueTypes, setUniqueTypes] = React.useState<number[]>([])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const getJob = async () => {
       jobStore.loadJobs()
     }
@@ -41,7 +33,7 @@ const SideBar = () => {
     getJob()
   }, [jobStore.filter])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const getFilter = async () => {
       await jobStore.loadFilter() // Await to ensure completion
     }
@@ -54,12 +46,23 @@ const SideBar = () => {
   }
 
   return (
-    <Container disableGutters={true} className='h-[100%] bg-background'>
-      <Button onClick={handleClearFilter} variant='outlined' startIcon={<DeleteIcon />}>
+    <Container
+      disableGutters={true}
+      className='h-[100%] bg-background'
+    >
+      <Button
+        onClick={handleClearFilter}
+        variant='outlined'
+        startIcon={<DeleteIcon />}
+      >
         Clear Filter
       </Button>
       {uniqueTypes.map((e) => (
-        <FilterBox key={e} type={e} filter={jobStore.filter} />
+        <FilterBox
+          key={e}
+          type={e}
+          filter={jobStore.filter}
+        />
       ))}
     </Container>
   )
