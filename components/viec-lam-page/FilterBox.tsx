@@ -1,10 +1,13 @@
 'use client'
-import { Box, InputLabel, MenuItem, outlinedInputClasses, Select, selectClasses, Typography } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import React, { useEffect, useState } from 'react'
-import { Metadata } from '@/models/common/Metadata'
-import { TypeTranslation } from '@/models/enum/MetadataValue'
+import React from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Select, { selectClasses } from '@mui/material/Select'
+import { outlinedInputClasses } from '@mui/material/OutlinedInput'
+import MenuItem from '@mui/material/MenuItem'
+import { Metadata, TypeTranslation } from '@/models'
 import { useJobListStore } from '@/stores'
 
 type FilterBoxProps = {
@@ -14,7 +17,7 @@ type FilterBoxProps = {
 
 const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
   const jobStore = useJobListStore()
-  const [val, setVal] = useState<string>('')
+  const [val, setVal] = React.useState<string>('')
   const filterOptions = props.filter.filter((element) => props.type === element.type)
 
   const handleSelect = (metadataId: string) => {
@@ -23,7 +26,7 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
     setVal(metadataId) // Update local state to reflect selected value
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     setVal('')
   }, [jobStore.resetFlag])
   return (
@@ -37,7 +40,10 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
         borderRadius: '8px'
       }}
     >
-      <Typography variant='body1' sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+      <Typography
+        variant='body1'
+        sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}
+      >
         {TypeTranslation[props.type]}
       </Typography>
       <Select
@@ -83,7 +89,11 @@ const FilterBox: React.FC<FilterBoxProps> = (props: FilterBoxProps) => {
         }}
       >
         {filterOptions.map((e) => (
-          <MenuItem key={e.id} value={e.id} sx={{ fontSize: '0.875rem', padding: '6px 12px' }}>
+          <MenuItem
+            key={e.id}
+            value={e.id}
+            sx={{ fontSize: '0.875rem', padding: '6px 12px' }}
+          >
             {e.value}
           </MenuItem>
         ))}

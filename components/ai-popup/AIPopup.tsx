@@ -1,11 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Paper, Typography, Box, Stack, Container, Button } from '@mui/material'
+import React from 'react'
+import { Typography, Box, Container } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Material UI
 import { InitialLayout } from './InitialLayout'
 import { useAIStore } from '@/stores/AIPopupStore'
-import { LoadingLayout } from './LoadingLayout'
 import { useAccountStore } from '@/stores'
 import { DoneLayout } from './DoneLayout'
 import { DoneLayoutSkeleton } from './DoneLayoutSkeleton'
@@ -18,7 +17,7 @@ const AICaption = {
 }
 
 export const AIPopup = () => {
-  const [clicked, setClicked] = useState(false)
+  const [clicked, setClicked] = React.useState(false)
   const AIStore = useAIStore()
   const accountStore = useAccountStore()
 
@@ -38,13 +37,13 @@ export const AIPopup = () => {
   }
   const [user, setUser] = React.useState<UserAccount | null>(TestValue)
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!accountStore.account) {
       accountStore.loadAccountByJwt()
     }
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (accountStore.accountType === AccountType.User) {
       setUser(accountStore.account as UserAccount)
     }

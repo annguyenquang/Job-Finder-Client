@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -7,12 +7,11 @@ import Divider from '@mui/material/Divider'
 import InputAdornment from '@mui/material/InputAdornment'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 
-import { Autocomplete, Button, Chip, SelectChangeEvent, TextField, Typography } from '@mui/material'
+import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material'
 import { useAIStore } from '@/stores/AIPopupStore'
-import SearchBar from './SearchBar'
 import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
-import { JobSuggestion, ParsedJobSuggestion } from '@/models'
+import { ParsedJobSuggestion } from '@/models'
 
 export function InitialLayout() {
   const AIPopupStore = useAIStore()
@@ -55,11 +54,11 @@ export function InitialLayout() {
     }
   }
 
-  const [locationQuery, setLocationQuery] = useState('')
+  const [locationQuery, setLocationQuery] = React.useState('')
 
   const locationDebounce = useDebounce<string>(locationQuery)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchProvinces = async () => {
       if (locationDebounce) {
         // Only fetch if there's a query
@@ -97,7 +96,7 @@ export function InitialLayout() {
       districts: []
     }
   ]
-  const [options, setOptions] = useState<Province[]>(initialOptions)
+  const [options, setOptions] = React.useState<Province[]>(initialOptions)
 
   return (
     <Card

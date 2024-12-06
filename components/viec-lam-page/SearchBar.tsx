@@ -1,15 +1,13 @@
 'use client'
 import { Autocomplete, Container, Grid2, InputLabel, SelectChangeEvent, TextField } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import SearchIcon from '@mui/icons-material/Search'
 import LoadingButton from '@mui/lab/LoadingButton'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useJobListStore } from '@/stores'
 import { useAIStore } from '@/stores/AIPopupStore'
-import { AIPopup } from '../ai-popup/AIPopup'
 
 interface SearchBarProps {
   location: string
@@ -36,14 +34,14 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       districts: []
     }
   ]
-  const [loading, setLoading] = useState(false)
-  const [options, setOptions] = useState<Province[]>(initialOptions)
-  const [locationQuery, setLocationQuery] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [options, setOptions] = React.useState<Province[]>(initialOptions)
+  const [locationQuery, setLocationQuery] = React.useState('')
+  const [searchQuery, setSearchQuery] = React.useState('')
   const locationDebounce = useDebounce<string>(locationQuery)
   const searchDebounce = useDebounce<string>(searchQuery)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchProvinces = async () => {
       if (locationDebounce) {
         // Only fetch if there's a query
@@ -69,7 +67,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     fetchProvinces()
   }, [locationDebounce])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const currentParam = jobStore.reqParam
     currentParam.setQuery(searchDebounce)
     currentParam.setPage(1)
