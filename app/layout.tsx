@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Navbar } from '@/components'
+import { AIPopup } from '../components/ai-popup/AIPopup'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}>
         <Navbar></Navbar>
         {children}
+        <AIPopup />
       </body>
     </html>
   )

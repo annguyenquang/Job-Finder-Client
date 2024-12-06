@@ -26,8 +26,8 @@ const JobCard: React.FC<JobCardProps> = (props) => {
 
   const handleOpenJobdetail = () => {
     setTimeout(() => {
-      router.push(`job-detail/${props.job.id}`);
-    }, 500);
+      router.push(`job-detail/${props.job.id}`)
+    }, 500)
   }
   return (
     <Card
@@ -50,19 +50,22 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           <Typography
             sx={{ cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
             gutterBottom
-            className='text-lg text-primary font-bold'
+            className='text-lg text-colorPrimary font-bold'
             component='div'
           >
             {props.job.title}
           </Typography>
-          <Typography variant='body1' className='text-primary'>
+          <Typography
+            variant='body1'
+            className='text-colorPrimary'
+          >
             {props.job.company.name}
           </Typography>
           <Typography variant='body2'>
             Contact: <span>{props.job.company.emailContact}</span>
           </Typography>
           <Chip
-            className='bg-primary text-text'
+            className='bg-colorPrimary text-text'
             icon={<MonetizationOnIcon sx={{ fill: 'white' }} />}
             label={props.job.salary}
             size='medium'
@@ -81,13 +84,30 @@ const JobCard: React.FC<JobCardProps> = (props) => {
             alignContent: 'center'
           }}
         >
-          <Typography gutterBottom variant='body2' sx={{ width: '30%', fontWeight: '700', color: 'primary' }}>
+          <Typography
+            gutterBottom
+            variant='body2'
+            sx={{ width: '30%', fontWeight: '700', color: 'primary' }}
+          >
             Kĩ năng:
           </Typography>
-          <Stack direction='row' spacing={1}>
-            <Chip color='primary' label='Java' size='small' />
-            <Chip label='SQL' size='small' />
-            <Chip label='Angular' size='small' />
+          <Stack
+            direction='row'
+            spacing={1}
+          >
+            <Chip
+              color='primary'
+              label='Java'
+              size='small'
+            />
+            <Chip
+              label='SQL'
+              size='small'
+            />
+            <Chip
+              label='Angular'
+              size='small'
+            />
           </Stack>
         </Box>
       </div>

@@ -31,7 +31,10 @@ const CompanyPage: React.FC = () => {
     <div>
       <Container maxWidth='lg'>
         <SearchBar {...{ location, handleChange: handleLocationChange }} />
-        <Typography className='text-primary font-sans font-semibold' variant='h4'>
+        <Typography
+          className='text-primary font-sans font-semibold'
+          variant='h4'
+        >
           Danh sách công ty
         </Typography>
         <CompanyList />

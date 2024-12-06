@@ -8,8 +8,6 @@ import React, { useEffect, useState } from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useJobListStore } from '@/stores'
-import { useAIStore } from '@/stores/AIPopupStore'
-import { AIPopup } from '../ai-popup/AIPopup'
 
 interface SearchBarProps {
   location: string
@@ -17,7 +15,6 @@ interface SearchBarProps {
 }
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const jobStore = useJobListStore()
-  const AIPopupStore = useAIStore()
   // Define your initial options state
   const initialOptions: Province[] = [
     {
@@ -75,10 +72,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     currentParam.setPage(1)
     jobStore.updateParam(currentParam)
     jobStore.loadJobs()
-    if (searchDebounce) {
-      const AIParam = AIPopupStore.reqParam
-      AIParam.setRecentQueries([searchDebounce])
-    }
   }, [searchDebounce])
 
   return (
