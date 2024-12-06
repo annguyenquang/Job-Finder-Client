@@ -1,7 +1,7 @@
-import { Job } from '@/models'
-import { JobApplicationService } from '@/services/ApplicationService'
-import { useAccountStore } from '@/stores/AccountStore'
 import { create } from 'zustand'
+import { Job } from '@/models'
+import { useAccountStore } from '@/stores'
+import { JobApplicationService } from '@/services'
 
 type ApplicationDialogStore = {
   readonly setJob: (job: Job) => void
