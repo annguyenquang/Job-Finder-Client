@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { Navbar, NotificationSnackBar } from '@/components'
 import React from 'react'
+import { AIPopup } from '../components/ai-popup/AIPopup'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -31,6 +32,7 @@ export default function RootLayout({
         <NotificationSnackBar />
         <Navbar></Navbar>
         {children}
+        <AIPopup />
       </body>
     </html>
   )
