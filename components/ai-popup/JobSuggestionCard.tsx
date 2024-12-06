@@ -1,17 +1,5 @@
 'use client'
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Chip,
-  Divider,
-  Skeleton,
-  Stack,
-  Typography
-} from '@mui/material'
+import { Box, Card, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
 import React from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'

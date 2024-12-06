@@ -1,8 +1,8 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Navbar, NotificationSnackBar } from '@/components'
-import React from 'react'
 import { AIPopup } from '../components/ai-popup/AIPopup'
 
 const geistSans = localFont({

@@ -1,11 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Paper, Typography, Box, Stack, Container, Button } from '@mui/material'
+import { Typography, Box, Container } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Material UI
 import { InitialLayout } from './InitialLayout'
 import { useAIStore } from '@/stores/AIPopupStore'
-import { LoadingLayout } from './LoadingLayout'
 import { useAccountStore } from '@/stores'
 import { DoneLayout } from './DoneLayout'
 import { DoneLayoutSkeleton } from './DoneLayoutSkeleton'

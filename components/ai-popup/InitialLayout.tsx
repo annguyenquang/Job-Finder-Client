@@ -7,12 +7,11 @@ import Divider from '@mui/material/Divider'
 import InputAdornment from '@mui/material/InputAdornment'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 
-import { Autocomplete, Button, Chip, SelectChangeEvent, TextField, Typography } from '@mui/material'
+import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material'
 import { useAIStore } from '@/stores/AIPopupStore'
-import SearchBar from './SearchBar'
 import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
-import { JobSuggestion, ParsedJobSuggestion } from '@/models'
+import { ParsedJobSuggestion } from '@/models'
 
 export function InitialLayout() {
   const AIPopupStore = useAIStore()

@@ -1,14 +1,6 @@
 import React from 'react'
-import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Divider from '@mui/material/Divider'
-import InputAdornment from '@mui/material/InputAdornment'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 
-import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material'
-import { useCreateJobStore } from '@/stores'
 import { useAIStore } from '@/stores/AIPopupStore'
 import GradientSpinner from '../common/GradientSpinner'
 

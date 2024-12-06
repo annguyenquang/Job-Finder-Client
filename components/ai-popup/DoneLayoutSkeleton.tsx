@@ -1,18 +1,9 @@
 import React from 'react'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'
 
-import Carousel from 'react-material-ui-carousel'
-
-import { Autocomplete, Button, Chip, Divider, Skeleton, Stack, TextField, Typography } from '@mui/material'
-import { useCreateJobStore } from '@/stores'
+import { Skeleton, Stack, Typography } from '@mui/material'
 import { useAIStore } from '@/stores/AIPopupStore'
-import GradientSpinner from '../common/GradientSpinner'
-import JobCard from '../viec-lam-page/JobCard'
 import { Job } from '@/models'
-import JobSuggestionCard from './JobSuggestionCard'
 
 export function DoneLayoutSkeleton() {
   const AIPopupStore = useAIStore()
