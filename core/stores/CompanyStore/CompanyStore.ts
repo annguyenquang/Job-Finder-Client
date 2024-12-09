@@ -9,6 +9,10 @@ type CompanyStore = {
   reqParam: CompanyParam
   isLoading: boolean
   total: number
+  setName: (name: string) => void;
+  setDescription: (description: string) => void;
+  setProvinceId: (provinceId: number) => void;
+  setDistrictId: (districtId: number) => void;
   loadCompanies: () => Promise<void>
   loadCompany: (slug: string) => Promise<void>
   updateParam: (newParam: CompanyParam) => void
@@ -35,12 +39,16 @@ export const emptyCompany: Company = {
   logo: '' // Logo
 }
 
-export const useCompanyStore = create<CompanyStore>()((set) => ({
+export const useCompanyStore = create<CompanyStore>()((set, get) => ({
   company: emptyCompany, // Sử dụng đối tượng company rỗng
   companies: [],
   isLoading: false,
   total: 0,
   reqParam: new CompanyParam(),
+  setName: (name) => set((state) => ({ company: { ...state.company, name } })),
+  setDescription: (description) => set((state) => ({ company: { ...state.company, description } })),
+  setProvinceId: (provinceId) => set((state) => ({ company: { ...state.company, provinceId } })),
+  setDistrictId: (districtId) => set((state) => ({ company: { ...state.company, districtId } })),
   loadCompany: async (slug: string) => {
     const res = await CompanyService.GetCompanyBySlug(slug)
     set(() => ({ company: res?.result })) // Cập nhật trạng thái company với dữ liệu nhận được

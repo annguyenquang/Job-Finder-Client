@@ -6,3 +6,4 @@ export * from './AccountStore';
 export * from './CreateJobStore';
 export * from './MetadataStore';
 export * from './ApplicationFormStore';
+export * from './EditCompanyStore';

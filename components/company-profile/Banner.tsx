@@ -12,18 +12,34 @@ import LanguageIcon from '@mui/icons-material/Language';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import EmailIcon from '@mui/icons-material/Email';
 import Box from '@mui/material/Box';
+import { EditProfileDialog } from './EditProfileDialog';
+import { useEditCompanyStore } from '@/stores';
 
 
 type BannerProps = {
+    slug: string,
     avatar: string,
     name: string,
     employeeCount: number,
     website: string,
     email: string,
+    isEditProfile: boolean
 }
+
 
 export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
     const BANNER_IMAGE = 'https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/184125/Originals/bo-suu-tap-background-xanh-duong-1.png'
+    const [open, setOpen] = React.useState(false);
+    const editCompanyStore = useEditCompanyStore();
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        editCompanyStore.loadCompany(props.slug);
+        setOpen(false);
+    };
     return (
         <Card className="bg-white shadow-md rounded-lg mt-2 relative">
             <CardMedia
@@ -71,13 +87,25 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
                         </Grid2>
                         <Grid2 size={3}>
                             <Box className='flex justify-end'>
-                                <Button className='bg-blue-50 font-sans shadow-sm text-colorPrimary p-3 font-bold flex justify-center mt-5 mr-5'
-                                    size="medium"
-                                    variant="contained"
-                                    startIcon={<AddIcon className='text-colorPrimary' />}>
-                                    Theo dõi công ty
-                                </Button>
+                                {
+                                    props.isEditProfile
+                                        ?
+                                        <Button className='bg-blue-50 font-sans shadow-sm text-colorPrimary p-3 font-bold flex justify-center mt-5 mr-5'
+                                            size="medium"
+                                            variant="contained"
+                                            onClick={handleClickOpen}
+                                        >
+                                            Chỉnh sửa
 
+                                        </Button>
+                                        :
+                                        <Button className='bg-blue-50 font-sans shadow-sm text-colorPrimary p-3 font-bold flex justify-center mt-5 mr-5'
+                                            size="medium"
+                                            variant="contained"
+                                            startIcon={<AddIcon className='text-colorPrimary' />}>
+                                            Theo dõi công ty
+                                        </Button>
+                                }
                             </Box>
                         </Grid2>
 
@@ -85,6 +113,11 @@ export const Banner: React.FC<BannerProps> = (props: BannerProps) => {
 
                 </CardContent>
             </Box >
+            <EditProfileDialog
+                slug={props.slug}
+                open={open}
+                handleClickOpen={handleClickOpen}
+                handleClose={handleClose} />
         </Card >
     );
 }

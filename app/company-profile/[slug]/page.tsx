@@ -1,15 +1,33 @@
 "use client";
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Banner, BasicBreadcrumb, CompanyInfo, ContactInfo, Share, Recruitment } from '@/components'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid2 from '@mui/material/Grid2';
-import { useCompanyStore } from '@/stores';
+import { useAccountStore, useCompanyStore } from '@/stores';
 
 const CompanyProfilePage = () => {
     const { slug } = useParams();
     const companyStore = useCompanyStore();
+    const accountStore = useAccountStore();
+    const [isEditProfile, setIsEditProfile] = useState(false);
+
+    useEffect(() => {
+        if (!accountStore.account) {
+            accountStore.loadAccountByJwt();
+        }
+    }, [])
+
+    useEffect(() => {
+        if (accountStore.account && accountStore.accountType === 1) {
+            if (accountStore.account.id === companyStore.company.id) {
+                setIsEditProfile(true);
+            } else {
+                setIsEditProfile(false);
+            }
+        }
+    }, [accountStore.account, companyStore.company])
 
     useEffect(() => {
         companyStore.loadCompany(slug as string);
@@ -25,11 +43,13 @@ const CompanyProfilePage = () => {
                     currentPosition={`Thông tin công ty & tin tuyển dụng từ ${companyStore.company.name}`}>
                 </BasicBreadcrumb>
                 <Banner
+                    slug={slug as string}
                     avatar={companyStore.company.logo}
                     name={companyStore.company.name}
                     employeeCount={companyStore.company.employeeCount}
                     email={companyStore.company.emailContact}
-                    website={companyStore.company.website ?? ''}>
+                    website={companyStore.company.website ?? ''}
+                    isEditProfile={isEditProfile}>
                 </Banner>
 
                 <Grid2
