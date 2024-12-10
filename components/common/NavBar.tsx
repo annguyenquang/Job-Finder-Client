@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { AccountMenu } from './AccountMenu'
 import { useAccountStore } from '@/stores'
-import { Button } from '@mui/material'
+import { Button, ButtonGroup, Stack } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { grey } from '@mui/material/colors'
 
@@ -56,15 +56,20 @@ export const Navbar = () => {
         {accountStore.account ? (
           <AccountMenu />
         ) : (
-          <Button
-            variant='contained'
-            color='info'
-            onClick={() => {
-              router.push('/login')
-            }}
+          <ButtonGroup
+            size='small'
+            variant='outlined'
+            sx={{ backgroundColor: grey[50], color: 'black', textTransform: 'none' }}
           >
-            Login
-          </Button>
+            <Button
+              onClick={() => {
+                router.push('/login')
+              }}
+            >
+              Đăng nhập
+            </Button>
+            <Button>Đăng ký</Button>
+          </ButtonGroup>
         )}
       </div>
     </div>
