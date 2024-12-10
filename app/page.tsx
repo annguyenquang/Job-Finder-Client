@@ -1,12 +1,12 @@
-'use client';
-import { Button, Container, Typography } from '@mui/material';
-import { Navbar } from '@/components';
-import { useRouter } from 'next/navigation';
+'use client'
+import { Button, Container, Typography } from '@mui/material'
+import { Navbar } from '@/components'
+import { useRouter } from 'next/navigation'
 
 const Home = () => {
-    const router = useRouter();
+  const router = useRouter()
 
-    return <div>Developing</div>;
-};
+  return <div>Developing</div>
+}
 
-export default Home;
+export default Home

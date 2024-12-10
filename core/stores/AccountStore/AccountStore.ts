@@ -6,6 +6,7 @@ type AccountStore = {
   account: Account
   accountType: AccountType | null
   login: (username: string, password: string) => Promise<Account>
+  logout: () => Promise<void>
   loadAccountByJwt: () => Promise<void>
 }
 
@@ -19,6 +20,12 @@ export const useAccountStore = create<AccountStore>()((set) => ({
       return res
     }
     return null
+  },
+  logout: async () => {
+    await AccountService.logout()
+    set(() => ({
+      account: null
+    }))
   },
   loadAccountByJwt: async () => {
     const account = await AccountService.getAccountByCookie()

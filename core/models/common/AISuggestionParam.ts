@@ -1,6 +1,6 @@
 import { Pagination } from '@/models/common/Pagination'
 import { Metadata } from './Metadata'
-import { metadata } from '../../../app/layout'
+import { metadata } from '../../../app/(protected)/layout'
 import { QueryParams } from '@/models/enum/MetadataValue'
 
 export class AISuggestionParam {

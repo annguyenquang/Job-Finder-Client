@@ -13,7 +13,7 @@ import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import { useAccountStore } from '@/stores'
-import AccountAndPasswordForm from '../../components/login/AccountAndPasswordForm'
+import AccountAndPasswordForm from '../../../components/login/AccountAndPasswordForm'
 
 const LoginPage: React.FC = () => {
   const accountStore = useAccountStore()
