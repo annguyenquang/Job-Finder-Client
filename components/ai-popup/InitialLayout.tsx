@@ -13,9 +13,10 @@ import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
 import { ParsedJobSuggestion } from '@/models'
 
-export function InitialLayout() {
+const InitialLayout = () => {
   const AIPopupStore = useAIStore()
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   const handleSkillChange = (event: React.ChangeEvent<{}>, newValue: string[]) => {
     const param = AIPopupStore.reqParam
     param.setSkills(newValue)
@@ -279,3 +280,5 @@ export function InitialLayout() {
     </Card>
   )
 }
+
+export default InitialLayout

@@ -1,8 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
-import { Navbar, NotificationSnackBar } from '@/components'
-import { AIPopup } from '../../components/ai-popup/AIPopup'
+import { AIPopup, Navbar } from '@/components'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +15,6 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`antialiased bg-background`}>
-        <NotificationSnackBar />
         <Navbar />
         {children}
         <AIPopup />

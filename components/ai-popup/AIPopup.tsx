@@ -3,18 +3,11 @@ import React from 'react'
 import { Typography, Box, Container } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome' // Sparkle icon
 import MinimizeIcon from '@mui/icons-material/Minimize' // Minimize icon from Material UI
-import { InitialLayout } from './InitialLayout'
-import { useAIStore } from '@/stores/AIPopupStore'
-import { useAccountStore } from '@/stores'
-import { DoneLayout } from './DoneLayout'
-import { DoneLayoutSkeleton } from './DoneLayoutSkeleton'
+import InitialLayout from './InitialLayout'
+import DoneLayout from './DoneLayout'
+import DoneLayoutSkeleton from './DoneLayoutSkeleton'
+import { useAccountStore, useAIStore } from '@/stores'
 import { AccountType, UserAccount } from '@/models'
-
-const AICaption = {
-  INITIAL: 'Seeking for help ?',
-  LOADING: 'Waiting for us to process ...',
-  DONE: 'Hope you like our suggestions'
-}
 
 export const AIPopup = () => {
   const [clicked, setClicked] = React.useState(false)
@@ -47,7 +40,6 @@ export const AIPopup = () => {
     if (accountStore.accountType === AccountType.User) {
       setUser(accountStore.account as UserAccount)
     }
-    console.log('Account: ' + JSON.stringify(accountStore.account))
     const userId = accountStore.account?.id
     const param = AIStore.reqParam
     if (userId) param.setUserId(userId)
