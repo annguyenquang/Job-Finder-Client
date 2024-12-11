@@ -2,9 +2,9 @@
 
 import { Container, Grid2, SelectChangeEvent, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import SearchBar from '../../components/viec-lam-page/SearchBar'
-import SideBar from '../../components/viec-lam-page/SideBar'
-import JobList from '../../components/viec-lam-page/JobList'
+import SearchBar from '../../../components/viec-lam-page/SearchBar'
+import SideBar from '../../../components/viec-lam-page/SideBar'
+import JobList from '../../../components/viec-lam-page/JobList'
 
 const ViecLamPage = () => {
   const [location, setLocation] = useState<string>('TP. Hồ Chí Minh')

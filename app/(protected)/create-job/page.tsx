@@ -4,7 +4,7 @@ import { Typography, Box, Container, Button, Snackbar, Alert } from '@mui/materi
 import { useRouter } from 'next/navigation' // useRouter for navigation
 import { AddressCard, DescriptionCard, RequirementCard, SalaryCard, TitleCard } from '@/components'
 import { useAccountStore, useCreateJobStore } from '@/stores'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Company } from '@/models'
 
 const CreateJobPage = () => {

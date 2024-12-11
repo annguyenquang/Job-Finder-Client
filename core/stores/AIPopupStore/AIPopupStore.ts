@@ -1,15 +1,5 @@
 import { create } from 'zustand'
-import {
-  Account,
-  AccountType,
-  AISuggestionParam,
-  CompanyAccount,
-  Job,
-  JobSuggestion,
-  ParsedJobSuggestion,
-  UserAccount
-} from '@/models'
-import { AccountService } from '@/services'
+import { AISuggestionParam, ParsedJobSuggestion } from '@/models'
 
 type ProcessState = 'INITIAL' | 'LOADING' | 'DONE'
 

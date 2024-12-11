@@ -1,12 +1,8 @@
 import React from 'react'
 import Card from '@mui/material/Card'
-
-import { useAIStore } from '@/stores/AIPopupStore'
 import GradientSpinner from '../common/GradientSpinner'
 
-export function LoadingLayout() {
-  const AIPopupStore = useAIStore()
-
+const LoadingLayout = () => {
   return (
     <Card
       sx={{
@@ -23,3 +19,5 @@ export function LoadingLayout() {
     </Card>
   )
 }
+
+export default LoadingLayout
