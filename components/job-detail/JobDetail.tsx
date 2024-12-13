@@ -1,7 +1,16 @@
 'use client'
 import React from 'react'
 import { Box, Card, CardContent, Container, Grid2 } from '@mui/material'
-import { CompanyIntro, JobBanner, JobBreadcrumb, JobInfo, JobList, ApplicationDialog } from '@/components'
+import {
+  CompanyIntro,
+  JobBanner,
+  JobBreadcrumb,
+  JobInfo,
+  JobList,
+  ApplicationDialog,
+  ApplicationTab,
+  ApplicationPanel
+} from '@/components'
 import { Job } from '@/models'
 import { useAccountStore, useMetadataStore } from '@/stores'
 
@@ -68,6 +77,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
               genderRequirement={metadataStore.genderRequirement}
               skills={props.job.skills}
             ></JobInfo>
+            <ApplicationPanel />
           </Grid2>
           <Grid2 size={4}>
             <CompanyIntro
