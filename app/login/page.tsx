@@ -27,8 +27,12 @@ const LoginPage: React.FC = () => {
     setPassword(newPassword)
   }
   const onLogin = async () => {
-    await accountStore.login(username, password)
-    router.push('/viec-lam')
+    const account = await accountStore.login(username, password)
+    if (account) {
+      router.push('/viec-lam')
+    } else {
+      alert('Đăng nhập thất bại. Tài khoản hoặc mật khẩu không đúng.')
+    }
   }
   return (
     <Grid2

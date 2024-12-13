@@ -13,6 +13,7 @@ type CompanyStore = {
   setDescription: (description: string) => void;
   setProvinceId: (provinceId: number) => void;
   setDistrictId: (districtId: number) => void;
+  setCompany: (company: Company) => void
   loadCompanies: () => Promise<void>
   loadCompany: (slug: string) => Promise<void>
   updateParam: (newParam: CompanyParam) => void
@@ -49,6 +50,8 @@ export const useCompanyStore = create<CompanyStore>()((set, get) => ({
   setDescription: (description) => set((state) => ({ company: { ...state.company, description } })),
   setProvinceId: (provinceId) => set((state) => ({ company: { ...state.company, provinceId } })),
   setDistrictId: (districtId) => set((state) => ({ company: { ...state.company, districtId } })),
+  setCompany: (company) => set((state) => ({ company: { ...state.company, company } })),
+
   loadCompany: async (slug: string) => {
     const res = await CompanyService.GetCompanyBySlug(slug)
     set(() => ({ company: res?.result })) // Cập nhật trạng thái company với dữ liệu nhận được

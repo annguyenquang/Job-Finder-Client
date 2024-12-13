@@ -1,13 +1,13 @@
 "use client";
-import { Alert, Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Slide, Snackbar, styled, TextField, Typography } from '@mui/material';
+import { AlertProps, AlertTitle, Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Slide, styled, TextField, Typography } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import * as React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { useEditCompanyStore, useLocationStore } from '@/stores';
+import { useAlertStore, useCompanyStore, useEditCompanyStore, useLocationStore } from '@/stores';
 import { District, LocationService, Province } from '@/services';
 import dynamic from 'next/dynamic';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
+import { useRouter } from 'next/navigation';
 
 
 // Import ReactQuill động và tắt SSR
@@ -16,8 +16,6 @@ const ReactQuill = dynamic(() => import('react-quill'), {
     loading: () => <p>Loading...</p>,
 });
 import 'react-quill/dist/quill.snow.css';
-import { useRouter } from 'next/navigation'
-
 
 type EditProfileDialogProps = {
     open: boolean,
@@ -62,6 +60,8 @@ const generateSlug = (name: string): string => {
 export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditProfileDialogProps) => {
     const locationStore = useLocationStore();
     const editCompanyStore = useEditCompanyStore();
+    const companyStore = useCompanyStore();
+    const alertStore = useAlertStore();
     const router = useRouter();
     const [listDistrict, setListDistrict] = React.useState<District[] | undefined>([]);
     const [inputDistrictText, setInputDistrictText] = React.useState<string>('');
@@ -196,13 +196,49 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
         }
     };
 
-    const handleClose = () => {
-        editCompanyStore.setsucceeded(true);
-    };
-
     const handleSubmit = async () => {
-        await editCompanyStore.editCompany();
-        router.push(`/company-profile/${editCompanyStore.company.slug}`);
+        const res = await editCompanyStore.editCompany();
+
+        if (res) {
+            const sucessAlertSettings: AlertProps = {
+                severity: 'success',
+                children: (
+                    <AlertTitle>
+                        Bạn đã thay đổi thành công thông tin Công Ty
+                    </AlertTitle>
+                )
+            }
+
+            if (editCompanyStore.company.slug === props.slug) {
+                companyStore.loadCompany(editCompanyStore.company.slug);
+
+            } else {
+                router.push(`/company-profile/${editCompanyStore.company.slug}`);
+            }
+            props.handleClose();
+
+            alertStore.alert(
+                { ...alertStore.snackbarSettings, TransitionComponent: Transition },
+                {
+                    ...alertStore.alertSettings,
+                    ...sucessAlertSettings
+                }
+            )
+        }
+
+        if (!res) {
+            const serverErrorAlertSettings: AlertProps = {
+                severity: 'info',
+                children: <AlertTitle>Vui lòng điền đầy đủ thông tin!</AlertTitle>
+            }
+            alertStore.alert(
+                { ...alertStore.snackbarSettings, TransitionComponent: Transition },
+                {
+                    ...alertStore.alertSettings,
+                    ...serverErrorAlertSettings
+                }
+            )
+        }
     }
 
     return (
@@ -533,22 +569,7 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Box>
-                <Snackbar
-                    open={editCompanyStore.succeeded === null ? false : !editCompanyStore.succeeded}
-                    autoHideDuration={3000}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                    <Alert
-                        onClose={handleClose}
-                        severity="info"
-                        className='bg-colorPrimary text-white shadow-md'
-                    >
-                        Vui lòng điền đầy đủ thông tin cần thiết
-                    </Alert>
-                </Snackbar>
-            </Box>
+
         </Box>
 
     );

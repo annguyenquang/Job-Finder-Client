@@ -1,18 +1,19 @@
 'use client'
 import { Autocomplete, Container, Grid2, InputLabel, SelectChangeEvent, TextField } from '@mui/material'
+
 import SearchIcon from '@mui/icons-material/Search'
 import LoadingButton from '@mui/lab/LoadingButton'
 import React from 'react'
 import { LocationService, Province } from '@/services/LocationService'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useCompanyStore, useJobListStore } from '@/stores'
+import { useJobListStore } from '@/stores'
 
 interface SearchBarProps {
   location: string
   handleChange: (event: SelectChangeEvent<string>) => void
 }
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
-  const companyStore = useCompanyStore()
+  const jobStore = useJobListStore()
   // Define your initial options state
   const initialOptions: Province[] = [
     {
@@ -53,11 +54,11 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         }
       } else {
         setOptions(initialOptions) // Clear options if the query is empty
-        const newParam = companyStore.reqParam
+        const newParam = jobStore.reqParam
         newParam.setProvinceId(null)
         newParam.setPage(1)
-        companyStore.updateParam(newParam)
-        companyStore.loadCompanies()
+        jobStore.updateParam(newParam)
+        jobStore.loadJobs()
       }
     }
 
@@ -65,11 +66,11 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   }, [locationDebounce])
 
   React.useEffect(() => {
-    const currentParam = companyStore.reqParam
+    const currentParam = jobStore.reqParam
     currentParam.setQuery(searchDebounce)
     currentParam.setPage(1)
-    companyStore.updateParam(currentParam)
-    companyStore.loadCompanies()
+    jobStore.updateParam(currentParam)
+    jobStore.loadJobs()
   }, [searchDebounce])
 
   return (
@@ -95,7 +96,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             }}
             fullWidth
             size='small'
-            label='Tìm công ty yêu thích'
+            label='Tìm việc làm yêu thích'
             id='fullWidth'
           />
         </Grid2>
@@ -140,18 +141,18 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               onChange={(event, value) => {
                 const selectedProvince = options.find((option) => option.name === value)
                 if (selectedProvince) {
-                  const newParam = companyStore.reqParam
+                  const newParam = jobStore.reqParam
                   // Call the passed setProvinceId function to set the province ID
                   newParam.setProvinceId(selectedProvince.code)
                   newParam.setPage(1)
-                  companyStore.updateParam(newParam)
-                  companyStore.loadCompanies()
+                  jobStore.updateParam(newParam)
+                  jobStore.loadJobs()
                 }
               }}
             />
           </Container>
           <LoadingButton
-            className='bg-primary text-text'
+            className='bg-colorPrimary text-text'
             loading={false}
             loadingPosition='start'
             startIcon={<SearchIcon />}

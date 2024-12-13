@@ -1,13 +1,12 @@
 'use client'
+
+import React from 'react'
+import Grid2 from '@mui/material/Grid2'
 import Grid from '@mui/material/Grid2'
-import React, { useEffect, useState } from 'react'
 import JobCard from './JobCard'
 import Pagination from '../common/Pagination'
-import { useJobListStore } from '@/stores'
-import { Metadata } from '@/models/common/Metadata'
-import { JobService } from '@/services'
-import Grid2 from '@mui/material/Grid2'
 import JobCardSkeleton from './skeleton/JobCardSkeleton'
+import { useJobListStore } from '@/stores'
 
 const JobList = () => {
   const jobStore = useJobListStore()

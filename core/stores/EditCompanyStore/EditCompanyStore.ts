@@ -16,9 +16,7 @@ type EditCompanyStore = {
   setProvinceId: (provinceId: number) => void;
   setDistrictId: (districtId: number) => void;
   loadCompany: (slug: string) => Promise<void>
-  succeeded: boolean | null,
-  setsucceeded: (succeeded: boolean | null) => void;
-  editCompany: () => Promise<void>;
+  editCompany: () => Promise<boolean>;
 
 }
 
@@ -38,48 +36,41 @@ export const useEditCompanyStore = create<EditCompanyStore>()((set, get) => ({
     const res = await CompanyService.GetCompanyBySlug(slug)
     set(() => ({ company: res?.result })) 
   },
-  succeeded:null,
-  setsucceeded: (succeeded) => set({ succeeded }),
   editCompany: async () => {
-    const { company, setsucceeded } = get();
+    const { company } = get();
 
     const data = {
-        id: company.id,
-        name: company.name,
-        emailContact: company.emailContact,
-        phoneContact: company.phoneContact,
-        address: company.address,
-        website: company.website,
-        slug: company.slug,
-        description: company.description,
-        logoFile: null,
-        employeeCount: company.employeeCount,
-        provinceId: company.provinceId,
-        districtId: company.districtId
-
-    }
+      id: company.id,
+      name: company.name,
+      emailContact: company.emailContact,
+      phoneContact: company.phoneContact,
+      address: company.address,
+      website: company.website,
+      slug: company.slug,
+      description: company.description,
+      logoFile: null,
+      employeeCount: company.employeeCount,
+      provinceId: company.provinceId,
+      districtId: company.districtId,
+    };
 
     const isValidData = data.name && data.emailContact &&
-    data.phoneContact && data.address && data.website &&
-    data.slug && data.description &&
-    data.employeeCount && data.provinceId &&
-    data.districtId;
+      data.phoneContact && data.address && data.website &&
+      data.slug && data.description &&
+      data.employeeCount && data.provinceId &&
+      data.districtId;
 
     if (!isValidData) {
-    console.error("Required fields are missing or invalid in job data:", data);
-    setsucceeded(false);
-    return;
+      console.error("Required fields are missing or invalid in job data:", data);
+      return false;
     }
 
     try {
-        const res = await CompanyService.editCompany(data as any);
-        if(res?.succeeded){
-            setsucceeded(true);
-        }else{
-            setsucceeded(false)
-        }
+      const res = await CompanyService.editCompany(data as any);
+      return !!res?.result; 
     } catch (error) {
-        console.error("Failed to edit company:", error);
+      console.error("Failed to edit company:", error);
+      return false; 
     }
-},
+  },
 }))

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { UserAccount } from '@/models'
 import Close from '@mui/icons-material/Close'
 import Box from '@mui/material/Box/Box'
