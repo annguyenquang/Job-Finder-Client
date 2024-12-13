@@ -2,10 +2,10 @@
 
 import { Container, SelectChangeEvent, Typography } from '@mui/material'
 import React from 'react'
-import CompanyList from '../../components/company-page/CompanyList'
-import Pagination from '../../components/common/Pagination'
+import Pagination from '../../../components/common/Pagination'
 import { useCompanyStore } from '@/stores'
-import SearchBar from '../../components/company-page/SearchBar'
+import SearchBar from '../../../components/company-page/SearchBar'
+import CompanyList from '../../../components/company-page/CompanyList'
 
 const CompanyPage: React.FC = () => {
   const companyStore = useCompanyStore()

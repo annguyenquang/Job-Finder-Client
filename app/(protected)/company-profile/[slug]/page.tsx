@@ -20,15 +20,13 @@ const CompanyProfilePage = () => {
   }, [])
 
   React.useEffect(() => {
-    // if (accountStore.account && accountStore.accountType === 1) {
-    //   if (accountStore.account.id === companyStore.company.id) {
-    //     setIsEditProfile(true);
-    //   } else {
-    //     setIsEditProfile(false);
-    //   }
-    // }
-
-    setIsEditProfile(true);
+    if (accountStore.account && accountStore.accountType === 1) {
+      if (accountStore.account.id === companyStore.company.id) {
+        setIsEditProfile(true);
+      } else {
+        setIsEditProfile(false);
+      }
+    }
 
   }, [accountStore.account, companyStore.company])
 

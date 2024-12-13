@@ -7,4 +7,5 @@ export * from './CreateJobStore'
 export * from './MetadataStore'
 export * from './ApplicationFormStore'
 export * from './AlertStore'
+export * from './AIPopupStore'
 export * from './EditCompanyStore';

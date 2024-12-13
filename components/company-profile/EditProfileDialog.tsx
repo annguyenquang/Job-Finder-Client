@@ -74,11 +74,11 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         editCompanyStore.setName(event.target.value);
-        let slug = generateSlug(event.target.value);
+        const slug = generateSlug(event.target.value);
         editCompanyStore.setSlug(slug);
     };
     const handleSlugChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let slug = generateSlug(event.target.value);
+        const slug = generateSlug(event.target.value);
         editCompanyStore.setSlug(slug);
     };
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +215,6 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
             } else {
                 router.push(`/company-profile/${editCompanyStore.company.slug}`);
             }
-            props.handleClose();
 
             alertStore.alert(
                 { ...alertStore.snackbarSettings, TransitionComponent: Transition },
@@ -224,6 +223,8 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
                     ...sucessAlertSettings
                 }
             )
+
+            props.handleClose();
         }
 
         if (!res) {

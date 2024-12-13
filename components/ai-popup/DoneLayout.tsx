@@ -4,23 +4,13 @@ import Box from '@mui/material/Box'
 import Carousel from 'react-material-ui-carousel'
 
 import { Chip, Stack, Typography } from '@mui/material'
-import { useAccountStore } from '@/stores'
-import { useAIStore } from '@/stores/AIPopupStore'
+import { useAccountStore, useAIStore } from '@/stores'
 import { UserAccount } from '@/models'
 import JobSuggestionCard from './JobSuggestionCard'
 
-export function DoneLayout() {
+const DoneLayout = () => {
   const AIPopupStore = useAIStore()
-  function Item({ item }: { item: { description: string } }) {
-    return <div style={{ width: '100%', height: '100%' }}>{item.description}</div>
-  }
-
   const [index, setIndex] = React.useState(0)
-
-  const handleChange = (cur: number, prev: number) => {
-    setIndex(cur)
-    console.log(cur, prev)
-  }
 
   const AccountStore = useAccountStore()
   const skills = (AccountStore.account as UserAccount)?.skills
@@ -200,3 +190,5 @@ export function DoneLayout() {
     </Box>
   )
 }
+
+export default DoneLayout
