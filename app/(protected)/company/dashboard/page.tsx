@@ -1,15 +1,17 @@
-import { CheckCircle, SwapVert } from '@mui/icons-material'
+import { Job } from '@/models'
+import { AccessTimeFilled, CheckCircle, DateRange, LocationOn, SwapVert } from '@mui/icons-material'
 import Search from '@mui/icons-material/Search'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Box,
   Button,
   ButtonGroup,
+  Card,
+  CardContent,
   Divider,
   InputAdornment,
   Stack,
   Tab,
-  Tabs,
   TextField,
   Typography
 } from '@mui/material'
@@ -54,28 +56,102 @@ const JobList: React.FC = () => {
           sx={{ position: 'absolute', right: 0, fontWeight: 'bold' }}
           startIcon={<SwapVert></SwapVert>}
         >
-          Sắp xếp theo:{' '}
+          Sắp xếp theo:
         </Button>
 
-        <TabContext value={2}>
-          <TabList>
-            <Tab
-              label='Tất cả tin'
-              value='0'
-            />
-            <Tab
-              label='Tin đang hoạt động'
-              value='1'
-            />
-            <Tab
-              label='Tin hết hạn'
-              value='2'
-            />
-          </TabList>
-          <TabPanel value={0}>ITem1</TabPanel>
-          <TabPanel value={1}>ITem2</TabPanel>
-          <TabPanel value={2}>ITem3</TabPanel>
-        </TabContext>
+        <Box>
+          <TabContext value={1}>
+            <TabList>
+              <Tab label='Tất cả công việc'></Tab>
+              <Tab
+                label='Đang mở'
+                value={2}
+              ></Tab>
+              <Tab
+                label='Hết hạn'
+                value={3}
+              ></Tab>
+            </TabList>
+
+            <TabPanel value={1}>
+              <Card>
+                <CardContent>
+                  <Typography variant='h6'>Inter .NET</Typography>
+
+                  <Box
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                  >
+                    <Stack>
+                      <Stack
+                        direction={'row'}
+                        spacing={1}
+                      >
+                        <AccessTimeFilled></AccessTimeFilled>
+                        <Typography>Toàn thời gian</Typography>
+                      </Stack>
+
+                      <Stack
+                        direction={'row'}
+                        spacing={1}
+                      >
+                        <LocationOn></LocationOn>
+                        <Typography>Quận Thủ Đức, Thành Phố Hồ Chí Minh, Vietnam</Typography>
+                      </Stack>
+
+                      <Stack
+                        direction={'row'}
+                        spacing={1}
+                      >
+                        <DateRange></DateRange>
+                        <Typography>Ngày tạo: 12 thg 10 2024</Typography>
+                      </Stack>
+                    </Stack>
+
+                    <Box
+                      right={0}
+                      border={1}
+                      borderRadius={2}
+                      color={'info'}
+                    >
+                      <Stack direction={'row'}>
+                        <Stack justifyContent={'center'}>
+                          <Typography textAlign={'center'}>0</Typography>
+                          <Typography>Đang xem xét</Typography>
+                          <Button>Xem</Button>
+                        </Stack>
+
+                        <Divider
+                          orientation='vertical'
+                          flexItem
+                        ></Divider>
+
+                        <Stack justifyContent={'center'}>
+                          <Typography textAlign={'center'}>0</Typography>
+                          <Typography>Đang xem xét</Typography>
+                          <Button>Xem</Button>
+                        </Stack>
+
+                        <Divider
+                          orientation='vertical'
+                          flexItem
+                        ></Divider>
+
+                        <Stack justifyContent={'center'}>
+                          <Typography textAlign={'center'}>0</Typography>
+                          <Typography>Đang xem xét</Typography>
+                          <Button>Xem</Button>
+                        </Stack>
+                      </Stack>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </TabPanel>
+            <TabPanel value={2}>ITem2</TabPanel>
+            <TabPanel value={3}>ITem3</TabPanel>
+          </TabContext>
+        </Box>
       </Box>
     </Stack>
   )
