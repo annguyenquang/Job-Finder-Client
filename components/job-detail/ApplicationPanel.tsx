@@ -1,9 +1,17 @@
+'use client'
 import { ApplicationTab } from '@/components'
 import { Box, Card } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ApplicationTable } from './ApllicationTable'
+import { useJobDetailStore } from '@/stores'
 
 export const ApplicationPanel = () => {
+  const jobDetailStore = useJobDetailStore()
+
+  useEffect(() => {
+    console.log('Job applications: ', jobDetailStore.jobApplication)
+  }, [jobDetailStore.jobApplication])
+
   return (
     <Card
       className='rounded-lg text-gray-400'

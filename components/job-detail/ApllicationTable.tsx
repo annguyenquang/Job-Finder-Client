@@ -6,6 +6,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import { DropdownMenuBtn } from '@/components'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein }
@@ -39,14 +41,15 @@ export const ApplicationTable = () => {
       >
         <TableHead>
           <TableRow sx={{ fontSize: '12px' }}>
-            {headers.map((header) => (
+            {headers.map((header, index) => (
               <TableCell
                 key={header.label}
                 className='bg-colorPrimary'
                 sx={{
                   color: 'white',
                   fontWeight: 'medium',
-                  padding: '0.5'
+                  padding: '0.5',
+                  textAlign: index === 0 ? 'left' : 'center' // Align first column to right, others to left
                 }}
               >
                 {header.label}
@@ -64,9 +67,13 @@ export const ApplicationTable = () => {
                 {row.name}
               </TableCell>
               <TableCell align='center'>{row.calories}</TableCell>
-              <TableCell align='center'>{row.fat}</TableCell>
+              <TableCell align='center'>
+                <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
+              </TableCell>
               <TableCell align='center'>{row.carbs}</TableCell>
-              <TableCell align='center'>{row.protein}</TableCell>
+              <TableCell align='center'>
+                <DropdownMenuBtn />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

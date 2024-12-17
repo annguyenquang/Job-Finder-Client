@@ -1,4 +1,4 @@
-import { ApiResult } from '@/models'
+import { ApiResult, JobApplication, ListResult } from '@/models'
 import { http } from '@/services'
 
 type JobApplictionParams = {
@@ -32,4 +32,14 @@ const CreateJobApplication = async (jobApplication: JobApplictionParams): Promis
   }
 }
 
-export const JobApplicationService = { CreateJobApplication }
+const getApplication = async (param: string) => {
+  const url = `/JobApplication/GetAllJobApplication?${param}`
+  try {
+    const res = await http().get<ApiResult<JobApplication[]>>(url)
+    return res.data.result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const JobApplicationService = { CreateJobApplication, getApplication }
