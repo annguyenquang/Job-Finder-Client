@@ -209,12 +209,6 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
                 )
             }
 
-            if (editCompanyStore.company.slug === props.slug) {
-                companyStore.loadCompany(editCompanyStore.company.slug);
-
-            } else {
-                router.push(`/company-profile/${editCompanyStore.company.slug}`);
-            }
 
             alertStore.alert(
                 { ...alertStore.snackbarSettings, TransitionComponent: Transition },
@@ -224,7 +218,14 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props: EditP
                 }
             )
 
-            props.handleClose();
+            if (editCompanyStore.company.slug === props.slug) {
+                companyStore.loadCompany(editCompanyStore.company.slug);
+                props.handleClose();
+            } else {
+                console.log("123: ", editCompanyStore.company.slug)
+                router.push(`/company-profile/${editCompanyStore.company.slug}`);
+            }
+
         }
 
         if (!res) {
