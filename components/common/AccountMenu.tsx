@@ -11,6 +11,8 @@ import Logout from '@mui/icons-material/Logout'
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
 import { useAccountStore } from '@/stores'
 import { useRouter } from 'next/navigation'
+import { AccountType } from '@/models'
+import { Dashboard } from '@mui/icons-material'
 
 export const AccountMenu = () => {
   const accountStore = useAccountStore()
@@ -85,12 +87,8 @@ export const AccountMenu = () => {
           <Avatar /> {accountStore.account?.username}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <WorkHistoryIcon fontSize='small' />
-          </ListItemIcon>
-          View your applications
-        </MenuItem>
+        {accountStore.accountType === AccountType.User && <UserItem handleOnClose={handleClose} />}
+        {accountStore.accountType === AccountType.Company && <CompanyItem />}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize='small' />
@@ -99,5 +97,37 @@ export const AccountMenu = () => {
         </MenuItem>
       </Menu>
     </React.Fragment>
+  )
+}
+
+const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
+  return (
+    <>
+      <MenuItem onClick={props.handleOnClose}>
+        <ListItemIcon>
+          <WorkHistoryIcon fontSize='small' />
+        </ListItemIcon>
+        View your applications
+      </MenuItem>
+    </>
+  )
+}
+
+const CompanyItem: React.FC = () => {
+  return (
+    <>
+      <MenuItem>
+        <ListItemIcon>
+          <Dashboard fontSize='small' />
+        </ListItemIcon>
+        Dashboard
+      </MenuItem>
+      <MenuItem>
+        <ListItemIcon>
+          <WorkHistoryIcon fontSize='small' />
+        </ListItemIcon>
+        View your job posts
+      </MenuItem>
+    </>
   )
 }
