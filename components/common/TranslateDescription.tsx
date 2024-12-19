@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import * as React from 'react';
 
-interface JobDescriptionProps {
+interface TranslateDescriptionProps {
     description: string;
 }
 
-const JobDescription: React.FC<JobDescriptionProps> = ({ description }) => {
+const TranslateDescription: React.FC<TranslateDescriptionProps> = ({ description }) => {
     React.useEffect(() => {
         console.log('description: ', description);
     }, [description]);
@@ -19,4 +19,4 @@ const JobDescription: React.FC<JobDescriptionProps> = ({ description }) => {
     );
 };
 
-export default JobDescription;
+export default TranslateDescription;
