@@ -87,8 +87,7 @@ export const AccountMenu = () => {
           <Avatar /> {accountStore.account?.username}
         </MenuItem>
         <Divider />
-        {accountStore.accountType === AccountType.User && <UserItem handleOnClose={handleClose} />}
-        {accountStore.accountType === AccountType.Company && <CompanyItem />}
+        {accountStore.accountType == AccountType.User ? <UserItem handleOnClose={handleClose} /> : <CompanyItem />}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize='small' />
