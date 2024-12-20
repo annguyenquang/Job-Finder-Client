@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --PRIMARYCOLOR: #006593;
+  --PRIMARYTEXT: #0baeec;
+  --BACKGROUNDWHITE: #f8fafc;
+}
+
+ul {
+  list-style-type: disc; /* Ensure bullets are shown */
+  margin-left: 30px; /* Indentation for the list */
+}
+
+li {
+  margin-bottom: 5px; /* Space between list items */
+}

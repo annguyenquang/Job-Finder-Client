@@ -32,7 +32,6 @@ const InitialLayout = () => {
 
   const handleGenerate = async () => {
     AIPopupStore.updateProcessState('LOADING')
-    console.log('AI popup current param: ' + JSON.stringify(AIPopupStore.reqParam))
     try {
       const suggestionParam = AIPopupStore.reqParam.constructParam()
       const suggestions = await AIService.getSuggestion(suggestionParam)
@@ -47,7 +46,6 @@ const InitialLayout = () => {
         )
         AIPopupStore.updateSuggestionJobs(parsedSuggestion)
         AIPopupStore.updateOverallExplanation(explanation)
-        console.log('Suggestion Jobs: ' + JSON.stringify(parsedSuggestion))
       }
     } catch (error) {
     } finally {
