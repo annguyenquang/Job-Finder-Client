@@ -11,8 +11,9 @@ import Logout from '@mui/icons-material/Logout'
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
 import { useAccountStore } from '@/stores'
 import { useRouter } from 'next/navigation'
-import { AccountType } from '@/models'
-import { Dashboard } from '@mui/icons-material'
+import { AccountType, CompanyAccount } from '@/models'
+import { Apartment, Dashboard } from '@mui/icons-material'
+import Link from 'next/link'
 
 export const AccountMenu = () => {
   const accountStore = useAccountStore()
@@ -113,19 +114,21 @@ const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
 }
 
 const CompanyItem: React.FC = () => {
+  const accountStore = useAccountStore()
+  const companyAccount = accountStore.account as CompanyAccount
   return (
     <>
       <MenuItem>
         <ListItemIcon>
           <Dashboard fontSize='small' />
         </ListItemIcon>
-        Dashboard
+        <Link href={'/company/dashboard'}>Dashboard</Link>
       </MenuItem>
       <MenuItem>
         <ListItemIcon>
-          <WorkHistoryIcon fontSize='small' />
+          <Apartment fontSize='small' />
         </ListItemIcon>
-        View your job posts
+        <Link href={`/company-profile/${companyAccount.slug}`}>Your profile</Link>
       </MenuItem>
     </>
   )
