@@ -59,7 +59,7 @@ const LeftBasicInfo: React.FC<{ user: UserAccount | null }> = ({ user }) => {
             ></InfoWithLabel>
             <InfoWithLabel
               label={'NGÀY SINH'}
-              value={user?.dateOfBirth ? user.dateOfBirth.toLocaleDateString() : ''}
+              value={user?.dateOfBirth ? new Date(user.dateOfBirth).toLocaleDateString() : ''}
             ></InfoWithLabel>
           </Grid2>
           <Grid2 size={6}>
