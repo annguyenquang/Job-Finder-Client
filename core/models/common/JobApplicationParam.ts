@@ -11,7 +11,7 @@ export class JobApplicationParam {
 
   constructor() {
     this.jobId = ''
-    this.pagination = { page: 1, pageSize: 9 }
+    this.pagination = { page: 1, pageSize: 4 }
     this.FromDate = ''
     this.ToDate = ''
   }

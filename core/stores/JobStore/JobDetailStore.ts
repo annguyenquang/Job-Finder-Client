@@ -1,5 +1,6 @@
 import { Job, JobApplication, JobApplicationParam, Pagination } from '@/models'
 import { JobApplicationService, JobService } from '@/services'
+import { Console } from 'console'
 import { create } from 'zustand'
 
 type JobDetailStore = {
@@ -8,6 +9,9 @@ type JobDetailStore = {
   totalJobs: number
   jobApplication: JobApplication[]
   jobApplicationParam: JobApplicationParam
+  jobApplicationState: number | null
+  total: number
+
   keyword: string
   provinceId: number
   loadJobs: (companyId: string, pagination: Pagination) => Promise<void>
@@ -15,6 +19,7 @@ type JobDetailStore = {
   loadApplication: (param: JobApplicationParam) => Promise<void>
   setSearchKeyword: (keyword: string) => void
   setProvinceId: (provinceId: number) => void
+  setApplicationState: (newState: number | null) => void
   updateJobApplicationParam: (newParam: JobApplicationParam) => void
 }
 
@@ -81,7 +86,9 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
   jobs: [emptyJob],
   totalJobs: 0,
   jobApplication: [],
+  total: 0,
   jobApplicationParam: new JobApplicationParam(),
+  jobApplicationState: null,
   keyword: '',
   provinceId: 0,
 
@@ -110,24 +117,25 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
     if (res) {
       set({ job: res.result })
     }
-
-    await loadApplication(newJobApplicationParam)
   },
 
   loadApplication: async (param: JobApplicationParam) => {
     const { jobApplicationParam } = useJobDetailStore.getState()
     const res = await JobApplicationService.getApplication(param.constructParam())
-
+    console.log('Application res: ', res)
     if (res) {
-      set({
-        jobApplication: res
-      })
+      set((state) => ({
+        jobApplication: res.result.data,
+        total: Math.ceil(res ? res.result.total / state.jobApplicationParam.pagination.pageSize : 0)
+      }))
     }
   },
 
   setSearchKeyword: (keyword) => set({ keyword }),
 
   setProvinceId: (provinceId) => set({ provinceId }),
+
+  setApplicationState: (newState: number | null) => set({ jobApplicationState: newState }),
 
   updateJobApplicationParam: (newParam: JobApplicationParam) =>
     set({

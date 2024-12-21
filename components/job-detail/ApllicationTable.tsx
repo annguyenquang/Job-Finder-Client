@@ -8,28 +8,29 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { DropdownMenuBtn } from '@/components'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
-
+import { useJobDetailStore } from '@/stores'
+import { Account, JobApplication, UserAccount } from '@/models'
+import { Avatar, Stack, Typography } from '@mui/material'
+import { differenceInDays, parseISO, format } from 'date-fns'
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein }
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9)
-]
-
 const headers = [
   { label: 'Candidate' },
-  { label: 'Gender' },
+  { label: 'Cover Letter' },
   { label: 'CV' },
   { label: 'Date Applied' },
   { label: 'Action' }
 ]
 
-export const ApplicationTable = () => {
+type ApplicationTableProps = {
+  data: JobApplication[]
+  users: Account[]
+}
+
+export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
+  console.log('List Users: ', props.users)
   return (
     <TableContainer component={Paper}>
       <Table
@@ -58,24 +59,68 @@ export const ApplicationTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell
-                component='th'
-                scope='row'
-              >
-                {row.name}
-              </TableCell>
-              <TableCell align='center'>{row.calories}</TableCell>
-              <TableCell align='center'>
-                <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
-              </TableCell>
-              <TableCell align='center'>{row.carbs}</TableCell>
-              <TableCell align='center'>
-                <DropdownMenuBtn />
-              </TableCell>
-            </TableRow>
-          ))}
+          {props.data.map((e, index) => {
+            console.log('Row data:', e)
+            const user: UserAccount = props.users[index] as UserAccount
+            return (
+              <TableRow key={e.id}>
+                <TableCell
+                  component='th'
+                  scope='row'
+                >
+                  <Stack
+                    direction='row'
+                    alignItems='center'
+                    spacing={2}
+                  >
+                    {/* Avatar with the first character of the user's first name */}
+                    <Avatar
+                      sx={{ bgcolor: 'primary.main' }}
+                      alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
+                    >
+                      {user?.firstName?.charAt(0).toUpperCase() || '?'}
+                    </Avatar>
+
+                    {/* User details */}
+                    <Stack>
+                      {/* Full Name */}
+                      <Typography
+                        variant='body1'
+                        fontWeight='medium'
+                      >
+                        {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
+                      </Typography>
+
+                      {/* Age */}
+                      <Typography
+                        variant='body2'
+                        color='text.secondary'
+                      >
+                        {user?.dateOfBirth
+                          ? `${new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()} years old`
+                          : 'Unknown Age'}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </TableCell>
+
+                <TableCell align='center'>{e.coverLetter}</TableCell>
+                <TableCell align='center'>
+                  <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
+                </TableCell>
+                <TableCell align='center'>
+                  {(() => {
+                    const createdAt = typeof e.createdAt === 'string' ? parseISO(e.createdAt) : e.createdAt
+                    const daysAgo = differenceInDays(new Date(), createdAt)
+                    return `${daysAgo} day(s) ago`
+                  })()}
+                </TableCell>
+                <TableCell align='center'>
+                  <DropdownMenuBtn />
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </TableContainer>

@@ -1,15 +1,67 @@
 'use client'
-import { ApplicationTab } from '@/components'
+import { ApplicationTab, DateTimePicker } from '@/components'
 import { Box, Card } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ApplicationTable } from './ApllicationTable'
 import { useJobDetailStore } from '@/stores'
+import { Account, ApplicationTableData } from '@/models'
+import { AccountService } from '@/services'
+import Pagination from '../common/Pagination'
+import SortMenu from './SortMenu'
 
 export const ApplicationPanel = () => {
   const jobDetailStore = useJobDetailStore()
 
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= jobDetailStore.total) {
+      const updateParam = jobDetailStore.jobApplicationParam
+      updateParam.setPage(page)
+      jobDetailStore.updateJobApplicationParam(updateParam)
+      jobDetailStore.loadApplication(jobDetailStore.jobApplicationParam)
+    }
+  }
+
+  const handleFromDateChange = (fromDate: string) => {
+    const param = jobDetailStore.jobApplicationParam
+    param.setFromDate(fromDate)
+    jobDetailStore.loadApplication(param)
+  }
+
+  const handleToDateChange = (toDate: string) => {
+    const param = jobDetailStore.jobApplicationParam
+    param.setToDate(toDate)
+    jobDetailStore.loadApplication(param)
+  }
+
+  const [applicationTableData, setData] = useState<ApplicationTableData>({
+    applications: [],
+    user: []
+  })
+
+  const fetchListUser = async () => {
+    const listId = jobDetailStore.jobApplication.map((application) => application.userId)
+    const listUser: Account[] = await Promise.all(
+      listId.map(async (e, i) => {
+        const result = await AccountService.getAccountByUserId(e)
+        return result
+      })
+    )
+
+    setData((prev) => ({
+      ...prev,
+      user: listUser
+    }))
+  }
+
   useEffect(() => {
     console.log('Job applications: ', jobDetailStore.jobApplication)
+
+    setData((prev) => ({
+      ...prev,
+      applications: [...jobDetailStore.jobApplication]
+    }))
+
+    fetchListUser()
   }, [jobDetailStore.jobApplication])
 
   return (
@@ -17,7 +69,6 @@ export const ApplicationPanel = () => {
       className='rounded-lg text-gray-400'
       sx={{
         width: '100%',
-        height: '500px',
         background: 'white',
         marginTop: '1rem',
         padding: '1rem'
@@ -26,14 +77,48 @@ export const ApplicationPanel = () => {
       <Box
         sx={{
           width: '100%',
-          background: '#eee',
+          background: '#ffffff',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          marginBottom: '1rem'
         }}
       >
         <ApplicationTab />
-        <ApplicationTable />
+
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingY: '1rem',
+            gap: 1
+          }}
+        >
+          <SortMenu />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
+            <DateTimePicker onDateChange={handleFromDateChange} />
+            <Box sx={{ mx: 1, fontWeight: 'bold' }}>TO</Box>
+            <DateTimePicker onDateChange={handleToDateChange} />
+          </Box>
+        </Box>
+
+        <ApplicationTable
+          data={applicationTableData.applications}
+          users={applicationTableData.user}
+        />
       </Box>
+      <Pagination
+        currentPage={jobDetailStore.jobApplicationParam.pagination.page}
+        totalPages={jobDetailStore.total}
+        onPageChange={handlePageChange}
+      />
     </Card>
   )
 }

@@ -32,11 +32,11 @@ const CreateJobApplication = async (jobApplication: JobApplictionParams): Promis
   }
 }
 
-const getApplication = async (param: string) => {
+const getApplication = async (param: string): Promise<ApiResult<ListResult<JobApplication[]>> | undefined> => {
   const url = `/JobApplication/GetAllJobApplication?${param}`
   try {
-    const res = await http().get<ApiResult<JobApplication[]>>(url)
-    return res.data.result
+    const res = await http().get<ApiResult<ListResult<JobApplication[]>>>(url)
+    return res.data
   } catch (error) {
     console.log(error)
   }

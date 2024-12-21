@@ -12,7 +12,7 @@ import {
   ApplicationPanel
 } from '@/components'
 import { Job } from '@/models'
-import { useAccountStore, useMetadataStore } from '@/stores'
+import { useAccountStore, useJobDetailStore, useMetadataStore } from '@/stores'
 
 type JobdetailProps = {
   job: Job

@@ -1,7 +1,9 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import { SxProps, Theme } from '@mui/material/styles'
 import Tab, { tabClasses } from '@mui/material/Tab'
 import Tabs, { tabsClasses, TabsProps } from '@mui/material/Tabs'
+import { useJobDetailStore } from '@/stores'
 
 export const tabsStyles = (theme: Theme) => ({
   backgroundColor: 'transparent',
@@ -14,12 +16,10 @@ export const tabsStyles = (theme: Theme) => ({
     zIndex: 1
   },
   [`& .${tabsClasses.indicator}`]: {
-    top: 3,
-    bottom: 3,
-    height: 'auto',
-    borderRadius: '8px',
-    backgroundColor: '#fff',
-    boxShadow: '0 4px 12px 0 rgba(0,0,0,0.16)'
+    top: 0, // Position the line at the top
+    height: 3, // Adjust the thickness of the line
+    backgroundColor: theme.palette.primary.main, // Use primary color for the line
+    borderRadius: '3px 3px 0 0' // Add rounded edges to the top corners
   }
 })
 
@@ -35,13 +35,18 @@ export const tabItemStyles = (theme: Theme) => ({
     opacity: 1
   },
   [`&.${tabClasses.selected}`]: {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.primary, // Keep the text color consistent when selected
     opacity: 1
   }
 })
 
 export const ApplicationTab = ({ sx }: TabsProps) => {
   const [tabIndex, setTabIndex] = React.useState(0)
+  const jobDetailStore = useJobDetailStore()
+
+  useEffect(() => {
+    jobDetailStore.setApplicationState(tabIndex === 0 ? null : tabIndex) // Pass `null` for "Tất cả"
+  }, [tabIndex])
 
   return (
     <Tabs
