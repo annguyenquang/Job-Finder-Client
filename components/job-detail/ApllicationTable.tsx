@@ -10,8 +10,11 @@ import { DropdownMenuBtn } from '@/components'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import { useJobDetailStore } from '@/stores'
 import { Account, JobApplication, UserAccount } from '@/models'
-import { Avatar, Stack, Typography } from '@mui/material'
+import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import { differenceInDays, parseISO, format } from 'date-fns'
+import MailIcon from '@mui/icons-material/Mail'
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
+
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein }
 }
@@ -59,68 +62,113 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.map((e, index) => {
-            console.log('Row data:', e)
-            const user: UserAccount = props.users[index] as UserAccount
-            return (
-              <TableRow key={e.id}>
-                <TableCell
-                  component='th'
-                  scope='row'
+          {props.data.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={5}
+                align='center'
+              >
+                <Stack
+                  direction='column'
+                  alignItems='center'
+                  spacing={2}
+                  sx={{ py: 3 }}
                 >
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    spacing={2}
+                  <SentimentDissatisfiedIcon sx={{ fontSize: 50, color: 'gray' }} />
+                  <Typography
+                    variant='h6'
+                    color='text.secondary'
                   >
-                    {/* Avatar with the first character of the user's first name */}
-                    <Avatar
-                      sx={{ bgcolor: 'primary.main' }}
-                      alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
+                    No application meet your condition
+                  </Typography>
+                </Stack>
+              </TableCell>
+            </TableRow>
+          ) : (
+            props.data.map((e, index) => {
+              console.log('Row data:', e)
+              const user: UserAccount = props.users[index] as UserAccount
+              return (
+                <TableRow key={e.id}>
+                  <TableCell
+                    component='th'
+                    scope='row'
+                  >
+                    <Stack
+                      direction='row'
+                      alignItems='center'
+                      spacing={2}
                     >
-                      {user?.firstName?.charAt(0).toUpperCase() || '?'}
-                    </Avatar>
-
-                    {/* User details */}
-                    <Stack>
-                      {/* Full Name */}
-                      <Typography
-                        variant='body1'
-                        fontWeight='medium'
+                      {/* Avatar with the first character of the user's first name */}
+                      <Avatar
+                        sx={{ bgcolor: 'primary.main' }}
+                        alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
                       >
-                        {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
-                      </Typography>
+                        {user?.firstName?.charAt(0).toUpperCase() || '?'}
+                      </Avatar>
 
-                      {/* Age */}
-                      <Typography
-                        variant='body2'
-                        color='text.secondary'
-                      >
-                        {user?.dateOfBirth
-                          ? `${new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()} years old`
-                          : 'Unknown Age'}
-                      </Typography>
+                      {/* User details */}
+                      <Stack>
+                        {/* Full Name */}
+                        <Typography
+                          variant='body1'
+                          fontWeight='medium'
+                        >
+                          {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
+                        </Typography>
+
+                        {/* Age */}
+                        <Typography
+                          variant='body2'
+                          color='text.secondary'
+                        >
+                          {user?.dateOfBirth
+                            ? `${new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()} years old`
+                            : 'Unknown Age'}
+                        </Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </TableCell>
+                  </TableCell>
 
-                <TableCell align='center'>{e.coverLetter}</TableCell>
-                <TableCell align='center'>
-                  <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
-                </TableCell>
-                <TableCell align='center'>
-                  {(() => {
-                    const createdAt = typeof e.createdAt === 'string' ? parseISO(e.createdAt) : e.createdAt
-                    const daysAgo = differenceInDays(new Date(), createdAt)
-                    return `${daysAgo} day(s) ago`
-                  })()}
-                </TableCell>
-                <TableCell align='center'>
-                  <DropdownMenuBtn />
-                </TableCell>
-              </TableRow>
-            )
-          })}
+                  <TableCell align='center'>{e.coverLetter}</TableCell>
+                  <TableCell align='center'>
+                    <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
+                  </TableCell>
+                  <TableCell align='center'>
+                    {(() => {
+                      const createdAt = typeof e.createdAt === 'string' ? parseISO(e.createdAt) : e.createdAt
+                      const daysAgo = differenceInDays(new Date(), createdAt)
+                      return `${daysAgo} day(s) ago`
+                    })()}
+                  </TableCell>
+                  <TableCell align='center'>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+                      <IconButton
+                        size='small'
+                        sx={{
+                          borderRadius: '50%', // Makes the button rounded
+                          width: 30, // Set a fixed width for square button
+                          height: 30, // Set a fixed height for square button
+                          border: '1px solid black', // Black border
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)', // Light background on hover
+                            transform: 'scale(1.1)', // Slightly enlarge the icon
+                            transition: 'all 0.3s ease' // Smooth transition for the hover effect
+                          }
+                        }}
+                      >
+                        <MailIcon sx={{ color: 'black' }} /> {/* Set icon color to black */}
+                      </IconButton>
+                      <DropdownMenuBtn />
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              )
+            })
+          )}
         </TableBody>
       </Table>
     </TableContainer>

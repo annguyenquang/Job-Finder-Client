@@ -29,6 +29,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = (props) => {
         value={selectedDate}
         onChange={handleDateChange}
         slotProps={{
+          actionBar: {
+            actions: ['clear']
+          },
           textField: {
             size: 'small',
             sx: {
