@@ -1,9 +1,19 @@
-const UserApplicationsPage = () => {
+import React from 'react'
+import { Stack, Typography } from '@mui/material'
+import { UserJobApplicationsTable } from '@/components'
+
+const UserJobApplicationsPage = () => {
   return (
-    <div>
-      <h1>Applications</h1>
-    </div>
+    <Stack>
+      <Typography
+        variant='h5'
+        fontWeight={'bold'}
+      >
+        Đơn ứng tuyển của tôi
+      </Typography>
+      <UserJobApplicationsTable />
+    </Stack>
   )
 }
 
-export default UserApplicationsPage
+export default UserJobApplicationsPage
