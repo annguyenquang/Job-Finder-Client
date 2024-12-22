@@ -9,7 +9,7 @@ type JobDetailStore = {
   totalJobs: number
   jobApplication: JobApplication[]
   jobApplicationParam: JobApplicationParam
-  jobApplicationState: number | null
+  jobApplicationLoading: boolean
   total: number
 
   keyword: string
@@ -19,7 +19,6 @@ type JobDetailStore = {
   loadApplication: (param: JobApplicationParam) => Promise<void>
   setSearchKeyword: (keyword: string) => void
   setProvinceId: (provinceId: number) => void
-  setApplicationState: (newState: number | null) => void
   updateJobApplicationParam: (newParam: JobApplicationParam) => void
 }
 
@@ -88,7 +87,7 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
   jobApplication: [],
   total: 0,
   jobApplicationParam: new JobApplicationParam(),
-  jobApplicationState: null,
+  jobApplicationLoading: false,
   keyword: '',
   provinceId: 0,
 
@@ -121,21 +120,31 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
 
   loadApplication: async (param: JobApplicationParam) => {
     const { jobApplicationParam } = useJobDetailStore.getState()
-    const res = await JobApplicationService.getApplication(param.constructParam())
-    console.log('Application res: ', res)
-    if (res) {
-      set((state) => ({
-        jobApplication: res.result.data,
-        total: Math.ceil(res ? res.result.total / state.jobApplicationParam.pagination.pageSize : 0)
-      }))
+
+    // Set loading state to true before the API call
+    set({ jobApplicationLoading: true })
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const res = await JobApplicationService.getApplication(param.constructParam())
+      console.log('Application res: ', res)
+      if (res) {
+        set((state) => ({
+          jobApplication: res.result.data,
+          total: Math.ceil(res.result.total / state.jobApplicationParam.pagination.pageSize)
+        }))
+      }
+    } catch (error) {
+      console.error('Error loading applications:', error)
+    } finally {
+      // Set loading state to false after the API call
+      set({ jobApplicationLoading: false })
     }
   },
 
   setSearchKeyword: (keyword) => set({ keyword }),
 
   setProvinceId: (provinceId) => set({ provinceId }),
-
-  setApplicationState: (newState: number | null) => set({ jobApplicationState: newState }),
 
   updateJobApplicationParam: (newParam: JobApplicationParam) =>
     set({

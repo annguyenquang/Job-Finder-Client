@@ -24,12 +24,16 @@ export const ApplicationPanel = () => {
   const handleFromDateChange = (fromDate: string) => {
     const param = jobDetailStore.jobApplicationParam
     param.setFromDate(fromDate)
+    param.setPage(1)
+    jobDetailStore.updateJobApplicationParam(param)
     jobDetailStore.loadApplication(param)
   }
 
   const handleToDateChange = (toDate: string) => {
     const param = jobDetailStore.jobApplicationParam
     param.setToDate(toDate)
+    param.setPage(1)
+    jobDetailStore.updateJobApplicationParam(param)
     jobDetailStore.loadApplication(param)
   }
 

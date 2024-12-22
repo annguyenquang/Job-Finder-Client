@@ -14,6 +14,7 @@ import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import { differenceInDays, parseISO, format } from 'date-fns'
 import MailIcon from '@mui/icons-material/Mail'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
+import { TableRowSkeleton } from './skeleton'
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein }
@@ -33,6 +34,7 @@ type ApplicationTableProps = {
 }
 
 export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
+  const jobDetailStore = useJobDetailStore()
   console.log('List Users: ', props.users)
   return (
     <TableContainer component={Paper}>
@@ -62,7 +64,9 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.length === 0 ? (
+          {jobDetailStore.jobApplicationLoading ? (
+            Array.from({ length: 4 }).map((e, i) => <TableRowSkeleton key={i} />)
+          ) : props.data.length === 0 ? (
             <TableRow>
               <TableCell
                 colSpan={5}

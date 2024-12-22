@@ -4,6 +4,7 @@ import { SxProps, Theme } from '@mui/material/styles'
 import Tab, { tabClasses } from '@mui/material/Tab'
 import Tabs, { tabsClasses, TabsProps } from '@mui/material/Tabs'
 import { useJobDetailStore } from '@/stores'
+import { StatusCodes } from '@/models'
 
 export const tabsStyles = (theme: Theme) => ({
   backgroundColor: 'transparent',
@@ -41,11 +42,15 @@ export const tabItemStyles = (theme: Theme) => ({
 })
 
 export const ApplicationTab = ({ sx }: TabsProps) => {
-  const [tabIndex, setTabIndex] = React.useState(0)
+  const [tabIndex, setTabIndex] = React.useState<number | null>(null)
   const jobDetailStore = useJobDetailStore()
 
   useEffect(() => {
-    jobDetailStore.setApplicationState(tabIndex === 0 ? null : tabIndex) // Pass `null` for "Tất cả"
+    const param = jobDetailStore.jobApplicationParam
+    param.setState(tabIndex === null ? null : tabIndex) // Pass `null` for "Tất cả"
+    param.setPage(1)
+    jobDetailStore.updateJobApplicationParam(param)
+    jobDetailStore.loadApplication(param)
   }, [tabIndex])
 
   return (
@@ -58,21 +63,25 @@ export const ApplicationTab = ({ sx }: TabsProps) => {
       <Tab
         disableRipple
         label='Tất cả'
+        value={null}
         sx={(theme) => tabItemStyles(theme)}
       />
       <Tab
         disableRipple
         label='Đang xem xét'
+        value={StatusCodes.REVIEW}
         sx={(theme) => tabItemStyles(theme)}
       />
       <Tab
         disableRipple
         label='Loại bỏ'
+        value={StatusCodes.REJECTED}
         sx={(theme) => tabItemStyles(theme)}
       />
       <Tab
         disableRipple
         label='Đã chọn'
+        value={StatusCodes.SELECTED}
         sx={(theme) => tabItemStyles(theme)}
       />
     </Tabs>
