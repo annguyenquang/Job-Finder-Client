@@ -17,6 +17,8 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import blue from '@mui/material/colors/blue'
 import grey from '@mui/material/colors/grey'
+import { Check, Download } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
 
 export const UserJobApplicationsTable: React.FC = () => {
   const locationStore = useLocationStore()
@@ -51,7 +53,8 @@ export const UserJobApplicationsTable: React.FC = () => {
           <TableRow>
             <TableCell>Công việc</TableCell>
             <TableCell>Thời gian ứng tuyển</TableCell>
-            <TableCell>Hành động</TableCell>
+            <TableCell>Cover Letter</TableCell>
+            <TableCell>CV</TableCell>
           </TableRow>
         </TableHead>
 
@@ -109,17 +112,51 @@ export const UserJobApplicationsTable: React.FC = () => {
                 </TableCell>
 
                 <TableCell>
-                  <Button
-                    className='rounded-full'
-                    variant='contained'
-                  >
-                    Xem
-                  </Button>
+                  {application.coverLetter !== null && application.coverLetter.length > 0 ? (
+                    <Stack
+                      direction={'row'}
+                      spacing={1}
+                    >
+                      <Check sx={{ color: 'green' }} />
+                      <Typography
+                        sx={{
+                          color: blue[500],
+                          ':hover': { cursor: 'pointer', textDecoration: 'underline', fontStyle: 'italic' }
+                        }}
+                      >
+                        Xem
+                      </Typography>
+                    </Stack>
+                  ) : (
+                    <EmptyCell />
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {application.cvLink !== null && application.cvLink.length > 0 ? (
+                    <Button startIcon={<Download />}>
+                      <Typography>Tải về</Typography>
+                    </Button>
+                  ) : (
+                    <EmptyCell />
+                  )}
                 </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
     </TableContainer>
+  )
+}
+
+const EmptyCell = () => {
+  return (
+    <Stack
+      direction={'row'}
+      spacing={1}
+    >
+      <Close color='error' />
+      <Typography>Không có</Typography>
+    </Stack>
   )
 }
