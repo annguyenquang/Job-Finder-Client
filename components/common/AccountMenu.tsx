@@ -23,6 +23,7 @@ export const AccountMenu = () => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -34,6 +35,7 @@ export const AccountMenu = () => {
     await accountStore.logout()
     router.push('/login')
   }
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -114,11 +116,11 @@ const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
         </ListItemIcon>
         <Link href={'/profile'}> Quản lý hồ sơ</Link>
       </MenuItem>
-      <MenuItem onClick={props.handleOnClose}>
+      <MenuItem>
         <ListItemIcon>
           <WorkHistoryIcon fontSize='small' />
         </ListItemIcon>
-        Đơn ứng tuyển của tôi
+        <Link href={'user/job-applications'}>Đơn ứng tuyển của tôi</Link>
       </MenuItem>
       <MenuItem onClick={props.handleOnClose}>
         <ListItemIcon>
@@ -133,6 +135,7 @@ const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
 const CompanyItem: React.FC = () => {
   const accountStore = useAccountStore()
   const companyAccount = accountStore.account as CompanyAccount
+
   return (
     <>
       <MenuItem>
