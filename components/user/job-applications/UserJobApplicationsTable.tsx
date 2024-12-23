@@ -3,7 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useUserJobApplicationStore, useAccountStore, useLocationStore } from '@/stores'
+import { useUserJobApplicationStore, useAccountStore, useLocationStore, useCoverLetterDialogStore } from '@/stores'
 import { AccountType } from '@/models'
 import TableContainer from '@mui/material/TableContainer'
 import Paper from '@mui/material/Paper'
@@ -23,6 +23,7 @@ import Close from '@mui/icons-material/Close'
 export const UserJobApplicationsTable: React.FC = () => {
   const locationStore = useLocationStore()
   const accountStore = useAccountStore()
+  const coverLetterDialogStore = useCoverLetterDialogStore()
   const userJobApplicationStore = useUserJobApplicationStore()
 
   React.useEffect(() => {
@@ -51,10 +52,18 @@ export const UserJobApplicationsTable: React.FC = () => {
       <Table size='small'>
         <TableHead>
           <TableRow>
-            <TableCell>Công việc</TableCell>
-            <TableCell>Thời gian ứng tuyển</TableCell>
-            <TableCell>Cover Letter</TableCell>
-            <TableCell>CV</TableCell>
+            <TableCell>
+              <Typography fontWeight={'bold'}>Công việc</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography fontWeight={'bold'}>Thời gian ứng tuyển</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography fontWeight={'bold'}>Cover Letter</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography fontWeight={'bold'}>CV</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
 
@@ -119,6 +128,9 @@ export const UserJobApplicationsTable: React.FC = () => {
                     >
                       <Check sx={{ color: 'green' }} />
                       <Typography
+                        onClick={() => {
+                          coverLetterDialogStore.openCoverLetterDialog(application.coverLetter)
+                        }}
                         sx={{
                           color: blue[500],
                           ':hover': { cursor: 'pointer', textDecoration: 'underline', fontStyle: 'italic' }
