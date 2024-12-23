@@ -147,7 +147,9 @@ export const UserJobApplicationsTable: React.FC = () => {
                 <TableCell>
                   {application.cvLink !== null && application.cvLink.length > 0 ? (
                     <Button startIcon={<Download />}>
-                      <Typography>Tải về</Typography>
+                      <Link href={application.cvLink}>
+                        <Typography>Tải về</Typography>
+                      </Link>
                     </Button>
                   ) : (
                     <EmptyCell />
