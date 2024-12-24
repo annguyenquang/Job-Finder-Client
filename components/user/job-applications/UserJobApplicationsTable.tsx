@@ -183,6 +183,9 @@ export const UserJobApplicationsTable: React.FC = () => {
         mt={2}
       >
         <Pagination
+          variant='outlined'
+          size='large'
+          shape='rounded'
           count={Math.ceil(userJobApplicationStore.total / userJobApplicationStore.pageSize)}
           page={userJobApplicationStore.page}
           onChange={handlePageChanged}
