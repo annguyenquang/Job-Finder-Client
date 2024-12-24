@@ -54,7 +54,6 @@ export const UserJobApplicationsTable: React.FC = () => {
   }, [accountStore.account?.id])
   React.useEffect(() => {
     if (accountStore.account) {
-      console.log('load job applications')
       userJobApplicationStore.loadJobApplications(accountStore.account.id)
     }
   }, [userJobApplicationStore.page, userJobApplicationStore.pageSize, accountStore.account])
