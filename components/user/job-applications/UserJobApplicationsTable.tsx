@@ -29,7 +29,6 @@ export const UserJobApplicationsTable: React.FC = () => {
   const userJobApplicationStore = useUserJobApplicationStore()
 
   const handlePageChanged = (_: unknown, page: number) => {
-    console.log('page', page)
     userJobApplicationStore.setPage(page)
   }
 
