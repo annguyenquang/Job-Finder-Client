@@ -2,19 +2,20 @@
 'use client'
 
 import Link from 'next/link'
-import { logo } from '../../assets'
 import Image from 'next/image'
-import { useState } from 'react'
-import { AccountMenu } from './AccountMenu'
-import { useAccountStore } from '@/stores'
-import { Button, ButtonGroup, Stack } from '@mui/material'
+import React from 'react'
+import { logo } from '../../assets'
+import { Button, ButtonGroup } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { grey } from '@mui/material/colors'
+import { useAccountStore } from '@/stores'
+import { AccountMenu } from './AccountMenu'
+import { AccountType } from '@/models'
 
 export const Navbar = () => {
   const accountStore = useAccountStore()
   const router = useRouter()
-  const [link, setLink] = useState([
+  const [link, setLink] = React.useState([
     {
       direction: '/viec-lam',
       text: 'Việc làm',
@@ -24,13 +25,20 @@ export const Navbar = () => {
       direction: '/cong-ty',
       text: 'Công ty',
       isActive: false
-    },
-    {
-      direction: '/ho-so',
-      text: 'Hồ sơ',
-      isActive: false
     }
   ])
+  React.useEffect(() => {
+    switch (accountStore.accountType) {
+      case AccountType.Company:
+        setLink([...link, { direction: '/company/dashboard', text: 'Dashboard', isActive: false }])
+        break
+      case AccountType.User:
+        setLink([...link, { direction: '/profile', text: 'Hồ sơ', isActive: false }])
+        break
+      default:
+        break
+    }
+  }, [accountStore.accountType])
 
   return (
     <div className='flex flex-row justify-between mb-3 gap-6 px-5 h-[75px] border-b-4 border-[#4acd8d]-500 bg-colorPrimary'>
