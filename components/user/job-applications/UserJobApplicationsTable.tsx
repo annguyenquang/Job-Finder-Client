@@ -17,10 +17,11 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import blue from '@mui/material/colors/blue'
 import grey from '@mui/material/colors/grey'
-import { Check, Download } from '@mui/icons-material'
 import Close from '@mui/icons-material/Close'
 import Box from '@mui/material/Box'
 import Pagination from '@mui/material/Pagination'
+import Download from '@mui/icons-material/Download'
+import Check from '@mui/icons-material/Check'
 
 export const UserJobApplicationsTable: React.FC = () => {
   const locationStore = useLocationStore()
