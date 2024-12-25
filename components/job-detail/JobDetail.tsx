@@ -77,7 +77,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
               genderRequirement={metadataStore.genderRequirement}
               skills={props.job.skills}
             ></JobInfo>
-            <ApplicationPanel />
+            {props.job.company.id == accountStore.account?.id && <ApplicationPanel />}
           </Grid2>
           <Grid2 size={4}>
             <CompanyIntro
