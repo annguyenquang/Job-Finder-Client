@@ -2,21 +2,32 @@ import { create } from 'zustand'
 import { Account, AccountType, CompanyAccount, UserAccount } from '@/models'
 import { AccountService } from '@/services'
 
-type AccountStore = {
+type AccountStoreStates = {
   account: Account
   accountType: AccountType | null
+}
+
+type AccountStoreActions = {
   login: (username: string, password: string) => Promise<Account>
   logout: () => Promise<void>
   loadAccountByJwt: () => Promise<void>
+  updateAccountTypeByAccount: (account: Account) => void
 }
 
-export const useAccountStore = create<AccountStore>()((set) => ({
+type AccountStore = AccountStoreStates & AccountStoreActions
+
+const initialState: AccountStoreStates = {
   account: null,
-  accountType: null,
+  accountType: null
+}
+
+export const useAccountStore = create<AccountStore>()((set, get) => ({
+  ...initialState,
   login: async (username: string, password: string) => {
     const res = await AccountService.login(username, password)
     if (res) {
       set(() => ({ account: res }))
+      get().updateAccountTypeByAccount(res)
       return res
     }
     return null
@@ -24,20 +35,22 @@ export const useAccountStore = create<AccountStore>()((set) => ({
   logout: async () => {
     await AccountService.logout()
     set(() => ({
-      account: null
+      ...initialState
     }))
   },
   loadAccountByJwt: async () => {
     const account = await AccountService.getAccountByCookie()
+    set(() => ({ account: account }))
+    get().updateAccountTypeByAccount(account)
+  },
+  updateAccountTypeByAccount: (account: Account) => {
     if (isUserAccount(account)) {
-      account.dateOfBirth = new Date(account.dateOfBirth)
       set(() => ({ accountType: AccountType.User }))
     } else if (isCompanyAccount(account)) {
       set(() => ({ accountType: AccountType.Company }))
     } else {
       set(() => ({ accountType: null }))
     }
-    set(() => ({ account: account }))
   }
 }))
 

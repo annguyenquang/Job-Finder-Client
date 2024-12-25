@@ -29,7 +29,8 @@ const updateUser = async (id: string, params: UpdateUserParams) => {
           credentialId: certification.credentialId ?? null,
           issuingOrganization: certification.issuingOrganization,
           issueDate: issueDate,
-          expirationDate: expirationDate
+          expirationDate: expirationDate,
+          credentialUrl: certification.credentialUrl ?? null
         }
       })
     }

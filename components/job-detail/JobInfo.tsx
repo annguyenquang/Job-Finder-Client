@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import JobDescription from './JobDescription';
 import { Company, Job } from '@/models';
+import TranslateDescription from '../common/TranslateDescription';
 type JobInfoProps = {
     company: Company,
     job: Job,
@@ -72,7 +72,7 @@ export const JobInfo: React.FC<JobInfoProps> = (props) => {
                 >
                     Chi tiết công việc
                 </Typography>
-                <JobDescription description={props.job.description} />
+                <TranslateDescription description={props.job.description} />
                 <Typography
                     className='font-sans text-lg font-semibold text-gray-600 mt-4 mb-4'
                 >

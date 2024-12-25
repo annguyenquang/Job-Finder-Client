@@ -1,4 +1,6 @@
-import * as React from 'react'
+import React from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
@@ -9,14 +11,19 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Logout from '@mui/icons-material/Logout'
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
+import Person from '@mui/icons-material/Person'
+import Settings from '@mui/icons-material/Settings'
+import Apartment from '@mui/icons-material/Apartment'
+import Dashboard from '@mui/icons-material/Dashboard'
 import { useAccountStore } from '@/stores'
-import { useRouter } from 'next/navigation'
+import { AccountType, CompanyAccount } from '@/models'
 
 export const AccountMenu = () => {
   const accountStore = useAccountStore()
   const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -28,6 +35,7 @@ export const AccountMenu = () => {
     await accountStore.logout()
     router.push('/login')
   }
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -81,23 +89,67 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> {accountStore.account?.username}
-        </MenuItem>
+        <Link href={accountStore.accountType == AccountType.User ? '/profile' : 'company/dashboard'}>
+          <MenuItem onClick={handleClose}>
+            <Avatar /> {accountStore.account?.username}
+          </MenuItem>
+        </Link>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <WorkHistoryIcon fontSize='small' />
-          </ListItemIcon>
-          View your applications
-        </MenuItem>
+        {accountStore.accountType == AccountType.User ? <UserItem handleOnClose={handleClose} /> : <CompanyItem />}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>
-          Logout
+          Đăng xuất
         </MenuItem>
       </Menu>
     </React.Fragment>
+  )
+}
+
+const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
+  return (
+    <>
+      <MenuItem onClick={props.handleOnClose}>
+        <ListItemIcon>
+          <Person fontSize='small' />
+        </ListItemIcon>
+        <Link href={'/profile'}> Quản lý hồ sơ</Link>
+      </MenuItem>
+      <MenuItem>
+        <ListItemIcon>
+          <WorkHistoryIcon fontSize='small' />
+        </ListItemIcon>
+        <Link href={'user/job-applications'}>Đơn ứng tuyển của tôi</Link>
+      </MenuItem>
+      <MenuItem onClick={props.handleOnClose}>
+        <ListItemIcon>
+          <Settings fontSize='small' />
+        </ListItemIcon>
+        Cài đặt tài khoản
+      </MenuItem>
+    </>
+  )
+}
+
+const CompanyItem: React.FC = () => {
+  const accountStore = useAccountStore()
+  const companyAccount = accountStore.account as CompanyAccount
+
+  return (
+    <>
+      <MenuItem>
+        <ListItemIcon>
+          <Dashboard fontSize='small' />
+        </ListItemIcon>
+        <Link href={'/company/dashboard'}>Dashboard</Link>
+      </MenuItem>
+      <MenuItem>
+        <ListItemIcon>
+          <Apartment fontSize='small' />
+        </ListItemIcon>
+        <Link href={`/company-profile/${companyAccount.slug}`}>Your profile</Link>
+      </MenuItem>
+    </>
   )
 }

@@ -48,4 +48,4 @@ const getAccountByUserId: (userId: string) => Promise<Account | null> = async (u
   }
 }
 
-export const AccountService = { login, getAccountByCookie, getAccountByUserId }
+export const AccountService = { login, getAccountByCookie, getAccountByUserId, logout }

@@ -1,4 +1,4 @@
-import { ApiResult, JobApplication, ListResult } from '@/models'
+import { ApiResult, GetUserJobApplicationsParams, ListResult, UserJobApplication, JobApplication } from '@/models'
 import { http } from '@/services'
 
 type JobApplictionParams = {
@@ -8,7 +8,6 @@ type JobApplictionParams = {
   coverLetter: string | null
   phoneNumber: string | null
 }
-
 type CreateJobApplicationBody = JobApplictionParams
 
 const CreateJobApplication = async (jobApplication: JobApplictionParams): Promise<string | undefined> => {
@@ -42,4 +41,14 @@ const getApplication = async (param: string): Promise<ApiResult<ListResult<JobAp
   }
 }
 
-export const JobApplicationService = { CreateJobApplication, getApplication }
+const GetUserJobApplications = async (params: GetUserJobApplicationsParams) => {
+  try {
+    const url = `JobApplication/GetJobApplicationByUserId?userId=${params.userId}&pagination.page=${params.page}&pagination.pageSize=${params.pageSize}`
+    const res = await http().get<ApiResult<ListResult<UserJobApplication[]>>>(url)
+    return res.data.result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const JobApplicationService = { CreateJobApplication, getApplication, GetUserJobApplications }
