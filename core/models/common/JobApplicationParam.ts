@@ -6,6 +6,7 @@ export class JobApplicationParam {
   fromDate: string
   toDate: string
   state: number | null
+  isDesc: boolean | null
 
   constructor() {
     this.jobId = ''
@@ -13,6 +14,7 @@ export class JobApplicationParam {
     this.fromDate = ''
     this.toDate = ''
     this.state = null
+    this.isDesc = null
   }
 
   setJobId(id: string): void {
@@ -21,6 +23,10 @@ export class JobApplicationParam {
 
   setState(newState: number | null) {
     this.state = newState
+  }
+
+  setSort(sort: number | null): void {
+    this.isDesc = sort === 1 ? true : sort === 0 ? false : null
   }
 
   setPage(newPage: number): void {
@@ -49,6 +55,8 @@ export class JobApplicationParam {
     if (this.toDate) result += `&Filter.ToDate=${this.toDate}`
 
     if (this.state != null) result += `&Filter.State=${this.state}`
+
+    if (this.isDesc != null) result += `&Order.By=CreatedAt&Order.IsDesc=${this.isDesc}`
 
     return result
   }

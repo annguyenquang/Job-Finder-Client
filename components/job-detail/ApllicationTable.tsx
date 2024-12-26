@@ -166,7 +166,10 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                       >
                         <MailIcon sx={{ color: 'black' }} /> {/* Set icon color to black */}
                       </IconButton>
-                      <DropdownMenuBtn />
+                      <DropdownMenuBtn
+                        applicationId={e.id}
+                        state={e.state}
+                      />
                     </Box>
                   </TableCell>
                 </TableRow>

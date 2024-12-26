@@ -1,12 +1,21 @@
-import { Box, IconButton, MenuItem, Select } from '@mui/material'
+import { Box, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import React from 'react'
+import { useJobDetailStore } from '@/stores'
 
 const SortMenu = () => {
-  const [sortOption, setSortOption] = React.useState('')
+  const [sortOption, setSortOption] = React.useState<number | ''>('') // Allow empty initial value
+  const jobDetailStore = useJobDetailStore()
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSortOption(event.target.value as string) // Cast value to the expected type
+  const handleChange = (event: SelectChangeEvent<number>) => {
+    const selectedValue = parseInt(event.target.value as unknown as string, 10)
+    setSortOption(selectedValue)
+
+    // Integrate with store
+    const param = jobDetailStore.jobApplicationParam
+    param.setSort(selectedValue) // Update the sort option in the store
+    jobDetailStore.updateJobApplicationParam(param)
+    jobDetailStore.loadApplication(param)
   }
 
   return (
@@ -18,14 +27,14 @@ const SortMenu = () => {
     >
       <Select
         value={sortOption}
-        // onChange={}
+        onChange={handleChange} // Fixed handler
         size='small'
         displayEmpty
         sx={{
           width: 120,
           fontSize: '14px'
         }}
-        IconComponent={ArrowDropDownIcon} // Disable default arrow
+        IconComponent={ArrowDropDownIcon} // Custom arrow icon
       >
         <MenuItem
           value=''
@@ -33,9 +42,8 @@ const SortMenu = () => {
         >
           Select an option
         </MenuItem>
-
-        <MenuItem value='date'>Newest</MenuItem>
-        <MenuItem value='name'>Date</MenuItem>
+        <MenuItem value={1}>Newest</MenuItem>
+        <MenuItem value={0}>Oldest</MenuItem>
       </Select>
     </Box>
   )

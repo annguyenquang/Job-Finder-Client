@@ -10,15 +10,63 @@ import MailIcon from '@mui/icons-material/Mail'
 import CheckIcon from '@mui/icons-material/Check'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
-export const DropdownMenuBtn = () => {
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
+import { JobApplicationService, JobService } from '@/services'
+import { useJobDetailStore } from '@/stores'
+
+type DropdownProp = {
+  applicationId: string
+  state: number
+}
+
+export const DropdownMenuBtn: React.FC<DropdownProp> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [selectedValue, setSelectedValue] = React.useState<number | null>(null)
+  const jobDetailStore = useJobDetailStore()
+
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
+
+  const updateState = async (newState: number) => {
+    await JobApplicationService.updateApplication(props.applicationId, newState)
+  }
+  const handleClose = (value: number) => {
+    if (value !== undefined) {
+      setSelectedValue(value)
+      updateState(value)
+      jobDetailStore.loadApplication(jobDetailStore.jobApplicationParam)
+      console.log('Selected value:', value)
+    }
     setAnchorEl(null)
   }
+
+  // Determine button properties based on the current state
+  const getButtonProps = () => {
+    switch (props.state) {
+      case 1:
+        return { color: '##63f011', label: 'Selected' }
+      case 2:
+        return { color: '#f01132', label: 'Rejected' }
+      case 0:
+      default:
+        return { color: '#f09541', label: 'Reviewing' }
+    }
+  }
+
+  const getButtonIcon = (state: number) => {
+    switch (state) {
+      case 1:
+        return <CheckIcon /> // Icon for "Đã chọn"
+      case 2:
+        return <NotInterestedIcon /> // Icon for "Đã loại"
+      default:
+        return <HourglassEmptyIcon /> // Icon for "Đang xem xét"
+    }
+  }
+
+  const { color, label } = getButtonProps()
 
   return (
     <div>
@@ -27,12 +75,16 @@ export const DropdownMenuBtn = () => {
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
+        sx={{
+          backgroundColor: color,
+          minWidth: '140px'
+        }}
         variant='contained'
         disableElevation
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
+        startIcon={getButtonIcon(props.state)}
       >
-        Move to
+        {label}
       </Button>
       <Menu
         id='demo-customized-menu'
@@ -67,26 +119,20 @@ export const DropdownMenuBtn = () => {
         }}
       >
         <MenuItem
-          onClick={handleClose}
+          onClick={() => handleClose(1)}
           disableRipple
+          value={1}
         >
           <CheckIcon />
           Chọn
         </MenuItem>
         <MenuItem
-          onClick={handleClose}
+          onClick={() => handleClose(2)}
           disableRipple
+          value={2}
         >
           <NotInterestedIcon />
           Loại
-        </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem
-          onClick={handleClose}
-          disableRipple
-        >
-          <MailIcon />
-          Email
         </MenuItem>
       </Menu>
     </div>
