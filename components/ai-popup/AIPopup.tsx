@@ -64,7 +64,7 @@ export const AIPopup = () => {
   }
 
   return (
-    accountStore.accountType !== AccountType.User && (
+    accountStore.accountType === AccountType.User && (
       <div>
         <Box
           onClick={() => {
