@@ -4,7 +4,7 @@ import { SxProps, Theme } from '@mui/material/styles'
 import Tab, { tabClasses } from '@mui/material/Tab'
 import Tabs, { tabsClasses, TabsProps } from '@mui/material/Tabs'
 import { useJobDetailStore } from '@/stores'
-import { StatusCodes } from '@/models'
+import { ApplicationStatus } from '@/models'
 
 export const tabsStyles = (theme: Theme) => ({
   backgroundColor: 'transparent',
@@ -69,19 +69,19 @@ export const ApplicationTab = ({ sx }: TabsProps) => {
       <Tab
         disableRipple
         label='Đang xem xét'
-        value={StatusCodes.REVIEW}
+        value={ApplicationStatus.REVIEW}
         sx={(theme) => tabItemStyles(theme)}
       />
       <Tab
         disableRipple
         label='Loại bỏ'
-        value={StatusCodes.REJECTED}
+        value={ApplicationStatus.REJECTED}
         sx={(theme) => tabItemStyles(theme)}
       />
       <Tab
         disableRipple
         label='Đã chọn'
-        value={StatusCodes.SELECTED}
+        value={ApplicationStatus.SELECTED}
         sx={(theme) => tabItemStyles(theme)}
       />
     </Tabs>

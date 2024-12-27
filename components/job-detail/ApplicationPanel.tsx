@@ -58,8 +58,6 @@ export const ApplicationPanel = () => {
   }
 
   useEffect(() => {
-    console.log('Job applications: ', jobDetailStore.jobApplication)
-
     setData((prev) => ({
       ...prev,
       applications: [...jobDetailStore.jobApplication]

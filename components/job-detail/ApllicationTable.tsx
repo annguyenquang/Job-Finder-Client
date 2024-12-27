@@ -16,10 +16,6 @@ import MailIcon from '@mui/icons-material/Mail'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import { TableRowSkeleton } from './skeleton'
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-  return { name, calories, fat, carbs, protein }
-}
-
 const headers = [
   { label: 'Candidate' },
   { label: 'Cover Letter' },
@@ -35,7 +31,6 @@ type ApplicationTableProps = {
 
 export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
   const jobDetailStore = useJobDetailStore()
-  console.log('List Users: ', props.users)
   return (
     <TableContainer component={Paper}>
       <Table

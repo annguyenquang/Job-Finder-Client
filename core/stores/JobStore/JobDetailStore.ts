@@ -1,6 +1,5 @@
 import { Job, JobApplication, JobApplicationParam, Pagination } from '@/models'
 import { JobApplicationService, JobService } from '@/services'
-import { Console } from 'console'
 import { create } from 'zustand'
 
 type JobDetailStore = {
@@ -127,7 +126,6 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000))
       const res = await JobApplicationService.getApplication(param.constructParam())
-      console.log('Application res: ', res)
       if (res) {
         set((state) => ({
           jobApplication: res.result.data,

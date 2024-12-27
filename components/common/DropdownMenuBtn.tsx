@@ -37,7 +37,6 @@ export const DropdownMenuBtn: React.FC<DropdownProp> = (props) => {
       setSelectedValue(value)
       updateState(value)
       jobDetailStore.loadApplication(jobDetailStore.jobApplicationParam)
-      console.log('Selected value:', value)
     }
     setAnchorEl(null)
   }
