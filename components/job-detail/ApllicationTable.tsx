@@ -6,20 +6,19 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { CoverLetterDialog, DropdownMenuBtn } from '@/components'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
-import { useCoverLetterDialogStore, useJobDetailStore } from '@/stores'
-import { Account, JobApplication, UserAccount } from '@/models'
 import { Avatar, Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { differenceInDays, parseISO } from 'date-fns'
 import MailIcon from '@mui/icons-material/Mail'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
-import { TableRowSkeleton } from './skeleton'
 import Close from '@mui/icons-material/Close'
 import Check from '@mui/icons-material/Check'
 import blue from '@mui/material/colors/blue'
-import Download from '@mui/icons-material/Download'
-import Link from 'next/link'
+import { useCoverLetterDialogStore, useJobDetailStore, usePDFDialogStore } from '@/stores'
+import { Account, JobApplication, UserAccount } from '@/models'
+import { CoverLetterDialog, DropdownMenuBtn } from '@/components'
+import { PDFDialog } from './PDFDialog'
+import { TableRowSkeleton } from './skeleton'
 
 const headers = [
   { label: 'Candidate' },
@@ -43,9 +42,11 @@ const generateDaysPassed = (date: Date) => {
 export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
   const jobDetailStore = useJobDetailStore()
   const coverLetterStore = useCoverLetterDialogStore()
+  const pdfDialogStore = usePDFDialogStore()
   return (
     <Box>
       <CoverLetterDialog />
+      <PDFDialog />
       <TableContainer component={Paper}>
         <Table
           sx={{
@@ -101,6 +102,10 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
             ) : (
               props.data.map((e, index) => {
                 const user: UserAccount = props.users[index] as UserAccount
+                const handleClickCV = (cvLink: string) => {
+                  pdfDialogStore.openPDFDialog(cvLink)
+                }
+
                 return (
                   <TableRow key={e.id}>
                     <TableCell
@@ -164,11 +169,12 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                     </TableCell>
 
                     <TableCell align='center'>
-                      {e.cvLink !== null && e.cvLink.length > 0 ? (
-                        <Button startIcon={<Download />}>
-                          <Link href={e.cvLink}>
-                            <Typography variant='subtitle2'>Tải về</Typography>
-                          </Link>
+                      {e.cvLink ? (
+                        <Button
+                          onClick={() => handleClickCV(e.cvLink)}
+                          startIcon={<AttachFileIcon />}
+                        >
+                          Xem
                         </Button>
                       ) : (
                         <EmptyCell />
