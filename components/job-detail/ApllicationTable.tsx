@@ -6,15 +6,20 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { DropdownMenuBtn } from '@/components'
+import { CoverLetterDialog, DropdownMenuBtn } from '@/components'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
-import { useJobDetailStore } from '@/stores'
+import { useCoverLetterDialogStore, useJobDetailStore } from '@/stores'
 import { Account, JobApplication, UserAccount } from '@/models'
-import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { differenceInDays, parseISO } from 'date-fns'
 import MailIcon from '@mui/icons-material/Mail'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import { TableRowSkeleton } from './skeleton'
+import Close from '@mui/icons-material/Close'
+import Check from '@mui/icons-material/Check'
+import blue from '@mui/material/colors/blue'
+import Download from '@mui/icons-material/Download'
+import Link from 'next/link'
 
 const headers = [
   { label: 'Candidate' },
@@ -37,140 +42,188 @@ const generateDaysPassed = (date: Date) => {
 
 export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
   const jobDetailStore = useJobDetailStore()
+  const coverLetterStore = useCoverLetterDialogStore()
   return (
-    <TableContainer component={Paper}>
-      <Table
-        sx={{
-          width: '100%',
-          flex: 1
-        }}
-        aria-label='customized table'
-      >
-        <TableHead>
-          <TableRow sx={{ fontSize: '12px' }}>
-            {headers.map((header, index) => (
-              <TableCell
-                key={header.label}
-                className='bg-colorPrimary'
-                sx={{
-                  color: 'white',
-                  fontWeight: 'medium',
-                  padding: '0.5',
-                  textAlign: index === 0 ? 'left' : 'center' // Align first column to right, others to left
-                }}
-              >
-                {header.label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {jobDetailStore.jobApplicationLoading ? (
-            Array.from({ length: 4 }).map((e, i) => <TableRowSkeleton key={i} />)
-          ) : props.data.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                align='center'
-              >
-                <Stack
-                  direction='column'
-                  alignItems='center'
-                  spacing={2}
-                  sx={{ py: 3 }}
+    <Box>
+      <CoverLetterDialog />
+      <TableContainer component={Paper}>
+        <Table
+          sx={{
+            width: '100%',
+            flex: 1
+          }}
+          aria-label='customized table'
+        >
+          <TableHead>
+            <TableRow sx={{ fontSize: '12px' }}>
+              {headers.map((header, index) => (
+                <TableCell
+                  key={header.label}
+                  className='bg-colorPrimary'
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'medium',
+                    padding: '0.5',
+                    textAlign: index === 0 ? 'left' : 'center' // Align first column to right, others to left
+                  }}
                 >
-                  <SentimentDissatisfiedIcon sx={{ fontSize: 50, color: 'gray' }} />
-                  <Typography
-                    variant='h6'
-                    color='text.secondary'
-                  >
-                    No application meet your condition
-                  </Typography>
-                </Stack>
-              </TableCell>
+                  {header.label}
+                </TableCell>
+              ))}
             </TableRow>
-          ) : (
-            props.data.map((e, index) => {
-              const user: UserAccount = props.users[index] as UserAccount
-              return (
-                <TableRow key={e.id}>
-                  <TableCell
-                    component='th'
-                    scope='row'
+          </TableHead>
+          <TableBody>
+            {jobDetailStore.jobApplicationLoading ? (
+              Array.from({ length: 4 }).map((e, i) => <TableRowSkeleton key={i} />)
+            ) : props.data.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  align='center'
+                >
+                  <Stack
+                    direction='column'
+                    alignItems='center'
+                    spacing={2}
+                    sx={{ py: 3 }}
                   >
-                    <Stack
-                      direction='row'
-                      alignItems='center'
-                      spacing={2}
+                    <SentimentDissatisfiedIcon sx={{ fontSize: 50, color: 'gray' }} />
+
+                    <Typography
+                      variant='h6'
+                      color='text.secondary'
                     >
-                      <Avatar
-                        sx={{ bgcolor: 'primary.main' }}
-                        alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
+                      No application meet your condition
+                    </Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ) : (
+              props.data.map((e, index) => {
+                const user: UserAccount = props.users[index] as UserAccount
+                return (
+                  <TableRow key={e.id}>
+                    <TableCell
+                      component='th'
+                      scope='row'
+                    >
+                      <Stack
+                        direction='row'
+                        alignItems='center'
+                        spacing={2}
                       >
-                        {user?.firstName?.charAt(0).toUpperCase() || '?'}
-                      </Avatar>
-
-                      <Stack>
-                        <Typography
-                          variant='body1'
-                          fontWeight='medium'
+                        <Avatar
+                          sx={{ bgcolor: 'primary.main' }}
+                          alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
                         >
-                          {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
-                        </Typography>
+                          {user?.firstName?.charAt(0).toUpperCase() || '?'}
+                        </Avatar>
 
-                        <Typography
-                          variant='body2'
-                          color='text.secondary'
-                        >
-                          {user?.dateOfBirth
-                            ? `${new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()} years old`
-                            : 'Unknown Age'}
-                        </Typography>
+                        <Stack>
+                          <Typography
+                            variant='body1'
+                            fontWeight='medium'
+                          >
+                            {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
+                          </Typography>
+
+                          <Typography
+                            variant='body2'
+                            color='text.secondary'
+                          >
+                            {user?.dateOfBirth
+                              ? `${new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()} years old`
+                              : 'Unknown Age'}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell align='center'>{e.coverLetter}</TableCell>
+                    <TableCell align='center'>
+                      {e.coverLetter !== null && e.coverLetter.length > 0 ? (
+                        <Stack
+                          direction={'row'}
+                          spacing={1}
+                        >
+                          <Check sx={{ color: 'green' }} />
+                          <Typography
+                            onClick={() => {
+                              coverLetterStore.openCoverLetterDialog(e.coverLetter)
+                            }}
+                            sx={{
+                              color: blue[500],
+                              ':hover': { cursor: 'pointer', textDecoration: 'underline', fontStyle: 'italic' }
+                            }}
+                          >
+                            Xem
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <EmptyCell />
+                      )}
+                    </TableCell>
 
-                  <TableCell align='center'>
-                    <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
-                  </TableCell>
+                    <TableCell align='center'>
+                      {e.cvLink !== null && e.cvLink.length > 0 ? (
+                        <Button startIcon={<Download />}>
+                          <Link href={e.cvLink}>
+                            <Typography variant='subtitle2'>Tải về</Typography>
+                          </Link>
+                        </Button>
+                      ) : (
+                        <EmptyCell />
+                      )}
+                    </TableCell>
 
-                  <TableCell align='center'>{generateDaysPassed(e.createdAt)}</TableCell>
+                    <TableCell align='center'>{generateDaysPassed(e.createdAt)}</TableCell>
 
-                  <TableCell align='center'>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
-                      <IconButton
-                        size='small'
-                        sx={{
-                          borderRadius: '50%',
-                          width: 30,
-                          height: 30,
-                          border: '1px solid black',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                            transform: 'scale(1.1)',
-                            transition: 'all 0.3s ease'
-                          }
-                        }}
-                      >
-                        <MailIcon sx={{ color: 'black' }} />
-                      </IconButton>
-                      <DropdownMenuBtn
-                        applicationId={e.id}
-                        state={e.state}
-                      />
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              )
-            })
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                    <TableCell align='center'>
+                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+                        <IconButton
+                          size='small'
+                          sx={{
+                            borderRadius: '50%',
+                            width: 30,
+                            height: 30,
+                            border: '1px solid black',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            '&:hover': {
+                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                              transform: 'scale(1.1)',
+                              transition: 'all 0.3s ease'
+                            }
+                          }}
+                        >
+                          <MailIcon sx={{ color: 'black' }} />
+                        </IconButton>
+
+                        <DropdownMenuBtn
+                          applicationId={e.id}
+                          state={e.state}
+                        />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  )
+}
+
+const EmptyCell = () => {
+  return (
+    <Stack
+      direction={'row'}
+      spacing={1}
+    >
+      <Close color='error' />
+      <Typography>Không có</Typography>
+    </Stack>
   )
 }
