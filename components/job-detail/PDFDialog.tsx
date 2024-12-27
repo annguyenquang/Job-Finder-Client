@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 export const PDFDialog = () => {
   const pdfDialogStore = usePDFDialogStore()
-  console.log(pdfDialogStore)
   return (
     <Dialog
       open={pdfDialogStore.open}
