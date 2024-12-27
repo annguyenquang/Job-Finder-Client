@@ -11,10 +11,20 @@ import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material
 import { useAIStore } from '@/stores/AIPopupStore'
 import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
-import { ParsedJobSuggestion } from '@/models'
+import { CompanyAccount, ParsedJobSuggestion, UserAccount } from '@/models'
+import { useAccountStore, useCompanyStore } from '@/stores'
 
 const InitialLayout = () => {
   const AIPopupStore = useAIStore()
+
+  const companyStore = useCompanyStore()
+  const accountStore = useAccountStore()
+
+  React.useEffect(() => {
+    if (!accountStore.account) {
+      accountStore.loadAccountByJwt()
+    }
+  }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   const handleSkillChange = (event: React.ChangeEvent<{}>, newValue: string[]) => {
@@ -130,7 +140,7 @@ const InitialLayout = () => {
             marginBottom: 0
           }}
         >
-          Alan Podemski
+          {accountStore.account?.username}
         </Box>
         <Box
           component='span'
@@ -140,7 +150,7 @@ const InitialLayout = () => {
             marginBottom: '0.875em'
           }}
         >
-          Lumiere Riverside, East Tower, 277 Đ. Võ Nguyên Giáp, An Phú, Quận 2
+          {(accountStore.account as UserAccount).selfDescription}
         </Box>
       </CardContent>
       <Divider />

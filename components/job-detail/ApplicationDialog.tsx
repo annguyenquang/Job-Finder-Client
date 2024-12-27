@@ -42,7 +42,7 @@ const Transition = React.forwardRef(function Transition(
   )
 })
 
-const ApplicationDialog: React.FC = (props) => {
+export const ApplicationDialog: React.FC = (props) => {
   const applicationDialogStore = useApplicationDialogStore()
   const alertStore = useAlertStore()
 
@@ -309,5 +309,3 @@ const ApplicationDialog: React.FC = (props) => {
     </Dialog>
   )
 }
-
-export default ApplicationDialog
