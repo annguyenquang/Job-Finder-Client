@@ -1,9 +1,8 @@
 import React from 'react'
-import { UserJobApplicationsTable } from '@/components'
+import { CoverLetterDialog, UserJobApplicationsTable } from '@/components'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import { CoverLetterDialog } from '@/components'
 
 const UserJobApplicationsPage = () => {
   return (

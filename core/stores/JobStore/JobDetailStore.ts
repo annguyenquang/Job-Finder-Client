@@ -6,7 +6,7 @@ type JobDetailStore = {
   job: Job
   jobs: Job[]
   totalJobs: number
-  jobApplication: JobApplication[]
+  jobApplications: JobApplication[]
   jobApplicationParam: JobApplicationParam
   jobApplicationLoading: boolean
   total: number
@@ -83,7 +83,7 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
   job: emptyJob,
   jobs: [emptyJob],
   totalJobs: 0,
-  jobApplication: [],
+  jobApplications: [],
   total: 0,
   jobApplicationParam: new JobApplicationParam(),
   jobApplicationLoading: false,
@@ -128,7 +128,7 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
       const res = await JobApplicationService.getApplication(param.constructParam())
       if (res) {
         set((state) => ({
-          jobApplication: res.result.data,
+          jobApplications: res.result.data,
           total: Math.ceil(res.result.total / state.jobApplicationParam.pagination.pageSize)
         }))
       }

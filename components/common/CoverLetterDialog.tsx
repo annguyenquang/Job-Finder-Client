@@ -27,7 +27,7 @@ export const CoverLetterDialog = () => {
           type='text'
           fullWidth
           multiline
-          rows={10}
+          rows={coverLetterStore?.coverLetter?.split('\n').length}
           variant='outlined'
           value={coverLetterStore.coverLetter}
           aria-readonly={true}

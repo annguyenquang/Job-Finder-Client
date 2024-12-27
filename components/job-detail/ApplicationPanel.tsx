@@ -43,7 +43,7 @@ export const ApplicationPanel = () => {
   })
 
   const fetchListUser = async () => {
-    const listId = jobDetailStore.jobApplication.map((application) => application.userId)
+    const listId = jobDetailStore.jobApplications.map((application) => application.userId)
     const listUser: Account[] = await Promise.all(
       listId.map(async (e, i) => {
         const result = await AccountService.getAccountByUserId(e)
@@ -60,11 +60,11 @@ export const ApplicationPanel = () => {
   useEffect(() => {
     setData((prev) => ({
       ...prev,
-      applications: [...jobDetailStore.jobApplication]
+      applications: [...jobDetailStore.jobApplications]
     }))
 
     fetchListUser()
-  }, [jobDetailStore.jobApplication])
+  }, [jobDetailStore.jobApplications])
 
   return (
     <Card
