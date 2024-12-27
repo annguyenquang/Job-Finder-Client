@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -11,7 +11,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile'
 import { useJobDetailStore } from '@/stores'
 import { Account, JobApplication, UserAccount } from '@/models'
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
-import { differenceInDays, parseISO, format } from 'date-fns'
+import { differenceInDays, parseISO } from 'date-fns'
 import MailIcon from '@mui/icons-material/Mail'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import { TableRowSkeleton } from './skeleton'
@@ -27,6 +27,12 @@ const headers = [
 type ApplicationTableProps = {
   data: JobApplication[]
   users: Account[]
+}
+
+const generateDaysPassed = (date: Date) => {
+  const createdAt = typeof date === 'string' ? parseISO(date) : date
+  const daysAgo = differenceInDays(new Date(), createdAt)
+  return `${daysAgo} day(s) ago`
 }
 
 export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
@@ -85,7 +91,6 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
             </TableRow>
           ) : (
             props.data.map((e, index) => {
-              console.log('Row data:', e)
               const user: UserAccount = props.users[index] as UserAccount
               return (
                 <TableRow key={e.id}>
@@ -98,7 +103,6 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                       alignItems='center'
                       spacing={2}
                     >
-                      {/* Avatar with the first character of the user's first name */}
                       <Avatar
                         sx={{ bgcolor: 'primary.main' }}
                         alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
@@ -106,9 +110,7 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                         {user?.firstName?.charAt(0).toUpperCase() || '?'}
                       </Avatar>
 
-                      {/* User details */}
                       <Stack>
-                        {/* Full Name */}
                         <Typography
                           variant='body1'
                           fontWeight='medium'
@@ -116,7 +118,6 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                           {user ? `${user.firstName} ${user.lastName}` : 'Unknown Name'}
                         </Typography>
 
-                        {/* Age */}
                         <Typography
                           variant='body2'
                           color='text.secondary'
@@ -130,36 +131,33 @@ export const ApplicationTable: React.FC<ApplicationTableProps> = (props) => {
                   </TableCell>
 
                   <TableCell align='center'>{e.coverLetter}</TableCell>
+
                   <TableCell align='center'>
                     <AttachFileIcon sx={{ color: 'primary.main', cursor: 'pointer' }} />
                   </TableCell>
-                  <TableCell align='center'>
-                    {(() => {
-                      const createdAt = typeof e.createdAt === 'string' ? parseISO(e.createdAt) : e.createdAt
-                      const daysAgo = differenceInDays(new Date(), createdAt)
-                      return `${daysAgo} day(s) ago`
-                    })()}
-                  </TableCell>
+
+                  <TableCell align='center'>{generateDaysPassed(e.createdAt)}</TableCell>
+
                   <TableCell align='center'>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
                       <IconButton
                         size='small'
                         sx={{
-                          borderRadius: '50%', // Makes the button rounded
-                          width: 30, // Set a fixed width for square button
-                          height: 30, // Set a fixed height for square button
-                          border: '1px solid black', // Black border
+                          borderRadius: '50%',
+                          width: 30,
+                          height: 30,
+                          border: '1px solid black',
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
                           '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.1)', // Light background on hover
-                            transform: 'scale(1.1)', // Slightly enlarge the icon
-                            transition: 'all 0.3s ease' // Smooth transition for the hover effect
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            transform: 'scale(1.1)',
+                            transition: 'all 0.3s ease'
                           }
                         }}
                       >
-                        <MailIcon sx={{ color: 'black' }} /> {/* Set icon color to black */}
+                        <MailIcon sx={{ color: 'black' }} />
                       </IconButton>
                       <DropdownMenuBtn
                         applicationId={e.id}
