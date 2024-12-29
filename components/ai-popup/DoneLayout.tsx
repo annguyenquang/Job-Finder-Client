@@ -7,6 +7,10 @@ import { Chip, Stack, Typography } from '@mui/material'
 import { useAccountStore, useAIStore } from '@/stores'
 import { UserAccount } from '@/models'
 import JobSuggestionCard from './JobSuggestionCard'
+import { getProvinceName } from '../../core/utils/LocationUtils'
+import { LocationService } from '@/services'
+import { Job } from '../../core/models/JobModel/Job'
+import { MoodBad as MoodBadIcon } from '@mui/icons-material'
 
 const DoneLayout = () => {
   const AIPopupStore = useAIStore()
@@ -124,35 +128,7 @@ const DoneLayout = () => {
               display: 'flex',
               flexDirection: 'row'
             }}
-          >
-            <Typography
-              variant='body2'
-              sx={{ width: '100px', fontWeight: '700', color: 'primary' }}
-            >
-              Location:
-            </Typography>
-            <Stack
-              direction='row'
-              spacing={1}
-              sx={{
-                display: 'inline-flex',
-                flex: 1,
-                overflowX: 'auto',
-                whiteSpace: 'nowrap',
-                scrollbarWidth: 'none',
-                '&::-webkit-scrollbar': {
-                  display: 'none'
-                }
-              }}
-            >
-              <Typography
-                variant='body2'
-                sx={{ width: '100px', color: 'primary' }}
-              >
-                Quận 3, TP. Hồ Chí Minh
-              </Typography>
-            </Stack>
-          </Box>
+          ></Box>
         </Box>
       </Box>
 
@@ -177,13 +153,45 @@ const DoneLayout = () => {
             swipe
             className='w-[100%] h-[100%]'
           >
-            {AIPopupStore.suggestionJobs.map((item, i) => (
-              <JobSuggestionCard
-                key={item.job?.id}
-                job={item.job}
-                Explanation={item.detailExplanation}
-              />
-            ))}
+            {AIPopupStore.suggestionJobs.length > 0 ? (
+              <Carousel
+                index={index}
+                interval={4000}
+                animation='slide'
+                indicators={false}
+                stopAutoPlayOnHover
+                swipe
+                className='w-[100%] h-[100%]'
+              >
+                {AIPopupStore.suggestionJobs.map((item, i) => (
+                  <JobSuggestionCard
+                    key={item.job?.id}
+                    job={item.job}
+                    Explanation={item.detailExplanation}
+                    provinceId={item.job?.provinceId}
+                  />
+                ))}
+              </Carousel>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                  padding: 4
+                }}
+              >
+                <MoodBadIcon sx={{ fontSize: '64px', color: 'rgba(0, 0, 0, 0.3)', marginBottom: 2 }} />
+                <Typography
+                  variant='h6'
+                  sx={{ fontWeight: '500', color: 'rgba(0, 0, 0, 0.6)', textAlign: 'center' }}
+                >
+                  No suitable jobs found
+                </Typography>
+              </Box>
+            )}
           </Carousel>
         </div>
       </Box>

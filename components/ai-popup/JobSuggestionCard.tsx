@@ -1,17 +1,29 @@
 'use client'
 import { Box, Card, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import { Job } from '@/models'
 import { useRouter } from 'next/navigation'
 import { useJobListStore } from '@/stores'
+import { LocationService } from '@/services'
 type JobCardProps = {
   job: Job | undefined
   Explanation: string
+  provinceId: number | undefined
 }
 const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
+  const [location, setLocation] = useState<string | undefined>('')
   const router = useRouter()
   const jobStore = useJobListStore()
+
+  const getProvince = async (pId: number) => {
+    const province = await LocationService.getProvinceById(pId)
+    setLocation(province?.name)
+  }
+
+  useEffect(() => {
+    if (props.provinceId) getProvince(props.provinceId)
+  }, [])
 
   const handleOpenJobdetail = () => {
     setTimeout(() => {
@@ -154,7 +166,7 @@ const JobSuggestionCard: React.FC<JobCardProps> = (props) => {
                   flex: 1 // Flexible width for the content
                 }}
               >
-                Q3, TP HCM
+                {location}
               </Typography>
             </Box>
           </Box>
