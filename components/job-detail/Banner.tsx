@@ -10,9 +10,10 @@ import SchoolIcon from '@mui/icons-material/School'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
-import { Job } from '@/models'
+import { AccountType, Job } from '@/models'
 import { District, LocationService, Province } from '@/services'
-import { useApplicationDialogStore } from '@/stores'
+import { useAccountStore, useApplicationDialogStore } from '@/stores'
+import RedirectToLoginDialog from './RedirectToLoginDialog'
 
 type BannerProps = {
   job: Job
@@ -45,14 +46,24 @@ const getTimeSince = (date: Date) => {
 
 export const JobBanner: React.FC<BannerProps> = (props) => {
   const applicationDialogStore = useApplicationDialogStore()
+  const accountStore = useAccountStore()
+  const [openRedirectToLoginDialog, setOpenRedirectToLoginDialog] = React.useState(false)
   const [district, setDistrict] = React.useState<District>()
   const [province, setProvince] = React.useState<Province>()
   const [timeSince, setTimeSince] = React.useState<string | null>(null)
 
-  const toggleDialog = () => {
+  const onClickApply = () => {
+    if (accountStore.accountType !== AccountType.User) {
+      setOpenRedirectToLoginDialog(true)
+      return
+    }
     const currentState = applicationDialogStore.isOpen
     applicationDialogStore.setJob(props.job)
     applicationDialogStore.setIsOpen(!currentState)
+  }
+
+  const onCloseRedirectToLoginDialog = () => {
+    setOpenRedirectToLoginDialog(false)
   }
 
   React.useEffect(() => {
@@ -95,6 +106,10 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
       spacing={2}
       className='m-0'
     >
+      <RedirectToLoginDialog
+        open={openRedirectToLoginDialog}
+        onClose={onCloseRedirectToLoginDialog}
+      ></RedirectToLoginDialog>
       <Grid2
         size={8}
         className='flex-1'
@@ -176,12 +191,13 @@ export const JobBanner: React.FC<BannerProps> = (props) => {
             ></ShareOutlinedIcon>
           </IconButton>
           <Button
-            onClick={toggleDialog}
-            className='text-white bg-orange-600 pt-2 pb-2 pl-4 pr-4 font-bold '
+            onClick={onClickApply}
+            className='text-white bg-orange-600 pt-2 pb-2 pl-4 pr-4 font-bold disabled:bg-gray-400 disabled:italic'
             size='medium'
             variant='contained'
+            disabled={accountStore.accountType === AccountType.Company}
           >
-            Ứng tuyển nhanh
+            {accountStore.accountType === AccountType.Company ? 'Không thể ứng tuyển' : 'Ứng tuyển nhanh'}
           </Button>
         </Box>
       </Grid2>

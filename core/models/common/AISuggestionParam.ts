@@ -1,8 +1,6 @@
 import { Pagination } from '@/models/common/Pagination'
-import { Metadata } from './Metadata'
-import { metadata } from '../../../app/(protected)/layout'
-import { QueryParams } from '@/models/enum/MetadataValue'
 
+const MAX_PAGE_SIZE = 2147483647
 export class AISuggestionParam {
   pagination: Pagination
   skills: string[]
@@ -11,7 +9,7 @@ export class AISuggestionParam {
   provinceId: number | null
 
   constructor() {
-    this.pagination = { page: 1, pageSize: 6 }
+    this.pagination = { page: 1, pageSize: MAX_PAGE_SIZE }
     this.userId = ''
     this.skills = []
     this.recentQueries = []

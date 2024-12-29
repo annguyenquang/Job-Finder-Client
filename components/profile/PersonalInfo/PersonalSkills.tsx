@@ -22,7 +22,7 @@ const PersonalSkills: React.FC<{ skills: string[]; isEditing: boolean; onCancel:
   const onSave = async () => {
     await useUserStore.getState().updateSkills(skills)
     await useAccountStore.getState().loadAccountByJwt()
-    onCancel()
+    props.onCancel()
   }
 
   React.useEffect(() => {

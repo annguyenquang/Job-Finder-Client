@@ -34,7 +34,6 @@ export const useJobListStore = create<JobListStore>((set) => ({
 
   loadFilter: async () => {
     const initialFilter = await MetadataService.getAndParseMetadata()
-    console.log('initialFilter: ' + initialFilter)
     set(() => ({
       filter: initialFilter
     }))

@@ -8,7 +8,7 @@ const updateUser = async (id: string, params: UpdateUserParams) => {
     const body: UpdateUserBody = {
       firstName: params.firstName,
       lastName: params.lastName,
-      dateOfBirth: dateToString(params.dateOfBirth),
+      dateOfBirth: params.dateOfBirth as any,
       skills: params.skills,
       selfDescription: params.selfDescription,
       certifications: params.certifications.map((certification) => {
@@ -29,7 +29,8 @@ const updateUser = async (id: string, params: UpdateUserParams) => {
           credentialId: certification.credentialId ?? null,
           issuingOrganization: certification.issuingOrganization,
           issueDate: issueDate,
-          expirationDate: expirationDate
+          expirationDate: expirationDate,
+          credentialUrl: certification.credentialUrl ?? null
         }
       })
     }

@@ -13,6 +13,7 @@ const JobDetailPage = () => {
   React.useEffect(() => {
     jobStore.loadJobById(id as string)
     createJobStore.resetJobForm()
+    jobStore.loadApplication(jobStore.jobApplicationParam)
   }, [id])
 
   React.useEffect(() => {

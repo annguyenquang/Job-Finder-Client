@@ -37,4 +37,15 @@ const getAccountByCookie: () => Promise<Account | null> = async () => {
   }
 }
 
-export const AccountService = { login, getAccountByCookie, logout }
+const getAccountByUserId: (userId: string) => Promise<Account | null> = async (userId: string) => {
+  try {
+    const url = `/Account/GetAccount?id=${userId}`
+    const res = await http().get<ApiResult<Account>>(url)
+    return res.data.result
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
+export const AccountService = { login, getAccountByCookie, getAccountByUserId, logout }

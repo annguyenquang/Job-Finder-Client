@@ -21,4 +21,19 @@ const getCompanies = async (param: string) => {
   }
 }
 
-export const CompanyService = { GetCompanyBySlug, getCompanies }
+const editCompany = async (company: Company): Promise<ApiResult<{ id: string }> | undefined> => {
+  try {
+    const url = `/Company/UpdateCompany/${company.id}`
+
+    const res = await http().patch<ApiResult<{ id: string }>>(url, company, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+    return res.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const CompanyService = { GetCompanyBySlug, getCompanies, editCompany }

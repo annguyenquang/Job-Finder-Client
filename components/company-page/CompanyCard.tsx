@@ -1,17 +1,24 @@
+"use client";
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material'
 import { companyLogo } from '../../assets'
 import React from 'react'
 import { getProvinceName } from '../../core/utils/LocationUtils'
 import { Company } from '@/models'
+import { useRouter } from 'next/navigation'
 
 type CompanyCardProps = {
   company: Company
 }
 
 const CompanyCard: React.FC<CompanyCardProps> = (props) => {
+  const router = useRouter();
+  const handleCompanyClick = (): void => {
+    router.push(`/company-profile/${props.company.slug}`);
+  };
   return (
     <Card
-      className='flex flex-col p-3 '
+      onClick={handleCompanyClick}
+      className='flex flex-col p-3 cursor-pointer '
       sx={{
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
