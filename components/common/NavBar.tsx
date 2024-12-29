@@ -76,7 +76,13 @@ export const Navbar = () => {
             >
               Đăng nhập
             </Button>
-            <Button>Đăng ký</Button>
+            <Button
+              onClick={() => {
+                router.push('/register/company')
+              }}
+            >
+              Đăng ký
+            </Button>
           </ButtonGroup>
         )}
       </div>
