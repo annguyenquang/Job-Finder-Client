@@ -52,7 +52,6 @@ const PreviewPage = () => {
           </Box>
         </Container>
       </Box>
-      );
     </Box>
   )
 }
