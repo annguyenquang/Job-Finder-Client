@@ -1,7 +1,7 @@
 import type { ApiResult, Company, ListResult } from '@/models'
 import { http } from '../http'
 
-const GetCompanyBySlug = async (slug: string) => {
+const getCompanyBySlug = async (slug: string) => {
   try {
     const url = `/Company/GetCompanyBySlug/${slug}`
     const res = await http().get<ApiResult<Company>>(url)
@@ -27,13 +27,27 @@ const editCompany = async (company: Company): Promise<ApiResult<{ id: string }> 
 
     const res = await http().patch<ApiResult<{ id: string }>>(url, company, {
       headers: {
-        "Content-Type": "multipart/form-data"
+        'Content-Type': 'multipart/form-data'
       }
     })
-    return res.data;
+    return res.data
   } catch (error) {
     console.log(error)
   }
 }
 
-export const CompanyService = { GetCompanyBySlug, getCompanies, editCompany }
+const createCompany = async (company: Company): Promise<ApiResult<{ id: string }> | undefined> => {
+  try {
+    const url = '/Company/CreateCompany'
+    const res = await http().post<ApiResult<{ id: string }>>(url, company, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const CompanyService = { GetCompanyBySlug: getCompanyBySlug, getCompanies, editCompany }
