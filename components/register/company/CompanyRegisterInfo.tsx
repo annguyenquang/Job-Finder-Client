@@ -12,8 +12,11 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { CompanyEmailContact } from './CompanyEmailContact'
 import { CompanyPhoneContact } from './CompanyPhoneContact'
+import CompanyName from './CompanyName'
+import CompanySlug from './CompanySlug'
 
 type CompanyRegisterInfoProps = {
+  name: string
   logo: File | null
   employeeCount: number
   website: string
@@ -23,6 +26,7 @@ type CompanyRegisterInfoProps = {
   emailContact: string
   description: string
   address: string
+  slug: string
   referralCode: string
   setCompanyInfo: (data: CompanyRegisterInfoProps) => void
   handleSubmit: (e: React.FormEvent) => void
@@ -53,6 +57,16 @@ export const CompanyRegisterInfo: React.FC<CompanyRegisterInfoProps> = (props) =
         onSubmit={props.handleSubmit}
         sx={{ mt: 4 }}
       >
+        <CompanyName
+          value={props.name}
+          onChange={(name) => props.setCompanyInfo({ ...props, name })}
+        />
+
+        <CompanySlug
+          value={props.slug}
+          onChange={(slug) => props.setCompanyInfo({ ...props, slug })}
+        ></CompanySlug>
+
         <CompanyLogo
           value={props.logo}
           onChange={(logo) => props.setCompanyInfo({ ...props, logo })}

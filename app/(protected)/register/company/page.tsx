@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import React from 'react'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Container, TextField } from '@mui/material'
 import { CompanyRegisterInfo } from '@/components'
-import { useAlertStore } from '@/stores'
+import { CompanyService } from '@/services'
+import { useRouter } from 'next/navigation'
 
 type CompanyFormData = {
+  name: string
   logo: File | null
   employeeCount: number
   website: string
@@ -15,6 +17,7 @@ type CompanyFormData = {
   emailContact: string
   description: string
   address: string
+  slug: string
   referralCode: string
   username: string
   password: string
@@ -29,8 +32,10 @@ enum RegisterCompanyStep {
 const steps = ['Thông tin tài khoản', 'Thông tin công ty']
 
 export default function RegisterCompanyPage() {
-  const [activeStep, setActiveStep] = useState<RegisterCompanyStep>(RegisterCompanyStep.AccountInfo)
-  const [formData, setFormData] = useState<CompanyFormData>({
+  const router = useRouter()
+  const [activeStep, setActiveStep] = React.useState<RegisterCompanyStep>(RegisterCompanyStep.AccountInfo)
+  const [formData, setFormData] = React.useState<CompanyFormData>({
+    name: '',
     logo: null,
     employeeCount: 1,
     website: '',
@@ -43,18 +48,37 @@ export default function RegisterCompanyPage() {
     referralCode: '',
     username: '',
     password: '',
+    slug: '',
     confirmPassword: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log(formData)
+  const handleSubmit = async () => {
+    await CompanyService.createCompany({
+      username: formData.username,
+      password: formData.password,
+      phone: formData.phoneContact,
+      email: formData.emailContact,
+      name: formData.name,
+      emailContact: formData.emailContact,
+      phoneContact: formData.phoneContact,
+      description: formData.description,
+      employeeCount: formData.employeeCount,
+      address: formData.address,
+      logoFile: formData.logo,
+      provinceId: formData.provinceId?.toString() || '',
+      districtId: formData.districtId?.toString() || '',
+      website: formData.website,
+      industry: '',
+      slug: formData.slug
+    })
+    router.push('/login')
   }
   const setCompanyInfo = (data: Partial<CompanyFormData>) => {
     setFormData((prev) => ({ ...prev, ...data }))
   }
   const handleNext = () => {
     if (activeStep === RegisterCompanyStep.CompanyInfo) {
+      handleSubmit()
       return
     }
 
@@ -102,6 +126,7 @@ export default function RegisterCompanyPage() {
       </Box>
       {activeStep === RegisterCompanyStep.CompanyInfo && (
         <CompanyRegisterInfo
+          name={formData.name}
           logo={formData.logo}
           employeeCount={formData.employeeCount}
           website={formData.website}
@@ -111,6 +136,7 @@ export default function RegisterCompanyPage() {
           emailContact={formData.emailContact}
           description={formData.description}
           address={formData.address}
+          slug={formData.slug}
           referralCode={formData.referralCode}
           setCompanyInfo={setCompanyInfo}
           handleSubmit={handleSubmit}

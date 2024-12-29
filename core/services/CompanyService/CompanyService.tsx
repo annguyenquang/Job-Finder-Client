@@ -1,4 +1,4 @@
-import type { ApiResult, Company, ListResult } from '@/models'
+import type { ApiResult, Company, CompanyAccount, ListResult } from '@/models'
 import { http } from '../http'
 
 const getCompanyBySlug = async (slug: string) => {
@@ -36,10 +36,66 @@ const editCompany = async (company: Company): Promise<ApiResult<{ id: string }> 
   }
 }
 
-const createCompany = async (company: Company): Promise<ApiResult<{ id: string }> | undefined> => {
+type CreateCompanyBody = {
+  username: string
+  password: string
+  phone: string
+  email: string
+  name: string
+  emailContact: string
+  phoneContact: string
+  description: string
+  employeeCount: number
+  address: string
+  slug: string
+  logoFile: File | null
+  provinceId: string
+  districtId: string
+  website: string
+  industry: string
+}
+
+type CreateCompanyParam = {
+  username: string
+  password: string
+  phone: string
+  email: string
+  name: string
+  emailContact: string
+  phoneContact: string
+  description: string
+  employeeCount: number
+  address: string
+  logoFile: File | null
+  provinceId: string
+  districtId: string
+  website: string
+  industry: string
+  slug: string
+}
+
+const createCompany = async (params: CreateCompanyParam): Promise<ApiResult<{ id: string }> | undefined> => {
   try {
     const url = '/Company/CreateCompany'
-    const res = await http().post<ApiResult<{ id: string }>>(url, company, {
+    const body: CreateCompanyBody = {
+      username: params.username,
+      password: params.password,
+      phone: params.phone,
+      email: params.email,
+      name: params.name,
+      emailContact: params.emailContact,
+      phoneContact: params.phoneContact,
+      description: params.description,
+      employeeCount: params.employeeCount,
+      address: params.address,
+      logoFile: params.logoFile,
+      provinceId: params.provinceId,
+      districtId: params.districtId,
+      website: params.website,
+      industry: params.industry,
+      slug: params.slug
+    }
+    const res = await http().post<ApiResult<{ id: string }>>(url, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -50,4 +106,4 @@ const createCompany = async (company: Company): Promise<ApiResult<{ id: string }
   }
 }
 
-export const CompanyService = { GetCompanyBySlug: getCompanyBySlug, getCompanies, editCompany }
+export const CompanyService = { GetCompanyBySlug: getCompanyBySlug, getCompanies, editCompany, createCompany }
