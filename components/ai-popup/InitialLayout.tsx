@@ -11,13 +11,12 @@ import { Autocomplete, Button, Chip, TextField, Typography } from '@mui/material
 import { useAIStore } from '@/stores/AIPopupStore'
 import { AIService, JobService, LocationService, Province } from '@/services'
 import { useDebounce } from '../../hooks/useDebounce'
-import { CompanyAccount, ParsedJobSuggestion, UserAccount } from '@/models'
-import { useAccountStore, useCompanyStore } from '@/stores'
+import { ParsedJobSuggestion, UserAccount } from '@/models'
+import { useAccountStore } from '@/stores'
 
 const InitialLayout = () => {
   const AIPopupStore = useAIStore()
 
-  const companyStore = useCompanyStore()
   const accountStore = useAccountStore()
 
   React.useEffect(() => {
