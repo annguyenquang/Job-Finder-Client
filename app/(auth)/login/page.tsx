@@ -14,6 +14,7 @@ import Avatar from '@mui/material/Avatar'
 import { useAccountStore } from '@/stores'
 import AccountAndPasswordForm from '../../../components/login/AccountAndPasswordForm'
 import Link from 'next/link'
+import { Link as MuiLink } from '@mui/material'
 
 const LoginPage: React.FC = () => {
   const accountStore = useAccountStore()
@@ -80,13 +81,13 @@ const LoginPage: React.FC = () => {
               updateUsername={onUpdateUsername}
             />
 
-            <Link
+            <MuiLink
               textAlign={'center'}
               color={blue[600]}
               href='#'
             >
               Quên mật khẩu?
-            </Link>
+            </MuiLink>
 
             <Button
               onClick={onLogin}
