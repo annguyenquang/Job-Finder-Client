@@ -26,6 +26,40 @@ const getJobsByCompany = async (
   }
 }
 
+const getStatusJobsByCompany = async (
+  companyId: string,
+  keyword: string | null,
+  pagination: Pagination,
+  provinceId: number | null,
+  status: number | null,
+  isNotEnded: boolean | null,
+): Promise<ApiResult<ListResult<Job[]>> | undefined> => {
+  try {
+    let baseUrl = `/Company/GetCompanyJobs/${companyId}/jobs?Pagination.Page=${pagination.page}&Pagination.PageSize=${pagination.pageSize}`
+
+    if (keyword) {
+      baseUrl += `&Filter.Keyword=${keyword}`
+    }
+
+    if (provinceId) {
+      baseUrl += `&Filter.ProvinceId=${provinceId}`
+    }
+
+    if(status !== null){
+      baseUrl += `&Filter.Status=${status}`
+    }
+
+    if(isNotEnded){
+      baseUrl += `&Filter.IsNotEnded=${isNotEnded}`
+    }
+
+    const res = await http().get<ApiResult<ListResult<Job[]>>>(baseUrl)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getJobById = async (jobId: string): Promise<ApiResult<Job> | undefined> => {
   try {
     const baseUrl = `Job/GetJob?id=${jobId}`
@@ -56,4 +90,4 @@ const createJob = async (jobData: Job): Promise<ApiResult<{ id: string }> | unde
   }
 }
 
-export const JobService = { getJobById, getJobsByCompany, getJobs, createJob }
+export const JobService = { getJobById, getJobsByCompany, getJobs, createJob, getStatusJobsByCompany }

@@ -1,207 +1,418 @@
-import { Job } from '@/models'
-import { AccessTimeFilled, CheckCircle, DateRange, LocationOn, SwapVert } from '@mui/icons-material'
-import Search from '@mui/icons-material/Search'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
+'use client'
+import React, { useState } from 'react';
 import {
   Box,
+  Stack,
+  Typography,
+  TextField,
   Button,
-  ButtonGroup,
+  Tab,
   Card,
   CardContent,
   Divider,
   InputAdornment,
-  Stack,
-  Tab,
-  TextField,
-  Typography
-} from '@mui/material'
-import { green } from '@mui/material/colors'
-import Image from 'next/image'
+  IconButton,
+  Container,
+  Pagination,
+} from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import {
+  Search,
+  AccessTime,
+  LocationOn,
+  CalendarToday,
+  Warning,
+  SwapVert,
+  Add,
+  Refresh as RefreshIcon
+} from '@mui/icons-material';
+import Image from 'next/image';
+import { useAccountStore, useJobsByCompanyStore, useLocationStore, useMetadataStore } from '@/stores';
+import { useRouter } from 'next/navigation';
+import { LocationService, Province } from '@/services';
+import { CompanyAccount, Job } from '@/models';
+import Link from 'next/link';
 
-const CompanyPage: React.FC = () => {
-  return (
-    <Stack>
-      <Box padding={1}>
-        <BasicCompanyInfo />
-      </Box>
-      <Box padding={1}>
-        <JobList />
-      </Box>
-    </Stack>
-  )
-}
+const formatCurrency = (amount: number) => {
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"; // Định dạng số tiền
+};
 
-const JobList: React.FC = () => {
-  return (
-    <Stack>
-      <Typography variant='h6'>Danh sách tin</Typography>
-      <Box position={'relative'}>
-        <TextField
-          size='small'
-          sx={{ width: '45%' }}
-          placeholder='Tìm kiếm công việc'
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Search></Search>
-                </InputAdornment>
-              )
-            }
-          }}
-        />
+const CompanyPage = () => {
+  const accountStore = useAccountStore();
+  const jobsByCompanyStore = useJobsByCompanyStore();
+  const metadataStore = useMetadataStore()
+  const router = useRouter()
+  const locationStore = useLocationStore()
+  const companyAccount = accountStore.account as CompanyAccount;
 
-        <Button
-          variant='outlined'
-          sx={{ position: 'absolute', right: 0, fontWeight: 'bold' }}
-          startIcon={<SwapVert></SwapVert>}
-        >
-          Sắp xếp theo:
-        </Button>
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const jobsPerPage = 4
+  const [jobProvinces, setJobProvinces] = React.useState<{ [key: number]: Province }>({})
+  const [searchKeyword, setSearchKeyword] = React.useState('')
+  const [searchInput, setSearchInput] = useState('');
 
-        <Box>
-          <TabContext value={1}>
-            <TabList>
-              <Tab label='Tất cả công việc'></Tab>
-              <Tab
-                label='Đang mở'
-                value={2}
-              ></Tab>
-              <Tab
-                label='Hết hạn'
-                value={3}
-              ></Tab>
-            </TabList>
+  React.useEffect(() => {
+    if (!accountStore.account) {
+      accountStore.loadAccountByJwt();
+    }
+  }, [])
 
-            <TabPanel value={1}>
-              <Card>
-                <CardContent>
-                  <Typography variant='h6'>Inter .NET</Typography>
+  React.useEffect(() => {
+    const pagination = { page: currentPage, pageSize: jobsPerPage }
+    if (accountStore.account) {
+      jobsByCompanyStore.loadAllJobs(accountStore.account.id, pagination)
+    }
+  }, [currentPage, accountStore.account?.id, jobsByCompanyStore.keyword, jobsByCompanyStore.provinceId])
 
-                  <Box
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                  >
-                    <Stack>
-                      <Stack
-                        direction={'row'}
-                        spacing={1}
-                      >
-                        <AccessTimeFilled></AccessTimeFilled>
-                        <Typography>Toàn thời gian</Typography>
-                      </Stack>
+  React.useEffect(() => {
+    const pagination = { page: currentPage, pageSize: jobsPerPage }
+    if (accountStore.account) {
+      jobsByCompanyStore.loadOpenJobs(accountStore.account.id, pagination)
+    }
+  }, [currentPage, accountStore.account?.id,])
 
-                      <Stack
-                        direction={'row'}
-                        spacing={1}
-                      >
-                        <LocationOn></LocationOn>
-                        <Typography>Quận Thủ Đức, Thành Phố Hồ Chí Minh, Vietnam</Typography>
-                      </Stack>
+  React.useEffect(() => {
+    const pagination = { page: currentPage, pageSize: jobsPerPage }
+    if (accountStore.account) {
+      jobsByCompanyStore.loadClosedJobs(accountStore.account.id, pagination)
+    }
+  }, [currentPage, accountStore.account?.id,])
 
-                      <Stack
-                        direction={'row'}
-                        spacing={1}
-                      >
-                        <DateRange></DateRange>
-                        <Typography>Ngày tạo: 12 thg 10 2024</Typography>
-                      </Stack>
-                    </Stack>
+  React.useEffect(() => {
+    console.log(jobsByCompanyStore.loadClosedJobs)
+  }, [jobsByCompanyStore.loadClosedJobs])
 
-                    <Box
-                      right={0}
-                      border={1}
-                      borderRadius={2}
-                      color={'info'}
-                    >
-                      <Stack direction={'row'}>
-                        <Stack justifyContent={'center'}>
-                          <Typography textAlign={'center'}>0</Typography>
-                          <Typography>Đang xem xét</Typography>
-                          <Button>Xem</Button>
-                        </Stack>
+  React.useEffect(() => {
+    locationStore.loadAllProvince()
+    const fetchProvinces = async () => {
+      const provinces: { [key: number]: Province } = {}
+      for (const job of jobsByCompanyStore.allJobs) {
+        const fetchedProvince = await LocationService.getProvinceById(job.provinceId)
+        provinces[job.provinceId] = fetchedProvince || { name: '', code: 0, districts: [] }
+      }
+      setJobProvinces(provinces)
+    }
+    fetchProvinces()
+  }, [jobsByCompanyStore.allJobs])
 
-                        <Divider
-                          orientation='vertical'
-                          flexItem
-                        ></Divider>
+  const [tabValue, setValue] = useState('1');
 
-                        <Stack justifyContent={'center'}>
-                          <Typography textAlign={'center'}>0</Typography>
-                          <Typography>Đang xem xét</Typography>
-                          <Button>Xem</Button>
-                        </Stack>
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
-                        <Divider
-                          orientation='vertical'
-                          flexItem
-                        ></Divider>
+  const handleCreateJob = () => {
+    router.push('/create-job');
+  }
 
-                        <Stack justifyContent={'center'}>
-                          <Typography textAlign={'center'}>0</Typography>
-                          <Typography>Đang xem xét</Typography>
-                          <Button>Xem</Button>
-                        </Stack>
-                      </Stack>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            </TabPanel>
-            <TabPanel value={2}>ITem2</TabPanel>
-            <TabPanel value={3}>ITem3</TabPanel>
-          </TabContext>
-        </Box>
-      </Box>
-    </Stack>
-  )
-}
+  // Hàm xử lý thay đổi trang
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value)
+  }
 
-const BasicCompanyInfo: React.FC = () => {
-  return (
-    <Box
-      display={'flex'}
-      justifyContent={'space-between'}
-      alignItems={'center'}
-    >
-      <Stack
-        direction={'row'}
-        spacing={1}
-      >
-        <Image
-          alt='company-logo'
-          height={'100'}
-          width={'100'}
-          src={'https://dummyimage.com/600x400/b2de2c/422ba1.png&text=yabox'}
-        />
+  const handleSearch = () => {
+    setCurrentPage(1);
+    jobsByCompanyStore.setSearchKeyword(searchInput);
 
-        <Divider orientation={'vertical'} />
+    const pagination = { page: 1, pageSize: jobsPerPage };
+    if (accountStore.account) {
+      switch (tabValue) {
+        case '1':
+          jobsByCompanyStore.loadAllJobs(accountStore.account.id, pagination);
+          break;
+        case '2':
+          jobsByCompanyStore.loadOpenJobs(accountStore.account.id, pagination);
+          break;
+        case '3':
+          jobsByCompanyStore.loadClosedJobs(accountStore.account.id, pagination);
+          break;
+      }
+    }
+  };
 
-        <Stack direction={'column'}>
-          <Typography
-            variant='h5'
-            fontWeight={'bold'}
-          >
-            AN
-          </Typography>
-          <Stack
-            direction={'row'}
-            spacing={1}
-          >
-            <CheckCircle sx={{ color: green[500] }}></CheckCircle>
-            <Typography variant='subtitle1'>Công ty đã được xác minh</Typography>
-          </Stack>
-        </Stack>
-      </Stack>
-      <ButtonGroup
-        sx={{ display: 'flex', alignItems: 'center' }}
-        size='small'
-      >
-        <Button sx={{ borderWidth: '2px', fontWeight: 'bold', height: 'fit-content' }}>Chỉnh sửa hồ sơ công ty</Button>
-        <Button sx={{ borderWidth: '2px', fontWeight: 'bold', height: 'fit-content' }}>Quản lý thành viên</Button>
-      </ButtonGroup>
+  const handleRefresh = () => {
+    setSearchInput('');
+    jobsByCompanyStore.setSearchKeyword('');
+    const pagination = { page: currentPage, pageSize: jobsPerPage };
+    if (accountStore.account) {
+      switch (tabValue) {
+        case '1':
+          jobsByCompanyStore.loadAllJobs(accountStore.account.id, pagination);
+          break;
+        case '2':
+          jobsByCompanyStore.loadOpenJobs(accountStore.account.id, pagination);
+          break;
+        case '3':
+          jobsByCompanyStore.loadClosedJobs(accountStore.account.id, pagination);
+          break;
+      }
+    }
+  };
+
+  const JobCard = ({ jobs }: { jobs: Job[] }) => (
+    <Box>
+      {jobs.length > 0 ? (
+        jobs.map((job: any) => (
+          <Card variant="outlined" className="border-gray-300 mb-4">
+            <CardContent>
+              <Box className="flex justify-between mb-4">
+                <Link
+                  href={`/job-detail/${job.id}`}
+                >
+                  <Typography variant="h6" className="font-semibold hover:underline hover:text-blue-500" >
+                    {job.title}
+                  </Typography>
+                </Link>
+                <Typography className={`${job.status == 1 ? 'text-colorPrimaryText' : 'text-red-500'}`}>
+                  {job.status == 1 ? "Đang mở" : "Đã đóng"}
+                </Typography>
+              </Box>
+
+              <Box className="flex justify-between">
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={1} className="items-center">
+                    <AccessTime fontSize="small" className="text-gray-500" />
+                    <Typography>{formatCurrency(job?.salary || 0)}</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1} className="items-center">
+                    <LocationOn fontSize="small" className="text-gray-500" />
+                    <Typography>
+                      {jobProvinces[job.provinceId]?.name || 'Đang tải...'}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1} className="items-center">
+                    <CalendarToday fontSize="small" className="text-gray-500" />
+                    <Typography>
+                      Tạo ngày: {new Date(job.createdAt).toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' })} {/* Updated formatting */}
+                    </Typography>
+                  </Stack>
+                </Stack>
+
+                <Box className="border rounded-lg flex">
+                  <Stack className="p-4 text-center min-w-[120px]">
+                    <Typography variant="h6">0</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Bắt đầu chat
+                    </Typography>
+                    <Button color="primary">Xem</Button>
+                  </Stack>
+                  <Divider orientation="vertical" flexItem />
+                  <Stack className="p-4 text-center min-w-[120px]">
+                    <Typography variant="h6">0</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Đang cần nhắc
+                    </Typography>
+                    <Button color="primary">Xem</Button>
+                  </Stack>
+                  <Divider orientation="vertical" flexItem />
+                  <Stack className="p-4 text-center min-w-[120px]">
+                    <Typography variant="h6">0</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Không phù hợp
+                    </Typography>
+                    <Button color="primary">Xem</Button>
+                  </Stack>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Typography variant='body2'>Không có công việc nào được tìm thấy.</Typography>
+      )}
     </Box>
   )
-}
 
-export default CompanyPage
+  return (
+    <Container maxWidth="lg" className="py-6">
+      {/* Company Info Card */}
+      <Card variant="outlined" className="mb-4">
+        <CardContent>
+          <Box className="flex justify-between items-center">
+            <Stack direction="row" spacing={2} className="items-center">
+              <Image
+                src={companyAccount?.logo}
+                alt="Company logo"
+                width={100}
+                height={100}
+                className="rounded"
+              />
+              <Stack spacing={1}>
+                <Typography variant="h5" className="font-bold">
+                  {companyAccount?.name}
+                </Typography>
+                <Stack direction="row" spacing={1} className="items-center">
+                  <Typography className="text-green-500">
+                    Đã xác minh
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Stack>
+            <Link
+              href={`/company-profile/${companyAccount?.slug}`}
+            >
+              <Button
+                variant="outlined"
+                className="font-medium"
+                size="small"
+              >
+                Chỉnh sửa hồ sơ công ty
+              </Button>
+            </Link>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Job List Card */}
+      <Card variant="outlined">
+        <CardContent>
+          <Box className="mb-6 flex justify-between items-center">
+            <Typography variant="h6" className="font-bold">
+              Danh sách tin
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCreateJob}
+              startIcon={<Add />}
+              size="medium"
+            >
+              Đăng tin tuyển dụng
+            </Button>
+          </Box>
+
+          {/* Updated Search and Sort */}
+          <Box className="flex justify-between mb-4">
+            <Box className="flex gap-2 w-1/2">
+              <TextField
+                placeholder="Nhập tên vị trí ứng tuyển"
+                variant="outlined"
+                size="small"
+                className="flex-grow"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch();
+                  }
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Button
+                variant="outlined"
+                onClick={handleSearch}
+                size="small"
+              >
+                Tìm kiếm
+              </Button>
+              <IconButton
+                onClick={handleRefresh}
+                size="small"
+                className="border border-gray-300"
+              >
+                <RefreshIcon />
+              </IconButton>
+            </Box>
+          </Box>
+
+          {/* Tabs */}
+          <TabContext value={tabValue}>
+            <Box className="border-b">
+              <TabList onChange={handleChange} className="border-b-0">
+                <Tab
+                  label={
+                    <Box className="flex items-center">
+                      Tất cả công việc <Typography className="ml-1 text-gray-500">({jobsByCompanyStore.totalAllJobs})</Typography>
+                    </Box>
+                  }
+                  value="1"
+                />
+                <Tab
+                  label={
+                    <Box className="flex items-center">
+                      Công việc đang mở <Typography className="ml-1 text-gray-500">({jobsByCompanyStore.totalOpenJobs})</Typography>
+                    </Box>
+                  }
+                  value="2"
+                />
+                <Tab
+                  label={
+                    <Box className="flex items-center">
+                      Công việc hết hạn <Typography className="ml-1 text-gray-500">({jobsByCompanyStore.totalClosedJobs})</Typography>
+                    </Box>
+                  }
+                  value="3"
+                />
+              </TabList>
+            </Box>
+
+            {/* All Jobs Tab */}
+            <TabPanel value="1" className="px-0">
+              <JobCard jobs={jobsByCompanyStore.allJobs} />
+              {/* Pagination */}
+              <Box
+                mt={3}
+                className='flex justify-center'
+              >
+                <Pagination
+                  count={Math.ceil(jobsByCompanyStore.totalAllJobs / jobsPerPage)} // Tính tổng số trang
+                  page={currentPage} // Trang hiện tại
+                  onChange={handlePageChange} // Xử lý thay đổi trang
+                  variant='outlined'
+                  size='large'
+                  shape='rounded'
+                />
+              </Box>
+            </TabPanel>
+
+            {/* Open Jobs Tab */}
+            <TabPanel value="2" className="px-0">
+              <JobCard jobs={jobsByCompanyStore.openJobs} />
+              {/* Pagination */}
+              <Box
+                mt={3}
+                className='flex justify-center'
+              >
+                <Pagination
+                  count={Math.ceil(jobsByCompanyStore.totalOpenJobs / jobsPerPage)} // Tính tổng số trang
+                  page={currentPage} // Trang hiện tại
+                  onChange={handlePageChange} // Xử lý thay đổi trang
+                  variant='outlined'
+                  size='large'
+                  shape='rounded'
+                />
+              </Box>
+            </TabPanel>
+
+            {/* Expired Jobs Tab */}
+            <TabPanel value="3" className="px-0">
+              <JobCard jobs={jobsByCompanyStore.closedJobs} />
+              {/* Pagination */}
+              <Box
+                mt={3}
+                className='flex justify-center'
+              >
+                <Pagination
+                  count={Math.ceil(jobsByCompanyStore.totalClosedJobs / jobsPerPage)} // Tính tổng số trang
+                  page={currentPage} // Trang hiện tại
+                  onChange={handlePageChange} // Xử lý thay đổi trang
+                  variant='outlined'
+                  size='large'
+                  shape='rounded'
+                />
+              </Box>
+            </TabPanel>
+          </TabContext>
+        </CardContent>
+      </Card>
+    </Container>
+  );
+};
+
+export default CompanyPage;
