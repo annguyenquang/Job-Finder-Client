@@ -8,11 +8,10 @@ import {
   JobInfo,
   JobList,
   ApplicationDialog,
-  ApplicationTab,
   ApplicationPanel
 } from '@/components'
 import { Job } from '@/models'
-import { useAccountStore, useJobDetailStore, useMetadataStore } from '@/stores'
+import { useAccountStore, useMetadataStore } from '@/stores'
 
 type JobdetailProps = {
   job: Job
@@ -86,7 +85,7 @@ export const JobDetail: React.FC<JobdetailProps> = (props) => {
             ></CompanyIntro>
             <Card>
               <CardContent>
-                <JobList></JobList>
+                <JobList />
               </CardContent>
             </Card>
           </Grid2>

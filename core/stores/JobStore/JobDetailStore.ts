@@ -1,25 +1,30 @@
 import { Job, JobApplication, JobApplicationParam, Pagination } from '@/models'
-import { JobApplicationService, JobService } from '@/services'
+import { AIService, JobApplicationService, JobService } from '@/services'
 import { create } from 'zustand'
 
-type JobDetailStore = {
+type JobDetailStoreStates = {
   job: Job
   jobs: Job[]
+  relativeJobs: Job[]
   totalJobs: number
   jobApplications: JobApplication[]
   jobApplicationParam: JobApplicationParam
   jobApplicationLoading: boolean
   total: number
-
   keyword: string
   provinceId: number
+}
+type JobDetailStoreActions = {
   loadJobs: (companyId: string, pagination: Pagination) => Promise<void>
   loadJobById: (jobId: string) => Promise<void>
   loadApplication: (param: JobApplicationParam) => Promise<void>
+  loadRelativeJobs: (jobId: string) => Promise<void>
   setSearchKeyword: (keyword: string) => void
   setProvinceId: (provinceId: number) => void
   updateJobApplicationParam: (newParam: JobApplicationParam) => void
 }
+
+type JobDetailStore = JobDetailStoreStates & JobDetailStoreActions
 
 export const emptyJob: Job = {
   id: '',
@@ -82,6 +87,7 @@ export const emptyJob: Job = {
 export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
   job: emptyJob,
   jobs: [emptyJob],
+  relativeJobs: [],
   totalJobs: 0,
   jobApplications: [],
   total: 0,
@@ -100,7 +106,6 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
       })
     }
   },
-
   loadJobById: async (jobId: string) => {
     const { loadApplication, updateJobApplicationParam } = useJobDetailStore.getState()
 
@@ -116,7 +121,6 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
       set({ job: res.result })
     }
   },
-
   loadApplication: async (param: JobApplicationParam) => {
     const { jobApplicationParam } = useJobDetailStore.getState()
 
@@ -139,11 +143,21 @@ export const useJobDetailStore = create<JobDetailStore>((set, get) => ({
       set({ jobApplicationLoading: false })
     }
   },
-
+  loadRelativeJobs: async (jobId: string) => {
+    const res = await AIService.getRelativeJobByJobId(jobId)
+    const listJobId = res?.result.suggestions
+    if (listJobId) {
+      const relativeJobs = await Promise.all(
+        listJobId.map(async (id) => {
+          const job = await JobService.getJobById(id.jobId)
+          return job?.result
+        })
+      )
+      set({ relativeJobs: relativeJobs.filter((job) => job !== undefined) })
+    }
+  },
   setSearchKeyword: (keyword) => set({ keyword }),
-
   setProvinceId: (provinceId) => set({ provinceId }),
-
   updateJobApplicationParam: (newParam: JobApplicationParam) =>
     set({
       jobApplicationParam: newParam
