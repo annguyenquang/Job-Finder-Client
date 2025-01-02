@@ -77,12 +77,12 @@ export const SalaryCard: React.FC = () => {
                     className="flex flex-row"
                 >
                     <Box className="mr-1">
-                        <Typography className="text-sm font-sans pl-2 pb-1">Mức lương (đơn vị: triệu đồng, 1 = 1.000.000 VNĐ)</Typography>
+                        <Typography className="text-sm font-sans pl-2 pb-1">Mức lương (đơn vị: Đồng)</Typography>
                         <TextField
                             id="salary"
                             size="small"
                             variant="outlined"
-                            placeholder="1 = 1.000.000 VND"
+                            placeholder="VND"
                             value={createJobStore.jobData.salary ?? ''}
                             onChange={handleSalaryChange}
                             className="pl-2 min-w-60 pb-4"
