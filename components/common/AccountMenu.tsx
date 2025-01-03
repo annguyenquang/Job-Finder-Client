@@ -120,7 +120,7 @@ const UserItem: React.FC<{ handleOnClose: () => void }> = (props) => {
         <ListItemIcon>
           <WorkHistoryIcon fontSize='small' />
         </ListItemIcon>
-        <Link href={'user/job-applications'}>Đơn ứng tuyển của tôi</Link>
+        <Link href={'/user/job-applications'}>Đơn ứng tuyển của tôi</Link>
       </MenuItem>
       <MenuItem onClick={props.handleOnClose}>
         <ListItemIcon>
